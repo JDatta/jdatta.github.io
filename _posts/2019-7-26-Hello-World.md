@@ -8,5 +8,5 @@ This platform is being set to mirror my blogs posted at
  - Tech blog at blogspot: <http://techgargle.blogspot.com/>
 
 Apart from these, my older blogs can be found here: 
-  - Passing Thoughts: <joydipdatta.blogspot.com>
+  - Passing Thoughts: <http://joydipdatta.blogspot.com>
 
