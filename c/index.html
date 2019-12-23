@@ -29,24 +29,29 @@
     vertical-align: middle;
     padding: 50px;
 "></h1>
-	
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
   <script>
 
     function numberWithCommas(x) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
+      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
 
-	const fDate = new Date('5/6/2020');
-	const cDate = new Date();
-	const diffTime = Math.abs(fDate - cDate);
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
-  const diffHrs = Math.ceil(diffTime / (1000 * 60 * 60 )); 
-  const diffMins = Math.ceil(diffTime / (1000 * 60 )); 
-	console.log(diffDays);
-  $("#main-thing").html(diffDays);  
-  $("#main-thing-hrs").html(diffHrs);  
-  $("#main-thing-mins").html(numberWithCommas(diffMins));  
+  function refresh() {
+    const fDate = new Date('5/6/2020');
+    const cDate = new Date();
+    const diffTime = Math.abs(fDate - cDate);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+    const diffHrs = Math.ceil(diffTime / (1000 * 60 * 60 )); 
+    const diffMins = Math.ceil(diffTime / (1000 * 60 )); 
+    console.log("Rendering " + diffDays);
+    $("#main-thing").html(diffDays);  
+    $("#main-thing-hrs").html(diffHrs);  
+    $("#main-thing-mins").html(numberWithCommas(diffMins));  
+  } 
+
+  setInterval(refresh, 1000 * 120);
+  
+	
 </script>
 
 </body>
