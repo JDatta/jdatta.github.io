@@ -358,10 +358,12 @@
     .prompt-row {
       min-height: 52px;
       display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-columns: minmax(0, 1fr);
       align-items: stretch;
       gap: 6px;
     }
+
+    .prompt-row.has-next { grid-template-columns: minmax(0, 1fr) auto; }
 
     .speech {
       min-width: 0;
@@ -389,12 +391,11 @@
     }
     #promptText { min-width: 0; }
 
-    .count-badge {
+    .next-button {
       min-width: 82px;
       min-height: 52px;
       padding: 4px 9px;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
       border: 2px solid #efbd34;
@@ -403,14 +404,13 @@
       color: #713c06;
       font-weight: 900;
       box-shadow: 0 3px 0 rgba(204,139,18,.13);
-      cursor: default;
+      cursor: pointer;
+      font-size: 15px;
     }
 
-    .count-badge .count-label { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; }
-    .count-badge strong { font-size: 25px; line-height: 1; font-variant-numeric: tabular-nums; }
-    .count-badge.next { cursor: pointer; font-size: 15px; }
-    .count-badge.next .count-label { font-size: 15px; text-transform: none; letter-spacing: 0; }
-    .count-badge.success-next {
+    .next-button[hidden] { display: none; }
+
+    .next-button.success-next {
       border-color: #5d42c2;
       background: linear-gradient(135deg, #fff1a8, #f1eaff 55%, #ddf8e7);
       color: #3f278d;
@@ -432,7 +432,7 @@
       }
     }
 
-    .count-badge.success-next.motion-reduced {
+    .next-button.success-next.motion-reduced {
       animation: none;
       outline: 4px solid rgba(114,86,201,.38);
       outline-offset: 2px;
@@ -556,6 +556,7 @@
 
     .digit-label .place-count { display: inline-flex; }
     .digit-label .carry-digit { color: #aeb6c2; }
+    .digit-label.hundreds-count { left: 5px; right: auto; bottom: 5px; }
 
     .hundred-slot {
       width: 31px;
@@ -571,13 +572,40 @@
     }
 
     .hundred-slot.filled {
-      border: 2px solid #7656ca;
-      background:
-        linear-gradient(45deg, rgba(255,255,255,.32) 25%, transparent 25% 50%, rgba(255,255,255,.32) 50% 75%, transparent 75%),
-        #d8c8ff;
-      background-size: 8px 8px;
-      box-shadow: 0 0 0 3px rgba(114,86,201,.1);
+      height: 31px;
+      border: 2px solid #9b5b00;
+      color: #724100;
+      background: repeating-linear-gradient(135deg, #ffc446 0 4px, #f0a000 4px 7px);
+      box-shadow: 0 0 0 4px rgba(255,196,70,.18), 0 0 11px rgba(255,190,40,.55);
     }
+
+    .carried-hundred-source {
+      position: absolute;
+      z-index: 4;
+      top: 2px;
+      left: 2px;
+      max-width: 100%;
+      padding: 3px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      border: 1px solid #e7ad19;
+      border-radius: 8px;
+      background: #fff5bd;
+      color: #724100;
+      font-size: 7px;
+      font-weight: 950;
+      line-height: 1;
+      box-shadow: 0 2px 5px rgba(130,83,0,.12);
+    }
+
+    .carried-hundred-source .hundred-slot {
+      width: 31px;
+      height: 31px;
+    }
+
+    .carried-hundred-source.placeholder { visibility: hidden; }
 
     .tens-grid {
       width: 100%;
@@ -752,12 +780,7 @@
     .carry-formation-token.hundred-token {
       width: 34px;
       height: 34px;
-      border-color: #7656ca;
       border-radius: 7px;
-      background:
-        linear-gradient(45deg, rgba(255,255,255,.32) 25%, transparent 25% 50%, rgba(255,255,255,.32) 50% 75%, transparent 75%),
-        #d8c8ff;
-      background-size: 8px 8px;
       transform: translate(-50%, -50%);
     }
 
@@ -778,13 +801,7 @@
     }
 
     .motion-overlay.carry-token.hundred-token {
-      border-color: #7656ca;
       border-radius: 7px;
-      background:
-        linear-gradient(45deg, rgba(255,255,255,.32) 25%, transparent 25% 50%, rgba(255,255,255,.32) 50% 75%, transparent 75%),
-        #d8c8ff;
-      background-size: 8px 8px;
-      box-shadow: 0 0 11px rgba(114,86,201,.45);
     }
 
     .motion-target-flash { animation: motion-target-flash 240ms ease-out; }
@@ -1148,7 +1165,7 @@
       .bee, .journey, .score { height: 38px; }
       .equation-card { min-height: 68px; font-size: clamp(28px, 9.5vw, 40px); }
       .answer-button { width: 54px; height: 54px; flex-basis: 54px; font-size: 31px; }
-      .prompt-row, .count-badge { min-height: 48px; }
+      .prompt-row, .next-button { min-height: 48px; }
       .prompt-mascot { font-size: 21px; }
       .board { grid-template-rows: 22px repeat(3, minmax(58px, 1fr)); }
       .tray { min-height: 66px; padding-top: 3px; }
@@ -1190,7 +1207,7 @@
         outline-offset: 2px;
         filter: brightness(1.22);
       }
-      .count-badge.success-next {
+      .next-button.success-next {
         animation: none;
         outline: 4px solid rgba(114,86,201,.38);
         outline-offset: 2px;
@@ -1233,15 +1250,12 @@
       <button id="resetCurrent" class="reset-current" type="button" aria-label="Reset this problem" title="Reset this problem">↻</button>
     </section>
 
-    <section class="prompt-row" aria-label="Instructions and count">
+    <section id="promptRow" class="prompt-row" aria-label="Instructions">
       <div class="speech">
         <span class="prompt-mascot" aria-hidden="true">🐞</span>
         <span id="promptText">Tap the glowing ones, in order.</span>
       </div>
-      <button id="countBadge" class="count-badge" type="button" disabled>
-        <span class="count-label">Count</span>
-        <strong id="countValue">0</strong>
-      </button>
+      <button id="nextButton" class="next-button" type="button" aria-label="Open the next problem" hidden disabled>Next →</button>
     </section>
 
     <section id="board" class="board" aria-label="Place-value board">
@@ -1657,7 +1671,7 @@
       journey: $("#journey"), levelBadge: $("#levelBadge"), score: $("#scoreValue"), settings: $("#settingsButton"),
       fullscreen: $("#fullscreenButton"), fullscreenIconPath: $("#fullscreenIconPath"),
       equationA: $("#equationA"), equationB: $("#equationB"), answer: $("#answerButton"), reset: $("#resetCurrent"),
-      prompt: $("#promptText"), countBadge: $("#countBadge"), count: $("#countValue"), board: $("#board"),
+      promptRow: $("#promptRow"), prompt: $("#promptText"), next: $("#nextButton"), board: $("#board"),
       tray: $("#suggestionTray"), suggestions: $("#suggestions"), keypad: $("#keypadDialog"), keypadForm: $("#keypadForm"),
       keypadEquation: $("#keypadEquation"), typed: $("#typedValue"), keypadDisplay: $("#keypadDisplay"),
       check: $("#checkAnswer"), settingsDialog: $("#settingsDialog"), settingsTitle: $("#settingsTitle"),
@@ -1773,6 +1787,8 @@
         onesCursor: 0,
         tensAcceptedCursor: 0,
         tensCursor: 0,
+        hundredsAcceptedCursor: 0,
+        hundredsCursor: 0,
         tempCount: 0,
         visibleOnesCarry: false,
         visibleHundredsCarry: false,
@@ -1927,7 +1943,7 @@
     function setDiceRefreshControlsLocked(locked, dice) {
       if (locked) {
         const controls = [
-          elements.answer, elements.reset, elements.settings, elements.countBadge, elements.fullscreen,
+          elements.answer, elements.reset, elements.settings, elements.next, elements.fullscreen,
           ...elements.board.querySelectorAll("button"),
           ...elements.suggestions.querySelectorAll(".suggestion:not(.current)")
         ].filter(Boolean);
@@ -2476,7 +2492,8 @@
 
     function isMotionDraining() {
       return Boolean(state && (state.animationState || state.dropQueue.length ||
-        state.onesAcceptedCursor !== state.onesCursor || state.tensAcceptedCursor !== state.tensCursor));
+        state.onesAcceptedCursor !== state.onesCursor || state.tensAcceptedCursor !== state.tensCursor ||
+        state.hundredsAcceptedCursor !== state.hundredsCursor));
     }
 
     function isInteractionLocked() {
@@ -2699,6 +2716,16 @@
           phase: "counting-ones"
         };
       }
+      if (place === "hundreds") {
+        return {
+          accepted: state.hundredsAcceptedCursor,
+          landed: state.hundredsCursor,
+          total: problem.hundreds,
+          carryNeeded: false,
+          carryVisible: true,
+          phase: "counting-hundreds"
+        };
+      }
       return {
         accepted: state.tensAcceptedCursor,
         landed: state.tensCursor,
@@ -2772,13 +2799,43 @@
     function resultHundreds() {
       const panel = document.createElement("div");
       panel.className = "place-panel hundreds result-panel";
-      const showHundred = state.phase === "completed" ? problem.hundreds : state.visibleHundredsCarry;
+      const countedHundreds = state.phase === "completed" ? problem.hundreds : state.hundredsCursor;
       const slot = document.createElement("span");
-      slot.className = "hundred-slot" + (showHundred ? " filled" : "");
-      slot.dataset.carryDestination = "hundreds";
-      slot.setAttribute("aria-label", showHundred ? "One hundred" : "Empty hundreds slot");
-      if (showHundred) slot.textContent = "100";
+      slot.className = "hundred-slot" + (countedHundreds ? " filled" : "");
+      slot.dataset.motionRole = "result";
+      slot.dataset.place = "hundreds";
+      slot.dataset.index = "0";
+      slot.setAttribute("aria-label", countedHundreds ? "One hundred counted" : "Empty hundreds result slot");
+      if (countedHundreds) slot.textContent = "100";
       panel.append(slot);
+      if (problem.carryToHundreds && state.phase !== "completed") {
+        const carriedHundred = document.createElement("span");
+        carriedHundred.className = "carried-hundred-source" + (state.visibleHundredsCarry ? "" : " placeholder");
+        const carryLabel = document.createElement("span");
+        carryLabel.textContent = "carry";
+        carryLabel.setAttribute("aria-hidden", "true");
+        const eligible = state.visibleHundredsCarry && canAcceptPlaceUnit("hundreds") && state.hundredsAcceptedCursor === 0;
+        const carryAvailable = state.visibleHundredsCarry && state.hundredsAcceptedCursor <= 0;
+        const carryToken = carryAvailable
+          ? makeUnit("carry", false, eligible, "Count the gold carried hundred", false,
+            { role: "source", place: "hundreds", index: 0 })
+          : makeEmptyUnit({ role: "source", place: "hundreds", index: 0 });
+        carryToken.classList.add("hundred-slot");
+        if (carryAvailable) {
+          carryToken.classList.add("filled");
+          carryToken.textContent = "100";
+        }
+        carryToken.dataset.carryDestination = "hundreds";
+        carriedHundred.append(carryLabel, carryToken);
+        panel.append(carriedHundred);
+      }
+      if (countedHundreds) {
+        const label = document.createElement("span");
+        label.className = "digit-label hundreds-count";
+        label.textContent = countedHundreds;
+        label.setAttribute("aria-label", countedHundreds + (state.phase === "completed" ? " hundred in the result" : " hundred counted"));
+        panel.append(label);
+      }
       if (state.carryKind === "hundreds") {
         const callout = document.createElement("span");
         callout.className = "carry-callout";
@@ -2908,12 +2965,11 @@
         source.append(document.createTextNode("carry"));
         const carryIndex = problem.originalTensTotal;
         const eligible = state.visibleOnesCarry && canAcceptPlaceUnit("tens") && state.tensAcceptedCursor === carryIndex;
-        const counted = state.tensCursor > carryIndex;
-        const queued = state.tensAcceptedCursor > carryIndex && !counted;
-        const token = state.visibleOnesCarry
-          ? makeUnit("carry", counted, eligible, "Count the gold carried ten", false,
-            { role: "source", place: "tens", index: carryIndex }, queued)
-          : makeEmptyUnit();
+        const carryAvailable = state.visibleOnesCarry && state.tensAcceptedCursor <= carryIndex;
+        const metadata = { role: "source", place: "tens", index: carryIndex };
+        const token = carryAvailable
+          ? makeUnit("carry", false, eligible, "Count the gold carried ten", false, metadata)
+          : makeEmptyUnit(metadata);
         token.dataset.carryDestination = "tens";
         source.append(token);
         panel.append(source);
@@ -2998,6 +3054,7 @@
       if (currentState.phase === "awaiting-answer") return "awaiting-answer";
       if (currentState.animationState === "ones" || currentState.phase === "carrying-to-tens") return "carrying-ones";
       if (currentState.animationState === "hundreds" || currentState.phase === "carrying-to-hundreds") return "carrying-hundreds";
+      if (currentState.phase === "counting-hundreds") return "carrying-hundreds";
       if (currentState.skipMessage && currentState.phase === "counting-tens" && currentState.tensCursor === 0) return "skip-zero-ones";
       if (currentState.phase === "counting-ones") return "counting-ones";
       if (currentState.phase === "counting-tens") return currentState.visibleOnesCarry ? "counting-tens-with-carry" : "counting-tens";
@@ -3107,23 +3164,11 @@
       elements.sound.setAttribute("aria-pressed", String(profile.sound));
       elements.sound.setAttribute("aria-label", profile.sound ? "Turn sound off" : "Turn sound on");
       elements.levelSelect.value = String(profile.currentLevel);
-      if (state.phase === "completed") {
-        elements.countBadge.disabled = motionLocked;
-        elements.countBadge.className = "count-badge next success-next" + (reduceMotion ? " motion-reduced" : "");
-        elements.countBadge.innerHTML = '<span class="count-label">Next →</span>';
-        elements.countBadge.setAttribute("aria-label", "Open the next problem");
-      } else if (state.phase === "awaiting-answer") {
-        elements.countBadge.disabled = motionLocked;
-        elements.countBadge.className = "count-badge next";
-        elements.countBadge.innerHTML = '<span class="count-label">Answer →</span>';
-        elements.countBadge.setAttribute("aria-label", "Enter the answer");
-      } else {
-        elements.countBadge.disabled = true;
-        elements.countBadge.className = "count-badge";
-        elements.countBadge.innerHTML = '<span class="count-label">Count</span><strong id="countValue">' + state.tempCount + "</strong>";
-        elements.countBadge.removeAttribute("aria-label");
-        elements.count = $("#countValue");
-      }
+      const showNext = state.phase === "completed";
+      elements.promptRow.classList.toggle("has-next", showNext);
+      elements.next.hidden = !showNext;
+      elements.next.disabled = !showNext || motionLocked;
+      elements.next.className = "next-button" + (showNext ? " success-next" + (reduceMotion ? " motion-reduced" : "") : "");
       renderJourney();
       renderBoard();
       renderSuggestions();
@@ -3149,11 +3194,12 @@
       const item = {
         place,
         index,
-        owner: unit.dataset.owner || (place === "ones" ? ownerForOnes(index) : ownerForTens(index)),
+        owner: unit.dataset.owner || (place === "ones" ? ownerForOnes(index) : place === "tens" ? ownerForTens(index) : "carry"),
         origin: rectSnapshot(unit)
       };
       if (place === "ones") state.onesAcceptedCursor += 1;
-      else state.tensAcceptedCursor += 1;
+      else if (place === "tens") state.tensAcceptedCursor += 1;
+      else state.hundredsAcceptedCursor += 1;
       state.dropQueue.push(item);
       state.animationState = "drop";
       recordMotion("drop-accepted", { place, index, accepted: index + 1 });
@@ -3162,7 +3208,9 @@
     }
 
     function acceptNextPlaceUnitForSolver() {
-      const place = state.phase === "counting-ones" ? "ones" : state.phase === "counting-tens" ? "tens" : null;
+      const place = state.phase === "counting-ones" ? "ones"
+        : state.phase === "counting-tens" ? "tens"
+          : state.phase === "counting-hundreds" ? "hundreds" : null;
       if (!place || !canAcceptPlaceUnit(place, true)) return null;
       const progress = placeProgress(place);
       return acceptPlaceUnit(place, sourceUnit(place, progress.accepted), true);
@@ -3189,7 +3237,8 @@
         return true;
       }
       cleanupMotionOverlays();
-      const overlay = makeMotionOverlay(item.origin, "unit owner-" + item.owner, {
+      const overlay = makeMotionOverlay(item.origin,
+        "unit owner-" + item.owner + (item.place === "hundreds" ? " hundred-slot filled" : ""), {
         motionKind: "drop", place: item.place, index: item.index
       });
       if (!overlay) return true;
@@ -3220,11 +3269,12 @@
         const useStaticFlash = await animateDrop(item);
         if (!state || session !== motionSession) return;
         if (item.place === "ones") state.onesCursor = item.index + 1;
-        else state.tensCursor = item.index + 1;
+        else if (item.place === "tens") state.tensCursor = item.index + 1;
+        else state.hundredsCursor = item.index + 1;
         state.tempCount = item.index + 1;
         state.dropQueue.shift();
         recordMotion("drop-landed", { place: item.place, index: item.index, landed: item.index + 1 });
-        announce("Count " + state.tempCount + " " + item.place + ".");
+        announce(item.place === "hundreds" ? "Count 1 hundred." : "Count " + state.tempCount + " " + item.place + ".");
 
         const carryKind = item.place === "ones" && state.onesCursor === 10 && problem.carryToTens && !state.visibleOnesCarry
           ? "ones"
@@ -3248,7 +3298,8 @@
           const progress = placeProgress(item.place);
           if (progress.landed >= progress.total) {
             if (item.place === "ones") finishOnesPlace();
-            else finishTensPlace();
+            else if (item.place === "tens") finishTensPlace();
+            else finishHundredsPlace();
           }
         }
       }
@@ -3273,6 +3324,29 @@
     }
 
     function finishTensPlace() {
+      if (state.phase === "completed") return;
+      state.animationState = null;
+      if (problem.carryToHundreds && state.visibleHundredsCarry && !state.hundredsCursor &&
+          profile.currentLevel >= HUNDREDS_UNLOCK_LEVEL) {
+        state.phase = "counting-hundreds";
+        state.tempCount = 0;
+        render();
+        announce("Tens finished. Tap the gold carried hundred.");
+        return;
+      }
+      if (solverRunning) {
+        completeProblem("solver");
+        return;
+      }
+      state.phase = "awaiting-answer";
+      clearIdleHints();
+      render();
+      showSolverHint(false);
+      cue(610, .08);
+      announce("Counting finished. The answer is still hidden. Tap the question mark and enter the answer.");
+    }
+
+    function finishHundredsPlace() {
       if (state.phase === "completed") return;
       state.animationState = null;
       if (solverRunning) {
@@ -3404,6 +3478,8 @@
       state.onesCursor = problem.onesTotal;
       state.tensAcceptedCursor = problem.tensTotal;
       state.tensCursor = problem.tensTotal;
+      state.hundredsAcceptedCursor = problem.hundreds;
+      state.hundredsCursor = problem.hundreds;
       state.dropQueue.length = 0;
       state.animationState = null;
       state.carryPhase = null;
@@ -3462,7 +3538,7 @@
       announce("Solver started from the next unfinished block.");
       render();
       while (state.phase !== "completed") {
-        if (state.phase === "counting-ones" || state.phase === "counting-tens") {
+        if (state.phase === "counting-ones" || state.phase === "counting-tens" || state.phase === "counting-hundreds") {
           const drain = acceptNextPlaceUnitForSolver();
           if (drain) await drain;
         }
@@ -3481,11 +3557,6 @@
     function nextProblem() {
       if (state.phase !== "completed" || diceRefreshState !== "idle") return;
       startWeightedProblem();
-    }
-
-    function handleCountBadgeClick() {
-      if (state.phase === "awaiting-answer") openKeypad();
-      else nextProblem();
     }
 
     function resetCurrentProblem() {
@@ -3699,7 +3770,7 @@
         }
       });
       elements.reset.addEventListener("click", resetCurrentProblem);
-      elements.countBadge.addEventListener("click", handleCountBadgeClick);
+      elements.next.addEventListener("click", nextProblem);
       elements.sound.addEventListener("click", toggleSound);
       elements.levelSelect.addEventListener("change", handleLevelChange);
       elements.settings.addEventListener("click", openSettings);
@@ -3750,10 +3821,14 @@
         onesLandedCursor: state.onesCursor,
         tensAcceptedCursor: state.tensAcceptedCursor,
         tensLandedCursor: state.tensCursor,
+        hundredsAcceptedCursor: state.hundredsAcceptedCursor,
+        hundredsLandedCursor: state.hundredsCursor,
         queueLength: state.dropQueue.length,
         queueBoundary: state.phase === "counting-ones"
           ? nextQueueBoundary(state.onesCursor, problem.onesTotal, Boolean(problem.carryToTens), state.visibleOnesCarry)
-          : nextQueueBoundary(state.tensCursor, problem.tensTotal, Boolean(problem.carryToHundreds), state.visibleHundredsCarry),
+          : state.phase === "counting-hundreds"
+            ? nextQueueBoundary(state.hundredsCursor, problem.hundreds, false, true)
+            : nextQueueBoundary(state.tensCursor, problem.tensTotal, Boolean(problem.carryToHundreds), state.visibleHundredsCarry),
         animationState: state.animationState,
         carryPhase: state.carryPhase,
         carryKind: state.carryKind,
