@@ -1,0 +1,1685 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f2e7d4">
+  <meta name="description" content="BiKL Dugga Elo — a family Durga Puja photo album with a companion YouTube playlist.">
+  <title>BiKL Dugga Elo</title>
+  <link rel="icon" href="resources/cd-art.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;500;600;700&amp;family=Tiro+Bangla:ital@0;1&amp;display=swap" rel="stylesheet">
+  <script>document.documentElement.classList.add('js');</script>
+  <style>
+    :root {
+      color-scheme: light;
+      --cloth: #f2e7d4;
+      --paper: #fff9ed;
+      --paper-deep: #ead9bb;
+      --vermilion: #a33428;
+      --deep-red: #6e211c;
+      --gold: #b48a4d;
+      --charcoal: #2c2622;
+      --muted: #77675b;
+      --page-width: 320px;
+      --page-height: 400px;
+      --header-height: clamp(82px, 11svh, 112px);
+      --player-height: 216px;
+      font-family: "Lato", Calibri, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-synthesis: none;
+    }
+
+    * { box-sizing: border-box; }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      min-width: 0;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    body {
+      margin: 0;
+      color: var(--charcoal);
+      background:
+        linear-gradient(90deg, transparent 0 10px, rgba(163, 52, 40, .2) 10px 13px, transparent 13px calc(100% - 13px), rgba(163, 52, 40, .2) calc(100% - 13px) calc(100% - 10px), transparent calc(100% - 10px)),
+        repeating-linear-gradient(32deg, rgba(110, 33, 28, .024) 0 1px, transparent 1px 8px),
+        var(--cloth);
+    }
+
+    button,
+    input,
+    a { font: inherit; }
+
+    button,
+    input[type="range"] { touch-action: manipulation; }
+
+    button:focus-visible,
+    input:focus-visible,
+    a:focus-visible,
+    .album-shell:focus-visible {
+      outline: 3px solid #f4c972;
+      outline-offset: 3px;
+    }
+
+    .app {
+      position: relative;
+      display: grid;
+      grid-template-rows: var(--header-height) minmax(0, 1fr) var(--player-height);
+      width: 100%;
+      height: 100svh;
+      min-width: 0;
+      min-height: 0;
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    @supports (height: 100dvh) {
+      .app { height: 100dvh; }
+    }
+
+    .app::before,
+    .app::after {
+      position: absolute;
+      z-index: -1;
+      width: 74px;
+      height: 74px;
+      border: 2px solid rgba(180, 138, 77, .26);
+      border-radius: 50%;
+      content: "";
+      pointer-events: none;
+    }
+
+    .app::before {
+      top: 30px;
+      left: 34px;
+      clip-path: polygon(0 0, 100% 0, 0 100%);
+      box-shadow: 13px 13px 0 -11px rgba(110, 33, 28, .24), 26px 26px 0 -23px rgba(110, 33, 28, .2);
+    }
+
+    .app::after {
+      right: 34px;
+      bottom: calc(var(--player-height) + 18px);
+      clip-path: polygon(100% 0, 100% 100%, 0 100%);
+      box-shadow: -13px 13px 0 -11px rgba(110, 33, 28, .24), -26px 26px 0 -23px rgba(110, 33, 28, .2);
+    }
+
+    .site-header {
+      display: grid;
+      place-content: center;
+      min-width: 0;
+      padding: 8px 18px 4px;
+      color: var(--deep-red);
+      text-align: center;
+      background: transparent;
+    }
+
+    h1 {
+      margin: 0;
+      font-family: "Tiro Bangla", Georgia, serif;
+      font-size: clamp(2.7rem, calc(5.5vw + 1rem), 5.7rem);
+      font-weight: 400;
+      line-height: .9;
+      letter-spacing: .01em;
+      text-shadow:
+        0 1px 0 #fff9ed,
+        0 3px 0 rgba(180, 138, 77, .72),
+        0 7px 13px rgba(79, 48, 29, .24);
+      white-space: nowrap;
+    }
+
+    .content {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      min-width: 0;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .album-workspace {
+      position: relative;
+      display: grid;
+      place-items: center;
+      min-width: 0;
+      min-height: 0;
+      padding: clamp(12px, 2.5vw, 28px) clamp(28px, 5vw, 68px);
+      overflow: hidden;
+    }
+
+    .album-shell {
+      position: relative;
+      width: var(--book-width, var(--page-width));
+      height: var(--page-height);
+      min-width: 0;
+      min-height: 0;
+      outline: none;
+      perspective: 1800px;
+      touch-action: pan-y;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .album-book {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(var(--page-count, 1), var(--page-width));
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 16px 15px rgba(79, 48, 29, .2));
+      transform-style: preserve-3d;
+    }
+
+    .page {
+      position: relative;
+      display: grid;
+      min-width: 0;
+      min-height: 0;
+      padding: clamp(14px, 2.3vmin, 25px);
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 18% 12%, rgba(180, 138, 77, .065) 0 1px, transparent 1.5px),
+        repeating-linear-gradient(110deg, rgba(44, 38, 34, .018) 0 1px, transparent 1px 5px),
+        var(--paper);
+      border: 1px solid rgba(125, 94, 55, .3);
+      box-shadow: inset 0 0 24px rgba(180, 138, 77, .09);
+      transform-style: preserve-3d;
+    }
+
+    .page-left { border-radius: 5px 1px 1px 5px; }
+    .page-right { border-radius: 1px 5px 5px 1px; }
+
+    .presentation-single .page-left { display: none; }
+
+    .presentation-single .page-right {
+      border-radius: 5px;
+      box-shadow: inset 9px 0 18px rgba(78, 48, 31, .08);
+    }
+
+    .photo-frame {
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: 100%;
+      height: 100%;
+      min-width: 0;
+      min-height: 0;
+      padding: clamp(5px, 1vmin, 9px);
+      overflow: hidden;
+      background: #f4ead6;
+      border: 1px solid rgba(81, 59, 42, .3);
+      box-shadow: 0 3px 8px rgba(48, 35, 25, .18), inset 0 0 0 1px rgba(255,255,255,.65);
+    }
+
+    .photo-frame::before,
+    .photo-frame::after {
+      position: absolute;
+      z-index: 2;
+      width: 25px;
+      height: 25px;
+      border-color: rgba(180, 138, 77, .62);
+      content: "";
+      pointer-events: none;
+    }
+
+    .photo-frame::before {
+      top: 5px;
+      left: 5px;
+      border-top: 2px solid;
+      border-left: 2px solid;
+    }
+
+    .photo-frame::after {
+      right: 5px;
+      bottom: 5px;
+      border-right: 2px solid;
+      border-bottom: 2px solid;
+    }
+
+    .photo-frame img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      min-width: 0;
+      min-height: 0;
+      object-fit: contain;
+      background: #eee2cd;
+      -webkit-user-drag: none;
+    }
+
+    .photo-frame.is-blank,
+    .photo-frame.is-error,
+    .photo-frame.is-empty {
+      background:
+        linear-gradient(135deg, transparent 49%, rgba(180, 138, 77, .11) 49.5% 50.5%, transparent 51%),
+        var(--paper);
+    }
+
+    .photo-frame.is-blank::after,
+    .photo-frame.is-error::after,
+    .photo-frame.is-empty::after {
+      position: static;
+      width: auto;
+      height: auto;
+      max-width: 19ch;
+      border: 0;
+      color: var(--muted);
+      font-family: "Tiro Bangla", Georgia, serif;
+      font-size: clamp(.75rem, 1.5vmin, .92rem);
+      line-height: 1.35;
+      text-align: center;
+    }
+
+    .photo-frame.is-blank::after { content: "More memories, on another page."; }
+    .photo-frame.is-error::after { content: "This photograph could not be opened."; }
+    .photo-frame.is-empty::after { content: "No photographs are available for this album."; }
+    .photo-frame.is-blank::before,
+    .photo-frame.is-error::before,
+    .photo-frame.is-empty::before { display: none; }
+    .photo-frame.is-blank img,
+    .photo-frame.is-error img,
+    .photo-frame.is-empty img { display: none; }
+
+    .binding {
+      position: absolute;
+      z-index: 12;
+      top: 3%;
+      left: 50%;
+      width: 24px;
+      height: 94%;
+      pointer-events: none;
+      transform: translateX(-50%);
+    }
+
+    .presentation-single .binding { left: 0; }
+
+    .binding::before {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 5px;
+      background: linear-gradient(90deg, #312a25, #aa8350 46%, #3a3029 55%, #171412);
+      border-radius: 4px;
+      box-shadow: 0 0 4px rgba(0,0,0,.35);
+      content: "";
+      transform: translateX(-50%);
+    }
+
+    .coil {
+      position: absolute;
+      left: 1px;
+      width: 22px;
+      height: 9px;
+      border: 3px solid #3d332b;
+      border-top-color: #c49a60;
+      border-radius: 50%;
+      box-shadow: 0 2px 2px rgba(0,0,0,.28);
+      transform: translateY(-50%);
+    }
+
+    .turn-leaf {
+      position: absolute;
+      z-index: 10;
+      top: 0;
+      width: var(--page-width);
+      height: var(--page-height);
+      backface-visibility: hidden;
+      transform-style: preserve-3d;
+      will-change: transform, opacity;
+      pointer-events: none;
+    }
+
+    .turn-leaf.forward { right: 0; transform-origin: left center; }
+    .turn-leaf.backward { left: 0; transform-origin: right center; }
+    .presentation-single .turn-leaf { right: 0; left: 0; }
+
+    .album-nav {
+      position: absolute;
+      z-index: 20;
+      top: 50%;
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 56px;
+      padding: 0;
+      color: #fff9ed;
+      background: rgba(110, 33, 28, .86);
+      border: 1px solid rgba(255, 249, 237, .5);
+      border-radius: 999px;
+      box-shadow: 0 4px 10px rgba(51, 31, 23, .25);
+      cursor: pointer;
+      transform: translateY(-50%);
+    }
+
+    .album-nav:hover { background: var(--vermilion); }
+    .album-nav:disabled { cursor: default; opacity: .42; }
+    .album-nav.previous { left: clamp(5px, 1.7vw, 22px); }
+    .album-nav.next { right: clamp(5px, 1.7vw, 22px); }
+
+    .compact-status {
+      display: none;
+      min-width: 0;
+      min-height: 0;
+    }
+
+    .player {
+      position: relative;
+      min-width: 0;
+      min-height: 0;
+      padding: 8px max(10px, 1.5vw);
+      color: #fff7e8;
+      background: transparent;
+      overflow: hidden;
+    }
+
+    .mini-player {
+      position: absolute;
+      bottom: 12px;
+      left: 50%;
+      display: grid;
+      grid-template-columns: 92px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 16px;
+      width: clamp(480px, 52vw, 700px);
+      min-height: 142px;
+      padding: 14px 24px 14px 18px;
+      background: linear-gradient(105deg, rgba(62, 45, 35, .82), rgba(110, 33, 28, .86));
+      border: 1px solid rgba(255, 249, 237, .3);
+      border-radius: 999px;
+      box-shadow:
+        0 16px 34px rgba(54, 31, 22, .34),
+        inset 0 1px rgba(255, 249, 237, .14);
+      -webkit-backdrop-filter: blur(10px) saturate(.88);
+      backdrop-filter: blur(10px) saturate(.88);
+      transform: translateX(-50%);
+    }
+
+    .disc-wrap {
+      display: grid;
+      place-items: center;
+      min-width: 0;
+    }
+
+    .disc {
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: 88px;
+      min-width: 64px;
+      aspect-ratio: 1;
+      overflow: hidden;
+      background: radial-gradient(circle, #b48a4d 0 8%, #f0d69f 9% 15%, #3a2c25 16% 24%, #7e241e 25% 68%, #e9d6b5 69% 71%, #2d2825 72%);
+      border-radius: 50%;
+      box-shadow: 0 6px 13px rgba(0,0,0,.35), inset 0 0 0 2px rgba(255,255,255,.2);
+      animation: disc-spin 7s linear infinite;
+      animation-play-state: paused;
+    }
+
+    .disc.is-spinning { animation-play-state: running; }
+    .disc img { display: block; width: 100%; height: 100%; object-fit: contain; }
+    .disc.css-fallback img { display: none; }
+    .disc.css-fallback::after {
+      color: #fff3d5;
+      content: "BiKL";
+      font-family: "Lato", Calibri, sans-serif;
+      font-size: clamp(.7rem, 1.6vw, 1rem);
+      letter-spacing: .08em;
+    }
+
+    @keyframes disc-spin { to { transform: rotate(360deg); } }
+
+    .player-console {
+      display: grid;
+      grid-template-rows: auto auto;
+      gap: 13px;
+      min-width: 0;
+      align-content: center;
+    }
+
+    .player-heading {
+      min-width: 0;
+    }
+
+    .player-heading h2 {
+      margin: 0;
+      overflow: hidden;
+      color: #fffaf1;
+      font-family: "Lato", Calibri, system-ui, sans-serif;
+      font-size: clamp(.96rem, 1.45vw, 1.15rem);
+      font-weight: 700;
+      line-height: 1.2;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .transport {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      min-width: 0;
+      gap: 9px;
+    }
+
+    .control-button {
+      display: grid;
+      place-items: center;
+      width: 32px;
+      height: 32px;
+      flex: 0 0 auto;
+      padding: 0;
+      color: #fff8e9;
+      background: transparent;
+      border: 0;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .control-button.primary {
+      width: 64px;
+      height: 64px;
+      color: #251e1a;
+      background: #fffaf1;
+      border: 2px solid #251e1a;
+      box-shadow: 0 0 0 3px #fffaf1, 0 5px 14px rgba(0, 0, 0, .24);
+      font-size: 1.15rem;
+    }
+    .control-button:hover:not(:disabled) { background: rgba(255, 249, 237, .14); }
+    .control-button.primary:hover:not(:disabled) { background: #f3dfba; }
+    .control-button:disabled { cursor: not-allowed; opacity: .42; }
+
+    .progress-wrap {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      min-width: 0;
+      gap: 8px;
+    }
+
+    progress {
+      width: 100%;
+      height: 7px;
+      overflow: hidden;
+      appearance: none;
+      background: #4c423b;
+      border: 0;
+      border-radius: 999px;
+    }
+
+    progress::-webkit-progress-bar { background: #4c423b; }
+    progress::-webkit-progress-value { background: #fffaf1; }
+    progress::-moz-progress-bar { background: #fffaf1; }
+    .time-readout { color: rgba(255, 250, 241, .75); font-size: .75rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+    .youtube-surface {
+      position: absolute;
+      right: max(10px, env(safe-area-inset-right));
+      bottom: 8px;
+      box-sizing: content-box;
+      display: grid;
+      place-items: center;
+      width: 200px;
+      min-width: 200px;
+      height: 200px;
+      min-height: 200px;
+      overflow: hidden;
+      background: #171411;
+      border: 1px solid rgba(180, 138, 77, .7);
+      box-shadow: 0 5px 14px rgba(0,0,0,.35);
+    }
+
+    .youtube-host,
+    .youtube-host iframe { display: block; width: 200px !important; height: 200px !important; min-width: 200px; min-height: 200px; border: 0; }
+
+    .player-message {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      display: grid;
+      place-content: center;
+      gap: 8px;
+      padding: 18px;
+      color: #efe3d0;
+      font-size: .85rem;
+      line-height: 1.25;
+      text-align: center;
+      background: #171411;
+    }
+
+    .player-message[hidden] { display: none; }
+    .player-message a { color: #f0c77e; }
+
+    .noscript-note {
+      position: absolute;
+      z-index: 30;
+      right: 12px;
+      bottom: 12px;
+      max-width: 30ch;
+      padding: 10px 12px;
+      color: #fff8e9;
+      background: #2c2622;
+      border: 1px solid #b48a4d;
+      border-radius: 4px;
+      font-size: .85rem;
+    }
+
+    .noscript-note a { color: #f0c77e; }
+
+    .sr-only {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
+    }
+
+    @media (min-width: 701px) and (max-width: 900px) {
+      .mini-player {
+        left: max(10px, env(safe-area-inset-left));
+        width: min(700px, calc(100% - 232px));
+        transform: none;
+      }
+    }
+
+    @media (max-width: 700px) {
+      :root { --player-height: 344px; }
+      .album-workspace { padding-right: 28px; padding-left: 28px; }
+      .mini-player {
+        bottom: 216px;
+        grid-template-columns: 60px minmax(0, 1fr) auto;
+        gap: 9px;
+        width: calc(100% - 20px);
+        min-height: 116px;
+        padding: 10px 16px 10px 12px;
+      }
+      .disc { width: 58px; min-width: 58px; }
+      .player-console { gap: 10px; }
+      .player-heading h2 { font-size: .86rem; }
+      .transport { gap: 3px; }
+      .control-button { width: 26px; height: 28px; font-size: .66rem; }
+      .control-button.primary { width: 52px; height: 52px; font-size: .92rem; box-shadow: 0 0 0 2px #fffaf1, 0 4px 10px rgba(0, 0, 0, .22); }
+      .progress-wrap { gap: 5px; }
+      .time-readout { font-size: .62rem; }
+      .album-nav { width: 31px; height: 48px; }
+    }
+
+    @media (orientation: landscape) and (max-width: 900px) and (max-height: 500px) {
+      :root { --header-height: clamp(46px, 15svh, 58px); }
+
+      .app {
+        grid-template-rows: var(--header-height) minmax(0, 1fr);
+      }
+
+      .app::after { bottom: 12px; }
+
+      h1 { font-size: clamp(1.35rem, 6.5svh, 1.9rem); }
+
+      .content {
+        grid-row: 2;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) clamp(102px, 16vw, 145px);
+        gap: 0;
+        padding: 7px max(7px, env(safe-area-inset-right)) 7px max(7px, env(safe-area-inset-left));
+      }
+
+      .album-workspace {
+        grid-column: 1 / 3;
+        padding: 1px 5px 1px 1px;
+      }
+
+      .album-book {
+        filter: drop-shadow(0 6px 7px rgba(79, 48, 29, .15));
+      }
+
+      .page { padding: clamp(7px, 2svh, 10px); transform-style: flat; }
+      .photo-frame { padding: 4px; box-shadow: 0 2px 4px rgba(48, 35, 25, .12); }
+      .binding { width: 18px; }
+      .coil { left: 1px; width: 16px; height: 7px; border-width: 2px; }
+
+      .album-nav,
+      .player { display: none !important; }
+
+      .compact-status {
+        position: relative;
+        display: grid;
+        grid-column: 3;
+        place-content: center;
+        min-width: 0;
+        min-height: 0;
+        padding: 10px 8px;
+        color: #fff4df;
+        text-align: center;
+        background: #2c2622;
+        border: 1px solid rgba(180, 138, 77, .76);
+        border-left: 4px double rgba(180, 138, 77, .85);
+        border-radius: 2px 5px 5px 2px;
+        box-shadow: 0 4px 9px rgba(58, 35, 24, .2);
+      }
+
+      .compact-status::before {
+        display: block;
+        margin-bottom: 7px;
+        color: #d4a865;
+        content: "Music";
+        font-family: "Tiro Bangla", Georgia, serif;
+        font-size: clamp(.78rem, 3.7svh, 1.05rem);
+      }
+
+      .compact-status p {
+        margin: 0;
+        font-size: clamp(.7rem, 3.1svh, .9rem);
+        line-height: 1.25;
+      }
+
+      .photo-frame.is-blank::after,
+      .photo-frame.is-error::after { font-size: .68rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; }
+      .disc { animation: none; }
+    }
+
+    @media (prefers-contrast: more) {
+      .page, .photo-frame, .control-button, .youtube-surface { border-width: 2px; }
+      .time-readout { color: #fff9ed; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app" id="app" data-layout="normal">
+    <header class="site-header">
+      <h1>BiKL Dugga Elo</h1>
+    </header>
+
+    <main class="content">
+      <section class="album-workspace" id="albumWorkspace" aria-label="Durga Puja photo album">
+        <button class="album-nav previous" id="previousPhoto" type="button" aria-label="Previous album page">&#x276E;</button>
+        <div class="album-shell presentation-single" id="albumShell" role="group" tabindex="0" aria-label="Photo 1 of 45. Use the arrow keys or tap a side to turn pages.">
+          <div class="album-book" id="albumBook">
+            <article class="page page-left" id="leftPage" aria-hidden="true">
+              <div class="photo-frame" id="leftFrame"><img id="leftImage" alt="" decoding="async"></div>
+            </article>
+            <article class="page page-right" id="rightPage">
+              <div class="photo-frame" id="rightFrame">
+                <img id="rightImage" src="resources/album/web/image-00001.jpg" width="1600" height="1067" alt="Close-up of Durga’s face and white shola crown" decoding="async" fetchpriority="high">
+              </div>
+            </article>
+            <div class="binding" id="binding" aria-hidden="true"></div>
+          </div>
+        </div>
+        <button class="album-nav next" id="nextPhoto" type="button" aria-label="Next album page">&#x276F;</button>
+        <p class="sr-only" id="albumAnnouncement" aria-live="polite"></p>
+      </section>
+
+      <aside class="compact-status" id="compactStatus" aria-live="polite">
+        <p id="compactStatusText">Rotate for music</p>
+      </aside>
+    </main>
+
+    <footer class="player" id="fullPlayer" aria-label="Music player">
+      <section class="mini-player" aria-labelledby="playerTitle">
+        <div class="disc-wrap" aria-hidden="true">
+          <div class="disc" id="disc"><img id="discImage" src="resources/cd-art.png" alt=""></div>
+        </div>
+
+        <div class="player-console">
+          <div class="player-heading">
+            <h2 id="playerTitle">Puja playlist</h2>
+          </div>
+          <div class="progress-wrap">
+            <progress id="progress" max="1" value="0" aria-label="Playback progress"></progress>
+            <span class="time-readout" id="timeReadout">0:00 / 0:00</span>
+          </div>
+        </div>
+
+        <div class="transport" aria-label="Playback controls">
+          <button class="control-button" id="previousTrack" type="button" aria-label="Previous track" disabled>&#x23EE;</button>
+          <button class="control-button primary" id="playPause" type="button" aria-label="Play" disabled><span id="playIcon" aria-hidden="true">&#x25B6;</span></button>
+          <button class="control-button" id="nextTrack" type="button" aria-label="Next track" disabled>&#x23ED;</button>
+        </div>
+
+        <span class="sr-only" id="playerStatus" role="status" aria-live="polite">Loading the YouTube player…</span>
+      </section>
+
+      <section class="youtube-surface" id="youtubeSurface" aria-label="YouTube playlist player">
+        <div class="youtube-host" id="youtubeHost"></div>
+        <div class="player-message" id="playerMessage">
+          <span id="playerMessageText">Preparing the official YouTube player…</span>
+          <a id="playlistLink" href="https://www.youtube.com/playlist?list=PLwE4iPKbDie6w4G4GjQ0Mccj49tgjiU4M" target="_blank" rel="noopener noreferrer">Open the playlist on YouTube</a>
+        </div>
+      </section>
+    </footer>
+
+    <noscript>
+      <p class="noscript-note">The first photograph is shown without JavaScript. Music and page turns need JavaScript. <a href="https://www.youtube.com/playlist?list=PLwE4iPKbDie6w4G4GjQ0Mccj49tgjiU4M">Open the playlist on YouTube.</a></p>
+    </noscript>
+  </div>
+
+  <script>
+    (() => {
+      'use strict';
+
+      const ALBUM_IMAGES = [
+        { src: 'resources/album/web/image-00001.jpg', fallback: 'resources/album/image-00001.jpg', width: 1600, height: 1067, alt: 'Close-up of Durga’s face and white shola crown' },
+        { src: 'resources/album/web/image-00002.jpg', fallback: 'resources/album/image-00002.jpg', width: 1600, height: 1067, alt: 'Durga idol with raised arms and white ornamentation' },
+        { src: 'resources/album/web/image-00003.jpg', fallback: 'resources/album/image-00003.jpg', width: 1200, height: 1600, alt: 'Floral pandal and Durga altar beneath a hanging canopy' },
+        { src: 'resources/album/web/image-00004.jpg', fallback: 'resources/album/image-00004.jpg', width: 1600, height: 1203, alt: 'Visitors before the illuminated pandal at night' },
+        { src: 'resources/album/web/image-00005.jpg', fallback: 'resources/album/image-00005.jpg', width: 1203, height: 1600, alt: 'Tall view of the flower-covered pandal and altar' },
+        { src: 'resources/album/web/image-00006.jpg', fallback: 'resources/album/image-00006.jpg', width: 1600, height: 1200, alt: 'Wide decorated pandal with the Durga altar' },
+        { src: 'resources/album/web/image-00007.jpg', fallback: 'resources/album/image-00007.jpg', width: 1600, height: 1203, alt: 'Dhaak players facing the Durga altar' },
+        { src: 'resources/album/web/image-00008.jpg', fallback: 'resources/album/image-00008.jpg', width: 1600, height: 900, alt: 'Children performing a mythological scene' },
+        { src: 'resources/album/web/image-00009.jpg', fallback: 'resources/album/image-00009.jpg', width: 1572, height: 1080, alt: 'Two children in stage costume' },
+        { src: 'resources/album/web/image-00010.jpg', fallback: 'resources/album/image-00010.jpg', width: 1600, height: 900, alt: 'Children lined up in mythological costumes' },
+        { src: 'resources/album/web/image-00011.jpg', fallback: 'resources/album/image-00011.jpg', width: 1600, height: 900, alt: 'Young performers acting together' },
+        { src: 'resources/album/web/image-00012.jpg', fallback: 'resources/album/image-00012.jpg', width: 1600, height: 900, alt: 'Wide view of the children’s performance' },
+        { src: 'resources/album/web/image-00013.jpg', fallback: 'resources/album/image-00013.jpg', width: 1600, height: 1203, alt: 'Adult presenter before the stage cast' },
+        { src: 'resources/album/web/image-00014.jpg', fallback: 'resources/album/image-00014.jpg', width: 1600, height: 1203, alt: 'Women seated for a Puja ritual' },
+        { src: 'resources/album/web/image-00015.jpg', fallback: 'resources/album/image-00015.jpg', width: 1600, height: 1200, alt: 'Community group beneath the Puja canopy' },
+        { src: 'resources/album/web/image-00016.jpg', fallback: 'resources/album/image-00016.jpg', width: 1600, height: 1203, alt: 'Prasad or food distribution outdoors' },
+        { src: 'resources/album/web/image-00017.jpg', fallback: 'resources/album/image-00017.jpg', width: 1600, height: 1203, alt: 'Close view of community food distribution' },
+        { src: 'resources/album/web/image-00018.jpg', fallback: 'resources/album/image-00018.jpg', width: 1600, height: 1203, alt: 'Ritual brass lamp with several flames' },
+        { src: 'resources/album/web/image-00019.jpg', fallback: 'resources/album/image-00019.jpg', width: 1600, height: 1200, alt: 'Priest working beside the Durga idol' },
+        { src: 'resources/album/web/image-00020.jpg', fallback: 'resources/album/image-00020.jpg', width: 1600, height: 1203, alt: 'Priest preparing the idol ensemble' },
+        { src: 'resources/album/web/image-00021.jpg', fallback: 'resources/album/image-00021.jpg', width: 1600, height: 1203, alt: 'Priest beside the completed idol' },
+        { src: 'resources/album/web/image-00022.jpg', fallback: 'resources/album/image-00022.jpg', width: 1600, height: 1203, alt: 'Singer and band under red stage lights' },
+        { src: 'resources/album/web/image-00023.jpg', fallback: 'resources/album/image-00023.jpg', width: 1600, height: 1203, alt: 'Women in lal-paar saris dancing' },
+        { src: 'resources/album/web/image-00024.jpg', fallback: 'resources/album/image-00024.jpg', width: 1600, height: 1200, alt: 'Guests lighting a ceremonial lamp' },
+        { src: 'resources/album/web/image-00025.jpg', fallback: 'resources/album/image-00025.jpg', width: 1600, height: 1200, alt: 'Ritual activity around the Durga altar' },
+        { src: 'resources/album/web/image-00026.jpg', fallback: 'resources/album/image-00026.jpg', width: 1600, height: 1203, alt: 'Front view of the decorated Durga ensemble' },
+        { src: 'resources/album/web/image-00027.jpg', fallback: 'resources/album/image-00027.jpg', width: 1600, height: 1203, alt: 'Wider view of the Durga altar and offerings' },
+        { src: 'resources/album/web/image-00028.jpg', fallback: 'resources/album/image-00028.jpg', width: 1600, height: 1203, alt: 'Children’s dance troupe posing' },
+        { src: 'resources/album/web/image-00029.jpg', fallback: 'resources/album/image-00029.jpg', width: 1600, height: 1203, alt: 'Large nighttime Puja gathering' },
+        { src: 'resources/album/web/image-00030.jpg', fallback: 'resources/album/image-00030.jpg', width: 1600, height: 1203, alt: 'Audience at the nighttime celebration' },
+        { src: 'resources/album/web/image-00031.jpg', fallback: 'resources/album/image-00031.jpg', width: 1600, height: 1200, alt: 'Elevated view of the Puja venue' },
+        { src: 'resources/album/web/image-00032.jpg', fallback: 'resources/album/image-00032.jpg', width: 1600, height: 1203, alt: 'Priest performing aarti' },
+        { src: 'resources/album/web/image-00033.jpg', fallback: 'resources/album/image-00033.jpg', width: 1600, height: 1203, alt: 'Aarti through dhunuchi smoke' },
+        { src: 'resources/album/web/image-00034.jpg', fallback: 'resources/album/image-00034.jpg', width: 1600, height: 1203, alt: 'Smoke-filled ritual before the idol' },
+        { src: 'resources/album/web/image-00035.jpg', fallback: 'resources/album/image-00035.jpg', width: 1600, height: 900, alt: 'Devotee dancing during the ritual' },
+        { src: 'resources/album/web/image-00036.jpg', fallback: 'resources/album/image-00036.jpg', width: 1600, height: 1203, alt: 'Community dancing under blue light' },
+        { src: 'resources/album/web/image-00037.jpg', fallback: 'resources/album/image-00037.jpg', width: 1600, height: 1200, alt: 'Nighttime food stalls and visitors' },
+        { src: 'resources/album/web/image-00038.jpg', fallback: 'resources/album/image-00038.jpg', width: 1600, height: 1200, alt: 'Busy Puja food stalls' },
+        { src: 'resources/album/web/image-00039.jpg', fallback: 'resources/album/image-00039.jpg', width: 1600, height: 1067, alt: 'Outdoor close-up of the Durga idol' },
+        { src: 'resources/album/web/image-00040.jpg', fallback: 'resources/album/image-00040.jpg', width: 1600, height: 1067, alt: 'Community celebrating sindoor khela' },
+        { src: 'resources/album/web/image-00041.jpg', fallback: 'resources/album/image-00041.jpg', width: 1200, height: 1600, alt: 'Puja thali with leaves, sweets, and vermilion' },
+        { src: 'resources/album/web/image-00042.jpg', fallback: 'resources/album/image-00042.jpg', width: 1600, height: 1203, alt: 'Group dancing together on the lawn' },
+        { src: 'resources/album/web/image-00043.jpg', fallback: 'resources/album/image-00043.jpg', width: 1203, height: 1600, alt: 'Woman offering vermilion to the idol' },
+        { src: 'resources/album/web/image-00044.jpg', fallback: 'resources/album/image-00044.jpg', width: 1203, height: 1600, alt: 'Durga idol in a truck for immersion' },
+        { src: 'resources/album/web/image-00045.jpg', fallback: 'resources/album/image-00045.jpg', width: 1600, height: 1200, alt: 'Puja group celebrating on the return bus' }
+      ];
+
+      const PLAYLIST = Object.freeze({
+        id: 'PLwE4iPKbDie6w4G4GjQ0Mccj49tgjiU4M',
+        url: 'https://www.youtube.com/playlist?list=PLwE4iPKbDie6w4G4GjQ0Mccj49tgjiU4M'
+      });
+
+      const elements = {
+        app: document.querySelector('#app'),
+        workspace: document.querySelector('#albumWorkspace'),
+        shell: document.querySelector('#albumShell'),
+        book: document.querySelector('#albumBook'),
+        leftPage: document.querySelector('#leftPage'),
+        rightPage: document.querySelector('#rightPage'),
+        leftFrame: document.querySelector('#leftFrame'),
+        rightFrame: document.querySelector('#rightFrame'),
+        leftImage: document.querySelector('#leftImage'),
+        rightImage: document.querySelector('#rightImage'),
+        binding: document.querySelector('#binding'),
+        previousPhoto: document.querySelector('#previousPhoto'),
+        nextPhoto: document.querySelector('#nextPhoto'),
+        albumAnnouncement: document.querySelector('#albumAnnouncement'),
+        compactStatusText: document.querySelector('#compactStatusText'),
+        fullPlayer: document.querySelector('#fullPlayer'),
+        disc: document.querySelector('#disc'),
+        discImage: document.querySelector('#discImage'),
+        playerTitle: document.querySelector('#playerTitle'),
+        playerStatus: document.querySelector('#playerStatus'),
+        previousTrack: document.querySelector('#previousTrack'),
+        playPause: document.querySelector('#playPause'),
+        playIcon: document.querySelector('#playIcon'),
+        nextTrack: document.querySelector('#nextTrack'),
+        progress: document.querySelector('#progress'),
+        timeReadout: document.querySelector('#timeReadout'),
+        youtubeHost: document.querySelector('#youtubeHost'),
+        playerMessage: document.querySelector('#playerMessage'),
+        playerMessageText: document.querySelector('#playerMessageText')
+      };
+
+      const compactQuery = window.matchMedia('(orientation: landscape) and (max-width: 900px) and (max-height: 500px)');
+      const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+      const state = {
+        layout: {
+          mode: compactQuery.matches ? 'restricted-landscape' : 'normal',
+          reducedMotion: reducedMotionQuery.matches,
+          resizeObserver: null
+        },
+        album: {
+          images: ALBUM_IMAGES,
+          activeIndex: 0,
+          presentation: 'single',
+          phase: 'idle',
+          targetIndex: null,
+          direction: 1,
+          animationHandle: null,
+          slideshowTimer: null,
+          isHeld: false,
+          pointer: null,
+          documentVisible: !document.hidden
+        },
+        player: {
+          lifecycle: 'absent',
+          playback: 'unstarted',
+          instance: null,
+          apiRequested: false,
+          apiReady: false,
+          apiTimeout: null,
+          currentPlaylistIndex: 0,
+          playlistLength: 0,
+          currentTrackTitle: 'Puja playlist',
+          currentSeconds: 0,
+          durationSeconds: 0,
+          userHasRequestedPlayback: false,
+          failedPlaylistItems: new Set(),
+          progressTimer: null,
+          lastError: null,
+          loopFallbackUsed: false,
+          compactSnapshot: null,
+          restoreSnapshot: null
+        }
+      };
+
+      const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+      const modulo = (value, divisor) => ((value % divisor) + divisor) % divisor;
+
+      function buildBinding() {
+        elements.binding.replaceChildren();
+        const count = state.album.presentation === 'compact-spread' ? 9 : 13;
+        for (let index = 0; index < count; index += 1) {
+          const coil = document.createElement('span');
+          coil.className = 'coil';
+          coil.style.top = `${(index + .5) * (100 / count)}%`;
+          elements.binding.append(coil);
+        }
+      }
+
+      function normalizedIndex(index, presentation = state.album.presentation) {
+        const count = state.album.images.length;
+        if (!count) return 0;
+        const wrapped = modulo(index, count);
+        return presentation === 'single' ? wrapped : wrapped - (wrapped % 2);
+      }
+
+      function stepSize() {
+        return state.album.presentation === 'single' ? 1 : 2;
+      }
+
+      function targetForDirection(direction) {
+        const count = state.album.images.length;
+        if (count <= 1) return state.album.activeIndex;
+        const step = stepSize();
+        if (direction > 0) {
+          const candidate = state.album.activeIndex + step;
+          return candidate >= count ? 0 : normalizedIndex(candidate);
+        }
+        if (state.album.activeIndex === 0) {
+          return state.album.presentation === 'single' ? count - 1 : count - 1 - ((count - 1) % 2);
+        }
+        return normalizedIndex(state.album.activeIndex - step);
+      }
+
+      function clearFrame(frame, image, mode = 'blank') {
+        image.removeAttribute('src');
+        image.alt = '';
+        image.onerror = null;
+        delete image.dataset.imageIndex;
+        frame.classList.remove('is-error', 'is-blank', 'is-empty');
+        frame.classList.add(mode === 'error' ? 'is-error' : mode === 'empty' ? 'is-empty' : 'is-blank');
+      }
+
+      function populateFrame(frame, image, imageIndex, highPriority = false) {
+        frame.classList.remove('is-error', 'is-blank', 'is-empty');
+        if (imageIndex < 0 || imageIndex >= state.album.images.length) {
+          clearFrame(frame, image, 'blank');
+          return;
+        }
+
+        const item = state.album.images[imageIndex];
+        image.hidden = false;
+        image.width = item.width;
+        image.height = item.height;
+        image.alt = item.alt;
+        image.decoding = 'async';
+        image.fetchPriority = highPriority ? 'high' : 'auto';
+        if (image.dataset.imageIndex === String(imageIndex) && image.getAttribute('src')) return;
+        image.dataset.imageIndex = String(imageIndex);
+        image.dataset.fallbackAttempted = 'false';
+        image.onerror = () => {
+          if (image.dataset.fallbackAttempted === 'false') {
+            image.dataset.fallbackAttempted = 'true';
+            image.src = item.fallback;
+            return;
+          }
+          image.onerror = null;
+          clearFrame(frame, image, 'error');
+        };
+        image.src = item.src;
+      }
+
+      function visibleIndices(index = state.album.activeIndex) {
+        if (!state.album.images.length) return [];
+        return state.album.presentation === 'single' ? [index] : [index, index + 1];
+      }
+
+      function renderAlbum(highPriority = false) {
+        const count = state.album.images.length;
+        const single = state.album.presentation === 'single';
+        elements.shell.classList.toggle('presentation-single', single);
+        elements.shell.classList.toggle('presentation-spread', !single);
+        elements.leftPage.setAttribute('aria-hidden', String(single));
+
+        if (!count) {
+          clearFrame(elements.leftFrame, elements.leftImage, 'blank');
+          clearFrame(elements.rightFrame, elements.rightImage, 'empty');
+          elements.shell.setAttribute('aria-label', 'The photo album is empty.');
+          elements.previousPhoto.disabled = true;
+          elements.nextPhoto.disabled = true;
+          return;
+        }
+
+        if (single) {
+          clearFrame(elements.leftFrame, elements.leftImage, 'blank');
+          populateFrame(elements.rightFrame, elements.rightImage, state.album.activeIndex, highPriority);
+        } else {
+          populateFrame(elements.leftFrame, elements.leftImage, state.album.activeIndex, highPriority);
+          populateFrame(elements.rightFrame, elements.rightImage, state.album.activeIndex + 1, highPriority);
+        }
+
+        const shown = visibleIndices().filter(index => index < count);
+        const label = shown.length === 1
+          ? `Photo ${shown[0] + 1} of ${count}: ${state.album.images[shown[0]].alt}`
+          : `Photos ${shown[0] + 1} and ${shown[1] + 1} of ${count}`;
+        elements.shell.setAttribute('aria-label', `${label}. Use the arrow keys or tap a side to turn pages.`);
+        const disabled = count <= 1;
+        elements.previousPhoto.disabled = disabled;
+        elements.nextPhoto.disabled = disabled;
+        preloadAdjacent();
+      }
+
+      function preloadImage(index) {
+        if (index < 0 || index >= state.album.images.length) return Promise.resolve();
+        const item = state.album.images[index];
+        return new Promise(resolve => {
+          const image = new Image(item.width, item.height);
+          image.decoding = 'async';
+          image.onload = () => {
+            const decoded = image.decode ? image.decode().catch(() => {}) : Promise.resolve();
+            decoded.finally(() => {
+              image.onload = null;
+              image.onerror = null;
+              resolve();
+            });
+          };
+          image.onerror = resolve;
+          image.src = item.src;
+        });
+      }
+
+      function preloadAdjacent() {
+        if (state.album.images.length <= 1) return;
+        const forward = targetForDirection(1);
+        const backward = targetForDirection(-1);
+        const indices = new Set([...visibleIndices(forward), ...visibleIndices(backward)]);
+        for (const index of indices) preloadImage(index);
+      }
+
+      function stopSlideshow() {
+        if (state.album.slideshowTimer) window.clearTimeout(state.album.slideshowTimer);
+        state.album.slideshowTimer = null;
+      }
+
+      function restartSlideshow() {
+        stopSlideshow();
+        if (
+          state.album.images.length <= 1 ||
+          !state.album.documentVisible ||
+          state.album.isHeld ||
+          state.album.phase !== 'idle'
+        ) return;
+        state.album.slideshowTimer = window.setTimeout(() => changeAlbum(1, false), 5000);
+      }
+
+      function makeTurnLeaf(direction) {
+        const leaf = document.createElement('article');
+        leaf.className = `page turn-leaf ${direction > 0 ? 'forward page-right' : 'backward page-left'}`;
+        const frame = document.createElement('div');
+        frame.className = 'photo-frame';
+        const image = document.createElement('img');
+        image.alt = '';
+        image.decoding = 'async';
+        frame.append(image);
+        leaf.append(frame);
+        const sourceIndex = state.album.presentation === 'single'
+          ? state.album.activeIndex
+          : direction > 0 ? state.album.activeIndex + 1 : state.album.activeIndex;
+        populateFrame(frame, image, sourceIndex);
+        return leaf;
+      }
+
+      function cleanTurnLayer() {
+        if (state.album.animationHandle) {
+          try { state.album.animationHandle.cancel(); } catch (error) { /* already finished */ }
+        }
+        state.album.animationHandle = null;
+        elements.book.querySelectorAll('.turn-leaf').forEach(leaf => leaf.remove());
+      }
+
+      function commitTurn(target, manual) {
+        cleanTurnLayer();
+        state.album.activeIndex = normalizedIndex(target);
+        state.album.targetIndex = null;
+        state.album.phase = 'idle';
+        renderAlbum();
+        if (manual) {
+          const shown = visibleIndices().filter(index => index < state.album.images.length);
+          elements.albumAnnouncement.textContent = shown.length === 1
+            ? `Showing photo ${shown[0] + 1} of ${state.album.images.length}.`
+            : `Showing photos ${shown[0] + 1} and ${shown[1] + 1} of ${state.album.images.length}.`;
+        }
+        restartSlideshow();
+      }
+
+      async function changeAlbum(direction, manual = true) {
+        if (state.album.phase !== 'idle' || state.album.images.length <= 1) return;
+        stopSlideshow();
+        state.album.phase = 'preparing';
+        state.album.direction = direction;
+        state.album.targetIndex = targetForDirection(direction);
+        const target = state.album.targetIndex;
+        await Promise.all(visibleIndices(target).map(preloadImage));
+        if (state.album.phase !== 'preparing' || state.album.targetIndex !== target) return;
+
+        const leaf = makeTurnLeaf(direction);
+        elements.book.append(leaf);
+        const reduced = state.layout.reducedMotion;
+        const totalDuration = reduced ? 160 : state.album.presentation === 'compact-spread' ? 480 : 680;
+
+        if (reduced || typeof leaf.animate !== 'function') {
+          state.album.phase = 'first-half';
+          const animation = leaf.animate(
+            [{ opacity: 1, transform: 'translateX(0)' }, { opacity: 0, transform: `translateX(${direction * -12}px)` }],
+            { duration: totalDuration, easing: 'ease-out', fill: 'forwards' }
+          );
+          state.album.animationHandle = animation;
+          try { await animation.finished; } catch (error) { return; }
+          commitTurn(target, manual);
+          return;
+        }
+
+        const half = totalDuration / 2;
+        const midpoint = direction > 0 ? -89.5 : 89.5;
+        const endpoint = direction > 0 ? -179.5 : 179.5;
+        state.album.phase = 'first-half';
+        let animation = leaf.animate(
+          [{ transform: 'rotateY(0deg)', filter: 'brightness(1)' }, { transform: `rotateY(${midpoint}deg)`, filter: 'brightness(.82)' }],
+          { duration: half, easing: 'cubic-bezier(.45,.02,.68,.53)', fill: 'forwards' }
+        );
+        state.album.animationHandle = animation;
+        try { await animation.finished; } catch (error) { return; }
+        if (state.album.targetIndex !== target) return;
+
+        state.album.phase = 'midpoint';
+        state.album.activeIndex = normalizedIndex(target);
+        renderAlbum();
+        state.album.phase = 'second-half';
+        animation = leaf.animate(
+          [{ transform: `rotateY(${midpoint}deg)`, opacity: .82 }, { transform: `rotateY(${endpoint}deg)`, opacity: 0 }],
+          { duration: half, easing: 'cubic-bezier(.32,.47,.25,1)', fill: 'forwards' }
+        );
+        state.album.animationHandle = animation;
+        try { await animation.finished; } catch (error) { return; }
+        commitTurn(target, manual);
+      }
+
+      function cancelTurnAndSettle() {
+        if (state.album.phase === 'idle') return;
+        const target = state.album.targetIndex;
+        cleanTurnLayer();
+        if (Number.isInteger(target)) state.album.activeIndex = normalizedIndex(target);
+        state.album.targetIndex = null;
+        state.album.phase = 'idle';
+      }
+
+      function determinePresentation(bounds) {
+        if (state.layout.mode === 'restricted-landscape') return 'compact-spread';
+        return bounds.width < 620 ? 'single' : 'spread';
+      }
+
+      function sizeAlbum() {
+        const bounds = elements.workspace.getBoundingClientRect();
+        if (!bounds.width || !bounds.height) return;
+        const nextPresentation = determinePresentation(bounds);
+        const oldPresentation = state.album.presentation;
+        if (state.album.phase !== 'idle') cancelTurnAndSettle();
+        state.album.presentation = nextPresentation;
+        state.album.activeIndex = normalizedIndex(state.album.activeIndex, nextPresentation);
+
+        const compact = nextPresentation === 'compact-spread';
+        const pageCount = nextPresentation === 'single' ? 1 : 2;
+        const ratio = compact ? 1.25 : .8;
+        const horizontalAllowance = compact ? 8 : Math.min(80, bounds.width * .08);
+        const verticalAllowance = compact ? 3 : Math.min(32, bounds.height * .07);
+        const availableWidth = Math.max(80, bounds.width - horizontalAllowance);
+        const availableHeight = Math.max(80, bounds.height - verticalAllowance);
+        const maxBookWidth = compact ? availableWidth : Math.min(1100, availableWidth);
+        let pageHeight = Math.min(availableHeight, maxBookWidth / (ratio * pageCount));
+        let pageWidth = pageHeight * ratio;
+        if ((pageWidth * pageCount) > maxBookWidth) {
+          pageWidth = maxBookWidth / pageCount;
+          pageHeight = pageWidth / ratio;
+        }
+
+        elements.shell.style.setProperty('--page-width', `${Math.floor(pageWidth)}px`);
+        elements.shell.style.setProperty('--page-height', `${Math.floor(pageHeight)}px`);
+        elements.shell.style.setProperty('--page-count', pageCount);
+        elements.shell.style.setProperty('--book-width', `${Math.floor(pageWidth * pageCount)}px`);
+        if (oldPresentation !== nextPresentation) buildBinding();
+        renderAlbum(oldPresentation !== nextPresentation);
+        restartSlideshow();
+      }
+
+      function handlePointerDown(event) {
+        if (state.album.phase !== 'idle' || state.album.images.length <= 1 || !event.isPrimary) return;
+        state.album.isHeld = true;
+        stopSlideshow();
+        state.album.pointer = {
+          id: event.pointerId,
+          x: event.clientX,
+          y: event.clientY,
+          time: performance.now()
+        };
+        elements.shell.setPointerCapture?.(event.pointerId);
+      }
+
+      function finishPointer(event, cancelled = false) {
+        const pointer = state.album.pointer;
+        if (!pointer || pointer.id !== event.pointerId) return;
+        state.album.pointer = null;
+        state.album.isHeld = false;
+        try { elements.shell.releasePointerCapture?.(event.pointerId); } catch (error) { /* not captured */ }
+        if (cancelled) {
+          restartSlideshow();
+          return;
+        }
+
+        const dx = event.clientX - pointer.x;
+        const dy = event.clientY - pointer.y;
+        const distance = Math.hypot(dx, dy);
+        const elapsed = performance.now() - pointer.time;
+        const threshold = Math.max(40, elements.shell.clientWidth * .08);
+        if (Math.abs(dx) >= threshold && Math.abs(dx) >= Math.abs(dy) * 1.2) {
+          changeAlbum(dx < 0 ? 1 : -1, true);
+          return;
+        }
+        if (distance <= 8 && elapsed < 500) {
+          const bounds = elements.shell.getBoundingClientRect();
+          changeAlbum(event.clientX < bounds.left + bounds.width / 2 ? -1 : 1, true);
+          return;
+        }
+        restartSlideshow();
+      }
+
+      function isInteractiveTarget(target) {
+        return Boolean(target.closest('button, input, select, textarea, a, iframe, [contenteditable="true"]'));
+      }
+
+      function setCompactStatus(text) {
+        elements.compactStatusText.textContent = text;
+      }
+
+      function currentCompactStatus(wasPlaying = false) {
+        if (['failed', 'timed-out'].includes(state.player.lifecycle)) return 'Music unavailable';
+        if (state.player.lastError && [5, 100, 101, 150].includes(state.player.lastError)) return 'Playlist unavailable';
+        return wasPlaying ? 'Music paused for compact view' : 'Rotate for music';
+      }
+
+      function safePlayerValue(method, fallback) {
+        try {
+          if (state.player.instance && typeof state.player.instance[method] === 'function') {
+            const result = state.player.instance[method]();
+            return result ?? fallback;
+          }
+        } catch (error) { /* the iframe may be shutting down */ }
+        return fallback;
+      }
+
+      function enterRestrictedLayout() {
+        if (state.layout.mode === 'restricted-landscape') return;
+        const wasPlaying = state.player.playback === 'playing';
+        state.player.compactSnapshot = {
+          playlistIndex: safePlayerValue('getPlaylistIndex', state.player.currentPlaylistIndex),
+          currentSeconds: safePlayerValue('getCurrentTime', state.player.currentSeconds),
+          wasPlaying
+        };
+        if (state.player.apiTimeout) window.clearTimeout(state.player.apiTimeout);
+        state.player.apiTimeout = null;
+        stopProgressPolling();
+        if (state.player.instance) {
+          try { state.player.instance.pauseVideo(); } catch (error) { /* best effort */ }
+          try { state.player.instance.destroy(); } catch (error) { /* already removed */ }
+        }
+        state.player.instance = null;
+        elements.youtubeHost.replaceChildren();
+        state.player.lifecycle = 'suspended-compact';
+        state.player.playback = 'paused';
+        updateDisc();
+        setCompactStatus(currentCompactStatus(wasPlaying));
+        state.layout.mode = 'restricted-landscape';
+        elements.app.dataset.layout = state.layout.mode;
+        sizeAlbum();
+      }
+
+      function exitRestrictedLayout() {
+        if (state.layout.mode !== 'restricted-landscape') return;
+        state.layout.mode = 'normal';
+        elements.app.dataset.layout = state.layout.mode;
+        state.player.restoreSnapshot = state.player.compactSnapshot;
+        state.player.compactSnapshot = null;
+        sizeAlbum();
+        createYouTubePlayer();
+      }
+
+      function syncLayoutMode() {
+        if (compactQuery.matches) enterRestrictedLayout();
+        else exitRestrictedLayout();
+      }
+
+      function showPlayerMessage(message, showLink = true) {
+        elements.playerMessageText.textContent = message;
+        elements.playerMessage.querySelector('a').hidden = !showLink;
+        elements.playerMessage.hidden = false;
+      }
+
+      function hidePlayerMessage() {
+        elements.playerMessage.hidden = true;
+      }
+
+      function setControlsEnabled(enabled) {
+        [elements.previousTrack, elements.playPause, elements.nextTrack]
+          .forEach(control => { control.disabled = !enabled; });
+      }
+
+      function loadYouTubeAPI() {
+        if (state.player.apiReady) {
+          createYouTubePlayer();
+          return;
+        }
+        if (state.player.apiRequested) {
+          schedulePlayerApiTimeout();
+          return;
+        }
+        state.player.apiRequested = true;
+        state.player.lifecycle = 'loading';
+        showPlayerMessage('Preparing the official YouTube player…', true);
+
+        const previousReady = window.onYouTubeIframeAPIReady;
+        window.onYouTubeIframeAPIReady = () => {
+          if (typeof previousReady === 'function') previousReady();
+          state.player.apiReady = true;
+          if (state.player.apiTimeout) window.clearTimeout(state.player.apiTimeout);
+          state.player.apiTimeout = null;
+          if (state.layout.mode === 'normal') createYouTubePlayer();
+        };
+
+        const script = document.createElement('script');
+        script.src = 'https://www.youtube.com/iframe_api';
+        script.async = true;
+        script.onerror = () => failPlayer('The YouTube player could not be loaded.', 'failed');
+        document.head.append(script);
+        schedulePlayerApiTimeout();
+      }
+
+      function schedulePlayerApiTimeout() {
+        if (state.player.apiReady || state.player.apiTimeout) return;
+        state.player.apiTimeout = window.setTimeout(() => {
+          state.player.apiTimeout = null;
+          if (!state.player.apiReady && state.layout.mode === 'normal') {
+            failPlayer('The YouTube player took too long to respond.', 'timed-out');
+          }
+        }, 10000);
+      }
+
+      function createYouTubePlayer() {
+        if (state.layout.mode !== 'normal' || state.player.instance) return;
+        if (!/^PL[A-Za-z0-9_-]{10,}$/.test(PLAYLIST.id)) {
+          failPlayer('The playlist configuration is not valid.', 'failed');
+          return;
+        }
+        if (!state.player.apiReady || !window.YT?.Player) {
+          loadYouTubeAPI();
+          return;
+        }
+
+        elements.youtubeHost.replaceChildren();
+        const mount = document.createElement('div');
+        mount.id = `youtube-player-${Date.now()}`;
+        elements.youtubeHost.append(mount);
+        showPlayerMessage('Connecting to YouTube…', true);
+        state.player.lifecycle = 'loading';
+
+        const playerVars = {
+          autoplay: 0,
+          controls: 1,
+          playsinline: 1,
+          loop: 1,
+          listType: 'playlist',
+          list: PLAYLIST.id,
+          rel: 0
+        };
+        if (/^https?:$/.test(location.protocol)) playerVars.origin = location.origin;
+
+        try {
+          state.player.instance = new window.YT.Player(mount.id, {
+            width: '200',
+            height: '200',
+            playerVars,
+            events: {
+              onReady: handlePlayerReady,
+              onStateChange: handlePlayerState,
+              onError: handlePlayerError,
+              onAutoplayBlocked: handleAutoplayBlocked
+            }
+          });
+        } catch (error) {
+          state.player.instance = null;
+          failPlayer('The YouTube player could not be created.', 'failed');
+        }
+      }
+
+      function handlePlayerReady(event) {
+        if (state.layout.mode !== 'normal' || event.target !== state.player.instance) return;
+        state.player.lifecycle = 'ready';
+        state.player.playback = 'cued';
+        setControlsEnabled(true);
+        hidePlayerMessage();
+
+        const snapshot = state.player.restoreSnapshot;
+        state.player.restoreSnapshot = null;
+        if (snapshot) {
+          try {
+            state.player.instance.cuePlaylist({
+              listType: 'playlist',
+              list: PLAYLIST.id,
+              index: Math.max(0, Number(snapshot.playlistIndex) || 0),
+              startSeconds: Math.max(0, Number(snapshot.currentSeconds) || 0)
+            });
+          } catch (error) { /* the configured playlist remains cued */ }
+          state.player.currentPlaylistIndex = Math.max(0, Number(snapshot.playlistIndex) || 0);
+          state.player.currentSeconds = Math.max(0, Number(snapshot.currentSeconds) || 0);
+          elements.playerStatus.textContent = 'Paused — press Play to continue';
+        } else {
+          elements.playerStatus.textContent = 'Ready — press Play';
+        }
+        syncPlayerSnapshot();
+        updatePlayButton();
+        updateDisc();
+      }
+
+      function playbackName(code) {
+        const states = window.YT?.PlayerState;
+        if (!states) return 'unstarted';
+        if (code === states.PLAYING) return 'playing';
+        if (code === states.PAUSED) return 'paused';
+        if (code === states.BUFFERING) return 'buffering';
+        if (code === states.ENDED) return 'ended';
+        if (code === states.CUED) return 'cued';
+        return 'unstarted';
+      }
+
+      function handlePlayerState(event) {
+        if (event.target !== state.player.instance) return;
+        state.player.playback = playbackName(event.data);
+        syncPlayerSnapshot();
+        if (state.player.playback === 'playing') {
+          state.player.loopFallbackUsed = false;
+          elements.playerStatus.textContent = factualTrackStatus('Playing');
+          startProgressPolling();
+        } else if (state.player.playback === 'buffering') {
+          elements.playerStatus.textContent = factualTrackStatus('Buffering');
+          stopProgressPolling();
+        } else if (state.player.playback === 'paused' || state.player.playback === 'cued') {
+          elements.playerStatus.textContent = factualTrackStatus('Paused');
+          stopProgressPolling();
+          syncPlayerSnapshot();
+        } else if (state.player.playback === 'ended') {
+          elements.playerStatus.textContent = 'Track ended';
+          stopProgressPolling();
+          if (state.player.userHasRequestedPlayback && !state.player.loopFallbackUsed) {
+            state.player.loopFallbackUsed = true;
+            window.setTimeout(() => {
+              if (state.player.playback === 'ended' && state.player.instance && state.layout.mode === 'normal') {
+                try { state.player.instance.playVideoAt(0); } catch (error) { /* native loop may have taken over */ }
+              }
+            }, 450);
+          }
+        } else {
+          stopProgressPolling();
+        }
+        updatePlayButton();
+        updateDisc();
+      }
+
+      function handleAutoplayBlocked() {
+        state.player.playback = 'blocked';
+        elements.playerStatus.textContent = 'Playback was blocked — press Play again';
+        stopProgressPolling();
+        updatePlayButton();
+        updateDisc();
+      }
+
+      function handlePlayerError(event) {
+        const code = Number(event.data);
+        state.player.lastError = code;
+        stopProgressPolling();
+        if ([5, 100, 101, 150].includes(code)) {
+          const index = Math.max(0, safePlayerValue('getPlaylistIndex', state.player.currentPlaylistIndex));
+          state.player.failedPlaylistItems.add(index);
+          const length = Math.max(0, safePlayerValue('getPlaylist', []).length || state.player.playlistLength);
+          if (length && state.player.failedPlaylistItems.size >= length) {
+            failPlayer('No playable items are available in this playlist.', 'failed');
+            return;
+          }
+          elements.playerStatus.textContent = 'Skipping an unavailable playlist item…';
+          try { state.player.instance.nextVideo(); } catch (error) { failPlayer('The playlist is unavailable.', 'failed'); }
+          return;
+        }
+        if ([2, 153].includes(code)) {
+          failPlayer(code === 2 ? 'The playlist request is not valid.' : 'YouTube rejected this player request.', 'failed');
+          return;
+        }
+        failPlayer('YouTube reported a playback error.', 'failed');
+      }
+
+      function failPlayer(message, lifecycle) {
+        stopProgressPolling();
+        state.player.lifecycle = lifecycle;
+        state.player.playback = 'error';
+        setControlsEnabled(false);
+        elements.playerStatus.textContent = message;
+        showPlayerMessage(message, true);
+        updatePlayButton();
+        updateDisc();
+        if (state.layout.mode === 'restricted-landscape') setCompactStatus(currentCompactStatus(false));
+      }
+
+      function factualTrackStatus(prefix) {
+        const length = state.player.playlistLength;
+        const index = state.player.currentPlaylistIndex;
+        return length ? `${prefix} — Track ${index + 1} of ${length}` : prefix;
+      }
+
+      function fallbackTrackTitle() {
+        const length = state.player.playlistLength;
+        const index = state.player.currentPlaylistIndex;
+        return length ? `Track ${Math.min(index + 1, length)} of ${length}` : 'Puja playlist';
+      }
+
+      function syncTrackTitle() {
+        const videoData = safePlayerValue('getVideoData', null);
+        const metadataTitle = typeof videoData?.title === 'string' ? videoData.title.trim() : '';
+        state.player.currentTrackTitle = metadataTitle || fallbackTrackTitle();
+        elements.playerTitle.textContent = state.player.currentTrackTitle;
+      }
+
+      function formatTime(seconds) {
+        const safe = Number.isFinite(seconds) && seconds > 0 ? Math.floor(seconds) : 0;
+        const hours = Math.floor(safe / 3600);
+        const minutes = Math.floor((safe % 3600) / 60);
+        const remainder = safe % 60;
+        return hours
+          ? `${hours}:${String(minutes).padStart(2, '0')}:${String(remainder).padStart(2, '0')}`
+          : `${minutes}:${String(remainder).padStart(2, '0')}`;
+      }
+
+      function syncPlayerSnapshot() {
+        if (!state.player.instance || state.layout.mode !== 'normal') return;
+        const playlist = safePlayerValue('getPlaylist', []);
+        state.player.currentPlaylistIndex = Math.max(0, Number(safePlayerValue('getPlaylistIndex', state.player.currentPlaylistIndex)) || 0);
+        state.player.playlistLength = Array.isArray(playlist) ? playlist.length : state.player.playlistLength;
+        state.player.currentSeconds = Math.max(0, Number(safePlayerValue('getCurrentTime', state.player.currentSeconds)) || 0);
+        state.player.durationSeconds = Math.max(0, Number(safePlayerValue('getDuration', state.player.durationSeconds)) || 0);
+        syncTrackTitle();
+        elements.progress.max = Math.max(1, state.player.durationSeconds);
+        elements.progress.value = Math.min(state.player.currentSeconds, Math.max(1, state.player.durationSeconds));
+        elements.timeReadout.textContent = `${formatTime(state.player.currentSeconds)} / ${formatTime(state.player.durationSeconds)}`;
+        if (['playing', 'paused', 'buffering'].includes(state.player.playback)) {
+          const prefix = state.player.playback === 'playing' ? 'Playing' : state.player.playback === 'buffering' ? 'Buffering' : 'Paused';
+          elements.playerStatus.textContent = factualTrackStatus(prefix);
+        }
+      }
+
+      function startProgressPolling() {
+        stopProgressPolling();
+        if (!state.album.documentVisible || state.layout.mode !== 'normal' || state.player.playback !== 'playing') return;
+        syncPlayerSnapshot();
+        state.player.progressTimer = window.setInterval(syncPlayerSnapshot, 1000);
+      }
+
+      function stopProgressPolling() {
+        if (state.player.progressTimer) window.clearInterval(state.player.progressTimer);
+        state.player.progressTimer = null;
+      }
+
+      function updatePlayButton() {
+        const playing = state.player.playback === 'playing' || state.player.playback === 'buffering';
+        elements.playIcon.textContent = playing ? '❚❚' : '▶';
+        elements.playPause.setAttribute('aria-label', playing ? 'Pause' : 'Play');
+      }
+
+      function updateDisc() {
+        const spinning = state.layout.mode === 'normal' && state.player.playback === 'playing' && !state.layout.reducedMotion;
+        elements.disc.classList.toggle('is-spinning', spinning);
+      }
+
+      function togglePlayback() {
+        if (!state.player.instance || state.player.lifecycle !== 'ready') return;
+        const active = state.player.playback === 'playing' || state.player.playback === 'buffering';
+        try {
+          if (active) state.player.instance.pauseVideo();
+          else {
+            state.player.userHasRequestedPlayback = true;
+            state.player.instance.playVideo();
+          }
+        } catch (error) { failPlayer('Playback controls are unavailable.', 'failed'); }
+      }
+
+      function initializeAlbum() {
+        buildBinding();
+        renderAlbum(true);
+        state.layout.resizeObserver = new ResizeObserver(() => window.requestAnimationFrame(sizeAlbum));
+        state.layout.resizeObserver.observe(elements.workspace);
+        sizeAlbum();
+
+        elements.previousPhoto.addEventListener('click', () => changeAlbum(-1, true));
+        elements.nextPhoto.addEventListener('click', () => changeAlbum(1, true));
+        elements.shell.addEventListener('pointerdown', handlePointerDown);
+        elements.shell.addEventListener('pointerup', event => finishPointer(event));
+        elements.shell.addEventListener('pointercancel', event => finishPointer(event, true));
+        elements.shell.addEventListener('lostpointercapture', event => {
+          if (state.album.pointer?.id === event.pointerId) finishPointer(event, true);
+        });
+      }
+
+      function initializePlayerControls() {
+        elements.playPause.addEventListener('click', togglePlayback);
+        elements.previousTrack.addEventListener('click', () => {
+          state.player.userHasRequestedPlayback = true;
+          try { state.player.instance?.previousVideo(); } catch (error) { /* player event reports errors */ }
+        });
+        elements.nextTrack.addEventListener('click', () => {
+          state.player.userHasRequestedPlayback = true;
+          try { state.player.instance?.nextVideo(); } catch (error) { /* player event reports errors */ }
+        });
+
+        elements.discImage.addEventListener('error', () => {
+          if (elements.discImage.dataset.fallback !== 'large') {
+            elements.discImage.dataset.fallback = 'large';
+            elements.discImage.src = 'resources/bikl-large.png';
+          } else {
+            elements.discImage.remove();
+            elements.disc.classList.add('css-fallback');
+          }
+        });
+      }
+
+      document.addEventListener('keydown', event => {
+        if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey || isInteractiveTarget(event.target)) return;
+        if (event.key === 'ArrowLeft') {
+          event.preventDefault();
+          changeAlbum(-1, true);
+        } else if (event.key === 'ArrowRight') {
+          event.preventDefault();
+          changeAlbum(1, true);
+        } else if ((event.key === ' ' || event.code === 'Space') && state.layout.mode === 'normal') {
+          event.preventDefault();
+          togglePlayback();
+        }
+      });
+
+      document.addEventListener('visibilitychange', () => {
+        state.album.documentVisible = !document.hidden;
+        if (document.hidden) {
+          stopSlideshow();
+          stopProgressPolling();
+        } else {
+          restartSlideshow();
+          if (state.player.playback === 'playing') startProgressPolling();
+        }
+      });
+
+      compactQuery.addEventListener?.('change', syncLayoutMode);
+      reducedMotionQuery.addEventListener?.('change', event => {
+        state.layout.reducedMotion = event.matches;
+        updateDisc();
+      });
+      window.addEventListener('orientationchange', () => window.requestAnimationFrame(syncLayoutMode));
+
+      initializeAlbum();
+      initializePlayerControls();
+      if (state.layout.mode === 'restricted-landscape') {
+        elements.app.dataset.layout = state.layout.mode;
+        setCompactStatus('Rotate for music');
+      } else {
+        loadYouTubeAPI();
+      }
+      restartSlideshow();
+    })();
+  </script>
+</body>
+</html>
