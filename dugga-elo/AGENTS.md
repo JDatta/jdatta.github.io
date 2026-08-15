@@ -29,20 +29,21 @@
 - Normal layouts keep a transparent, title-only semantic header above the album
   and a transparent semantic music footer below it. Do not restore colored
   header or footer bands or a header subtitle.
-- The normal music footer contains two separate surfaces: a translucent,
-  shadowed mini-player and an unobscured native YouTube iframe of at least 200 by
-  200 pixels anchored at bottom right. At widths up to 700 px, stack the
-  mini-player above the iframe; otherwise keep them side by side without overlap.
+- The normal music footer always contains a translucent, shadowed mini-player.
+  The 200 by 200 pixel native YouTube iframe remains alive but is visually clipped
+  and unfocusable by default. The startup `show-yt-iframe` feature flag restores
+  its unobscured bottom-right surface; at widths up to 700 px, stack the
+  mini-player above it, otherwise keep them side by side without overlap.
 - Preserve the mini-player's disc–track information–controls order. Track text
   is sans-serif and title-only; do not add an artist/uploader line or a visible
   playback-status label. Keep factual player messages in the screen-reader live
   region. The custom controls are previous, dominant play/pause, and next;
   volume and mute remain on the native YouTube surface.
 - Restricted landscape is exactly `(orientation: landscape) and
-  (max-width: 900px) and (max-height: 500px)`. It shows a two-page album plus a
-  textual status rail. Destroy the YouTube iframe on entry; show no disc,
-  artwork, player controls, or iframe there. Recreate and cue the saved position
-  without audible autoplay on exit.
+  (max-width: 900px) and (max-height: 500px)`. It shows a two-page album plus one
+  compact play/pause button. Keep the YouTube iframe and playback alive across
+  entry and exit, but show no disc, artwork, metadata, progress, previous/next
+  controls, or native iframe surface there.
 - `server.py`, `image-compressor.sh`, and source photographs are outside routine
   UI edits. Files outside this project are out of scope.
 
@@ -51,16 +52,18 @@
 - Test both direct localhost root serving and subpath serving from the parent
   `jdatta.github.io` directory.
 - Exercise 390×844, 844×390, 768×1024, 1024×768, and 1440×900.
-- In every normal viewport, confirm the mini-player, iframe, and album do not
-  overlap; the document does not overflow; and the primary play/pause control is
+- In every normal viewport, confirm the mini-player and album do not overlap;
+  when `show-yt-iframe` is true, also confirm the native surface does not overlap
+  either. The document must not overflow, and the primary play/pause control is
   substantially larger than previous/next.
-- Confirm a real `<iframe>` exists in normal mode and no `<iframe>` exists in
-  restricted landscape.
+- Confirm one real `<iframe>` exists in normal and restricted landscape modes.
+  With `show-yt-iframe` false it is visually clipped and unfocusable; with the
+  flag true it is visible only in normal layouts.
 - Verify current-title metadata after previous/next and automatic playlist
   transitions. If metadata is temporarily unavailable, show `Track N of M`, then
   `Puja playlist` until playlist position is known.
-- Rotation out of restricted mode must restore the saved track and time in a
-  paused state. It must never resume sound automatically.
+- Playback, track, and time must continue uninterrupted while rotating into and
+  out of restricted mode. Both play/pause controls must remain synchronized.
 - Resizing during a page turn commits the selected target and removes temporary
   turn layers.
 - Keep automated album changes silent to screen readers; manual changes use the

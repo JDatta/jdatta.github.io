@@ -38,18 +38,21 @@ progress, and elapsed/total time in a three-part disc–information–controls
 layout. Its translucent, shadowed pill keeps the controls legible over future
 background treatments, and its play/pause control is intentionally dominant.
 Playback state remains available to assistive technology without adding a
-visible status label. A separate 200×200 official YouTube surface sits at the
-bottom right with its native identity, volume, controls, keyboard behavior, and
-fullscreen action; custom controls are only a supplement. Narrow portrait
-screens stack the mini-player above the bottom-right YouTube surface so neither
-overlaps the album. Music never autoplays audibly.
+visible status label. A separate official YouTube iframe stays alive for music
+but is visually clipped and unfocusable by default, keeping the album and compact
+mini-player primary. A source feature flag can expose its 200×200 native surface
+at the bottom right with identity, volume, controls, keyboard behavior, and
+fullscreen action; custom controls remain a supplement. When exposed, narrow
+portrait screens stack the mini-player above it so neither overlaps the album.
+Music never autoplays audibly.
 
 Very short mobile landscape viewports prioritize photographs. They show two
 compact album pages, slim leather and page-edge decoration, both magnetic
-closure controls, and a narrower text status rail. Music stops, the external
-player is removed, and all music controls and artwork disappear. Rotating back
-restores the same playlist position in a paused state and asks for a fresh play
-gesture.
+closure controls, and one prominent play/pause button. The existing player and
+music continue uninterrupted through rotation, while disc artwork, track
+information, progress, time, previous/next controls, and the native YouTube
+surface stay out of view. Returning to normal immediately presents the current
+track state in the full mini-player.
 
 ## Accessibility and resilience
 
@@ -64,8 +67,8 @@ is available in normal mode.
 
 - No backend, accounts, chat, live-listener fiction, analytics, or shared state.
 - No local music files, proxying, API keys, or invented track metadata.
-- No extracted thumbnails, fake record jackets, hidden miniature players, or
-  custom controls placed over the YouTube surface.
+- No extracted thumbnails, fake record jackets, or custom controls placed over
+  the YouTube surface.
 - No neon, glass panels, animated smoke, large clip art, or dense mandala fields.
 - No publishing during localhost alpha. Public-use consent for identifiable
   people is a release gate, not an alpha implementation detail.

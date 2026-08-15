@@ -22,16 +22,20 @@ right-aligned transport controls with a dominant play/pause action. Its
 translucent surface uses blur and shadow to retain contrast over changing
 backgrounds. Factual
 playback status is maintained in a screen-reader-only live region instead of a
-visible label. An independent, unobstructed 200×200 YouTube surface is anchored
-at the bottom right. At widths up to 700 px the mini-player stacks above that
-surface and the music row grows to reserve space for both.
+visible label. The independent 200×200 YouTube iframe remains mounted for API
+playback but its surface is clipped, inert, and unfocusable by default. The
+startup `show-yt-iframe` feature flag makes the native surface unobstructed at
+the bottom right. At widths up to 700 px the mini-player then stacks above that
+surface and the music row grows to reserve space for both. With the default flag
+the shorter music row centers the mini-player without reserving iframe space.
 
 Restricted landscape activates only when the media query reports landscape,
 width at most 900 px, and height at most 500 px. The content row becomes two
-compact 5:4 pages plus a narrow text-only status rail. The leather reveal,
+compact 5:4 pages plus one prominent play/pause button. The leather reveal,
 stacked edges, and closure hardware become slimmer, but both album navigation
-targets remain available. The iframe is destroyed, not hidden. The music footer,
-disc, artwork, and controls are absent from the rendered layout.
+targets remain available. The full music footer is clipped and inert while its
+iframe stays alive. Disc artwork, track information, progress, time,
+previous/next controls, and the native iframe surface are absent visually.
 
 A `ResizeObserver` fits the decorated shell to its flexible workspace. Sizing
 subtracts workspace padding, leather reveal, stacked-page depth, and any
@@ -87,18 +91,22 @@ in normal mode. Only manual album changes write to the polite live region.
 
 The playlist ID is validated locally before the official IFrame API is loaded.
 The player is configured as an embedded playlist with native controls, inline
-playback, looping, no autoplay, and the current HTTP origin. Custom controls call
-documented player methods and derive their state from player events. The native
-surface remains the place for volume and mute control. A one-second poll reads
+playback, looping, no autoplay, and the current HTTP origin. It is created at
+startup even when the initial viewport is restricted landscape. Custom controls
+call documented player methods and derive their state from player events. When
+the feature flag exposes it, the native surface remains the place for volume and
+mute control. A one-second poll reads
 only factual time, duration, playlist index, playlist length, and current video
 title while playback is active and the document is visible. Title state also
 syncs on ready and player-state transitions; unavailable metadata falls back to
 `Track N of M`, then `Puja playlist` until playlist position is known.
 
-Entering restricted mode snapshots the known playlist index and current time,
-pauses playback, stops polling, calls `destroy()`, clears the host, and updates
-the text status. Leaving restricted mode creates a new visible player and cues
-the snapshot without playing it. The user must explicitly press Play again.
+Restricted-layout transitions change only presentation state: they do not pause,
+snapshot, destroy, clear, or recreate the player. Playback and progress polling
+continue uninterrupted. The compact and normal play/pause controls share one
+action and receive the same event-derived icon, disabled state, and accessible
+label. Returning to normal mode immediately refreshes title, progress, time, and
+disc state from the existing player.
 
 API timeout or creation failure disables supplemental controls and retains a
 direct playlist link. Unavailable or embedding-disabled playlist items are
@@ -114,6 +122,7 @@ All project asset URLs are relative. The directory therefore works at localhost
 root and can later move unchanged to a `/dugga-elo/` GitHub Pages subpath. The
 canonical high-resolution photos remain intact, while checked-in progressive web
 copies cap decode dimensions. The initial photograph is high priority; all other
-album decodes are current or adjacent. Timers stop in background tabs, page-turn
-nodes are temporary, and the YouTube document is removed completely in compact
-mode.
+album decodes are current or adjacent. Timers stop in background tabs and
+page-turn nodes are temporary. The YouTube document remains mounted across
+responsive layout changes so playback continuity does not depend on
+reconstruction.

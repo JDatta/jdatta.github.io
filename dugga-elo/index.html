@@ -35,7 +35,7 @@
       --shell-width: calc(var(--book-width) + ((var(--cover-reveal) + var(--closure-overhang)) * 2));
       --shell-height: calc(var(--page-height) + (var(--cover-reveal) * 2) + var(--stack-depth));
       --header-height: clamp(82px, 11svh, 112px);
-      --player-height: 216px;
+      --player-height: 166px;
       font-family: "Lato", Calibri, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       font-synthesis: none;
     }
@@ -472,7 +472,9 @@
     .album-nav.next::before { right: 2px; }
     .album-nav.next::after { right: 2px; content: "\276F"; }
 
-    .compact-status {
+    html.show-yt-iframe { --player-height: 216px; }
+
+    .compact-player {
       display: none;
       min-width: 0;
       min-height: 0;
@@ -641,6 +643,17 @@
       background: #171411;
       border: 1px solid rgba(180, 138, 77, .7);
       box-shadow: 0 5px 14px rgba(0,0,0,.35);
+      clip: rect(0, 0, 0, 0);
+      clip-path: inset(50%);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    html.show-yt-iframe .youtube-surface {
+      clip: auto;
+      clip-path: none;
+      opacity: 1;
+      pointer-events: auto;
     }
 
     .youtube-host,
@@ -693,7 +706,7 @@
     }
 
     @media (min-width: 701px) and (max-width: 900px) {
-      .mini-player {
+      html.show-yt-iframe .mini-player {
         left: max(10px, env(safe-area-inset-left));
         width: min(700px, calc(100% - 232px));
         transform: none;
@@ -706,16 +719,17 @@
     }
 
     @media (max-width: 700px) {
-      :root { --player-height: 344px; }
+      :root { --player-height: 140px; }
+      html.show-yt-iframe { --player-height: 344px; }
       .album-workspace { padding-right: 4px; padding-left: 4px; }
       .mini-player {
-        bottom: 216px;
         grid-template-columns: 60px minmax(0, 1fr) auto;
         gap: 9px;
         width: calc(100% - 20px);
         min-height: 116px;
         padding: 10px 16px 10px 12px;
       }
+      html.show-yt-iframe .mini-player { bottom: 216px; }
       .disc { width: 58px; min-width: 58px; }
       .player-console { gap: 10px; }
       .player-heading h2 { font-size: .86rem; }
@@ -758,7 +772,17 @@
       .binding { width: 18px; }
       .coil { left: 1px; width: 16px; height: 7px; border-width: 2px; }
 
-      .player { display: none !important; }
+      .player {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 200px;
+        height: 200px;
+        padding: 0;
+        clip: rect(0, 0, 0, 0);
+        clip-path: inset(50%);
+        pointer-events: none;
+      }
 
       .album-cover::before { inset: 4px; }
       .album-nav { width: 44px; height: 48px; }
@@ -767,37 +791,29 @@
       .album-nav.previous { padding-left: 11px; border-radius: 4px 18px 18px 4px; }
       .album-nav.next { padding-right: 11px; border-radius: 18px 4px 4px 18px; }
 
-      .compact-status {
-        position: relative;
+      .compact-player {
         display: grid;
         grid-column: 3;
-        place-content: center;
+        place-items: center;
         min-width: 0;
         min-height: 0;
-        padding: 10px 8px;
-        color: #fff4df;
-        text-align: center;
-        background: #2c2622;
-        border: 1px solid rgba(180, 138, 77, .76);
-        border-left: 4px double rgba(180, 138, 77, .85);
-        border-radius: 2px 5px 5px 2px;
-        box-shadow: 0 4px 9px rgba(58, 35, 24, .2);
+        padding: 8px;
       }
 
-      .compact-status::before {
-        display: block;
-        margin-bottom: 7px;
-        color: #d4a865;
-        content: "Music";
-        font-family: "Tiro Bangla", Georgia, serif;
-        font-size: clamp(.78rem, 3.7svh, 1.05rem);
+      .compact-play-pause {
+        width: clamp(64px, 16svh, 78px);
+        height: clamp(64px, 16svh, 78px);
+        color: #251e1a;
+        background: #fffaf1;
+        border: 2px solid #251e1a;
+        border-radius: 50%;
+        box-shadow: 0 0 0 4px #fffaf1, 0 7px 18px rgba(54, 31, 22, .3);
+        font-size: clamp(1rem, 4svh, 1.35rem);
+        cursor: pointer;
       }
 
-      .compact-status p {
-        margin: 0;
-        font-size: clamp(.7rem, 3.1svh, .9rem);
-        line-height: 1.25;
-      }
+      .compact-play-pause:hover:not(:disabled) { background: #f3dfba; }
+      .compact-play-pause:disabled { cursor: not-allowed; opacity: .42; }
 
       .photo-frame.is-blank::after,
       .photo-frame.is-error::after { font-size: .68rem; }
@@ -842,8 +858,8 @@
         <p class="sr-only" id="albumAnnouncement" aria-live="polite"></p>
       </section>
 
-      <aside class="compact-status" id="compactStatus" aria-live="polite">
-        <p id="compactStatusText">Rotate for music</p>
+      <aside class="compact-player" aria-label="Compact music player">
+        <button class="compact-play-pause" id="compactPlayPause" type="button" aria-label="Play" disabled><span id="compactPlayIcon" aria-hidden="true">&#x25B6;</span></button>
       </aside>
     </main>
 
@@ -869,7 +885,6 @@
           <button class="control-button" id="nextTrack" type="button" aria-label="Next track" disabled>&#x23ED;</button>
         </div>
 
-        <span class="sr-only" id="playerStatus" role="status" aria-live="polite">Loading the YouTube player…</span>
       </section>
 
       <section class="youtube-surface" id="youtubeSurface" aria-label="YouTube playlist player">
@@ -880,6 +895,8 @@
         </div>
       </section>
     </footer>
+
+    <span class="sr-only" id="playerStatus" role="status" aria-live="polite">Loading the YouTube player…</span>
 
     <noscript>
       <p class="noscript-note">The first photograph is shown without JavaScript. Music and page turns need JavaScript. <a href="https://www.youtube.com/playlist?list=PLwE4iPKbDie6w4G4GjQ0Mccj49tgjiU4M">Open the playlist on YouTube.</a></p>
@@ -938,6 +955,10 @@
         { src: 'resources/album/web/image-00045.jpg', fallback: 'resources/album/image-00045.jpg', width: 1600, height: 1200, alt: 'Puja group celebrating on the return bus' }
       ];
 
+      const FEATURE_FLAGS = Object.freeze({
+        'show-yt-iframe': false
+      });
+
       const PLAYLIST = Object.freeze({
         id: 'PLwE4iPKbDie6w4G4GjQ0Mccj49tgjiU4M',
         url: 'https://www.youtube.com/playlist?list=PLwE4iPKbDie6w4G4GjQ0Mccj49tgjiU4M'
@@ -958,7 +979,6 @@
         previousPhoto: document.querySelector('#previousPhoto'),
         nextPhoto: document.querySelector('#nextPhoto'),
         albumAnnouncement: document.querySelector('#albumAnnouncement'),
-        compactStatusText: document.querySelector('#compactStatusText'),
         fullPlayer: document.querySelector('#fullPlayer'),
         disc: document.querySelector('#disc'),
         discImage: document.querySelector('#discImage'),
@@ -967,9 +987,12 @@
         previousTrack: document.querySelector('#previousTrack'),
         playPause: document.querySelector('#playPause'),
         playIcon: document.querySelector('#playIcon'),
+        compactPlayPause: document.querySelector('#compactPlayPause'),
+        compactPlayIcon: document.querySelector('#compactPlayIcon'),
         nextTrack: document.querySelector('#nextTrack'),
         progress: document.querySelector('#progress'),
         timeReadout: document.querySelector('#timeReadout'),
+        youtubeSurface: document.querySelector('#youtubeSurface'),
         youtubeHost: document.querySelector('#youtubeHost'),
         playerMessage: document.querySelector('#playerMessage'),
         playerMessageText: document.querySelector('#playerMessageText')
@@ -1013,9 +1036,7 @@
           failedPlaylistItems: new Set(),
           progressTimer: null,
           lastError: null,
-          loopFallbackUsed: false,
-          compactSnapshot: null,
-          restoreSnapshot: null
+          loopFallbackUsed: false
         }
       };
 
@@ -1389,49 +1410,40 @@
         return Boolean(target.closest('button, input, select, textarea, a, iframe, [contenteditable="true"]'));
       }
 
-      function setCompactStatus(text) {
-        elements.compactStatusText.textContent = text;
-      }
-
-      function currentCompactStatus(wasPlaying = false) {
-        if (['failed', 'timed-out'].includes(state.player.lifecycle)) return 'Music unavailable';
-        if (state.player.lastError && [5, 100, 101, 150].includes(state.player.lastError)) return 'Playlist unavailable';
-        return wasPlaying ? 'Music paused for compact view' : 'Rotate for music';
-      }
-
       function safePlayerValue(method, fallback) {
         try {
           if (state.player.instance && typeof state.player.instance[method] === 'function') {
             const result = state.player.instance[method]();
             return result ?? fallback;
           }
-        } catch (error) { /* the iframe may be shutting down */ }
+        } catch (error) { /* the player may be temporarily unavailable */ }
         return fallback;
+      }
+
+      function syncPlayerSurfaces() {
+        const restricted = state.layout.mode === 'restricted-landscape';
+        const showYouTubeSurface = FEATURE_FLAGS['show-yt-iframe'] && !restricted;
+        document.documentElement.classList.toggle('show-yt-iframe', FEATURE_FLAGS['show-yt-iframe']);
+        elements.fullPlayer.inert = restricted;
+        elements.youtubeSurface.inert = !showYouTubeSurface;
+        if (restricted) elements.fullPlayer.setAttribute('aria-hidden', 'true');
+        else elements.fullPlayer.removeAttribute('aria-hidden');
+        if (showYouTubeSurface) elements.youtubeSurface.removeAttribute('aria-hidden');
+        else elements.youtubeSurface.setAttribute('aria-hidden', 'true');
+
+        const iframe = elements.youtubeHost.querySelector('iframe');
+        if (iframe) {
+          if (showYouTubeSurface) iframe.removeAttribute('tabindex');
+          else iframe.tabIndex = -1;
+        }
       }
 
       function enterRestrictedLayout() {
         if (state.layout.mode === 'restricted-landscape') return;
-        const wasPlaying = state.player.playback === 'playing';
-        state.player.compactSnapshot = {
-          playlistIndex: safePlayerValue('getPlaylistIndex', state.player.currentPlaylistIndex),
-          currentSeconds: safePlayerValue('getCurrentTime', state.player.currentSeconds),
-          wasPlaying
-        };
-        if (state.player.apiTimeout) window.clearTimeout(state.player.apiTimeout);
-        state.player.apiTimeout = null;
-        stopProgressPolling();
-        if (state.player.instance) {
-          try { state.player.instance.pauseVideo(); } catch (error) { /* best effort */ }
-          try { state.player.instance.destroy(); } catch (error) { /* already removed */ }
-        }
-        state.player.instance = null;
-        elements.youtubeHost.replaceChildren();
-        state.player.lifecycle = 'suspended-compact';
-        state.player.playback = 'paused';
-        updateDisc();
-        setCompactStatus(currentCompactStatus(wasPlaying));
         state.layout.mode = 'restricted-landscape';
         elements.app.dataset.layout = state.layout.mode;
+        syncPlayerSurfaces();
+        updateDisc();
         sizeAlbum();
       }
 
@@ -1439,10 +1451,11 @@
         if (state.layout.mode !== 'restricted-landscape') return;
         state.layout.mode = 'normal';
         elements.app.dataset.layout = state.layout.mode;
-        state.player.restoreSnapshot = state.player.compactSnapshot;
-        state.player.compactSnapshot = null;
+        syncPlayerSurfaces();
         sizeAlbum();
-        createYouTubePlayer();
+        syncPlayerSnapshot();
+        updatePlayButton();
+        updateDisc();
       }
 
       function syncLayoutMode() {
@@ -1461,7 +1474,7 @@
       }
 
       function setControlsEnabled(enabled) {
-        [elements.previousTrack, elements.playPause, elements.nextTrack]
+        [elements.previousTrack, elements.playPause, elements.nextTrack, elements.compactPlayPause]
           .forEach(control => { control.disabled = !enabled; });
       }
 
@@ -1484,7 +1497,7 @@
           state.player.apiReady = true;
           if (state.player.apiTimeout) window.clearTimeout(state.player.apiTimeout);
           state.player.apiTimeout = null;
-          if (state.layout.mode === 'normal') createYouTubePlayer();
+          createYouTubePlayer();
         };
 
         const script = document.createElement('script');
@@ -1499,14 +1512,14 @@
         if (state.player.apiReady || state.player.apiTimeout) return;
         state.player.apiTimeout = window.setTimeout(() => {
           state.player.apiTimeout = null;
-          if (!state.player.apiReady && state.layout.mode === 'normal') {
+          if (!state.player.apiReady) {
             failPlayer('The YouTube player took too long to respond.', 'timed-out');
           }
         }, 10000);
       }
 
       function createYouTubePlayer() {
-        if (state.layout.mode !== 'normal' || state.player.instance) return;
+        if (state.player.instance) return;
         if (!/^PL[A-Za-z0-9_-]{10,}$/.test(PLAYLIST.id)) {
           failPlayer('The playlist configuration is not valid.', 'failed');
           return;
@@ -1553,29 +1566,13 @@
       }
 
       function handlePlayerReady(event) {
-        if (state.layout.mode !== 'normal' || event.target !== state.player.instance) return;
+        if (event.target !== state.player.instance) return;
         state.player.lifecycle = 'ready';
         state.player.playback = 'cued';
         setControlsEnabled(true);
         hidePlayerMessage();
-
-        const snapshot = state.player.restoreSnapshot;
-        state.player.restoreSnapshot = null;
-        if (snapshot) {
-          try {
-            state.player.instance.cuePlaylist({
-              listType: 'playlist',
-              list: PLAYLIST.id,
-              index: Math.max(0, Number(snapshot.playlistIndex) || 0),
-              startSeconds: Math.max(0, Number(snapshot.currentSeconds) || 0)
-            });
-          } catch (error) { /* the configured playlist remains cued */ }
-          state.player.currentPlaylistIndex = Math.max(0, Number(snapshot.playlistIndex) || 0);
-          state.player.currentSeconds = Math.max(0, Number(snapshot.currentSeconds) || 0);
-          elements.playerStatus.textContent = 'Paused — press Play to continue';
-        } else {
-          elements.playerStatus.textContent = 'Ready — press Play';
-        }
+        elements.playerStatus.textContent = 'Ready — press Play';
+        syncPlayerSurfaces();
         syncPlayerSnapshot();
         updatePlayButton();
         updateDisc();
@@ -1613,7 +1610,7 @@
           if (state.player.userHasRequestedPlayback && !state.player.loopFallbackUsed) {
             state.player.loopFallbackUsed = true;
             window.setTimeout(() => {
-              if (state.player.playback === 'ended' && state.player.instance && state.layout.mode === 'normal') {
+              if (state.player.playback === 'ended' && state.player.instance) {
                 try { state.player.instance.playVideoAt(0); } catch (error) { /* native loop may have taken over */ }
               }
             }, 450);
@@ -1665,7 +1662,6 @@
         showPlayerMessage(message, true);
         updatePlayButton();
         updateDisc();
-        if (state.layout.mode === 'restricted-landscape') setCompactStatus(currentCompactStatus(false));
       }
 
       function factualTrackStatus(prefix) {
@@ -1698,7 +1694,7 @@
       }
 
       function syncPlayerSnapshot() {
-        if (!state.player.instance || state.layout.mode !== 'normal') return;
+        if (!state.player.instance) return;
         const playlist = safePlayerValue('getPlaylist', []);
         state.player.currentPlaylistIndex = Math.max(0, Number(safePlayerValue('getPlaylistIndex', state.player.currentPlaylistIndex)) || 0);
         state.player.playlistLength = Array.isArray(playlist) ? playlist.length : state.player.playlistLength;
@@ -1716,7 +1712,7 @@
 
       function startProgressPolling() {
         stopProgressPolling();
-        if (!state.album.documentVisible || state.layout.mode !== 'normal' || state.player.playback !== 'playing') return;
+        if (!state.album.documentVisible || state.player.playback !== 'playing') return;
         syncPlayerSnapshot();
         state.player.progressTimer = window.setInterval(syncPlayerSnapshot, 1000);
       }
@@ -1728,8 +1724,12 @@
 
       function updatePlayButton() {
         const playing = state.player.playback === 'playing' || state.player.playback === 'buffering';
-        elements.playIcon.textContent = playing ? '❚❚' : '▶';
-        elements.playPause.setAttribute('aria-label', playing ? 'Pause' : 'Play');
+        const icon = playing ? '❚❚' : '▶';
+        const label = playing ? 'Pause' : 'Play';
+        elements.playIcon.textContent = icon;
+        elements.compactPlayIcon.textContent = icon;
+        elements.playPause.setAttribute('aria-label', label);
+        elements.compactPlayPause.setAttribute('aria-label', label);
       }
 
       function updateDisc() {
@@ -1768,6 +1768,7 @@
 
       function initializePlayerControls() {
         elements.playPause.addEventListener('click', togglePlayback);
+        elements.compactPlayPause.addEventListener('click', togglePlayback);
         elements.previousTrack.addEventListener('click', () => {
           state.player.userHasRequestedPlayback = true;
           try { state.player.instance?.previousVideo(); } catch (error) { /* player event reports errors */ }
@@ -1822,12 +1823,9 @@
 
       initializeAlbum();
       initializePlayerControls();
-      if (state.layout.mode === 'restricted-landscape') {
-        elements.app.dataset.layout = state.layout.mode;
-        setCompactStatus('Rotate for music');
-      } else {
-        loadYouTubeAPI();
-      }
+      elements.app.dataset.layout = state.layout.mode;
+      syncPlayerSurfaces();
+      loadYouTubeAPI();
       restartSlideshow();
     })();
   </script>
