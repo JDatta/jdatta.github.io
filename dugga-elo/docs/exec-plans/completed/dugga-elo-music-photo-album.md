@@ -1,8 +1,7 @@
 # Completed execution plan: BiKL Dugga Elo music photo album
 
 **Completed:** 15 August 2026  
-**Implementation location:** `/home/jd/workspace/tiny-games/dugga-elo`  
-**Release location:** deliberately unchanged
+**Project location:** `/home/jd/workspace/jdatta.github.io/dugga-elo`
 
 ## Delivered
 
@@ -20,8 +19,8 @@
 - Implemented restricted-landscape player suspension: snapshot, pause, iframe
   destruction, text-only status, recreation, and paused playlist-position cue.
 - Added project instructions and product/architecture documentation.
-- Left `server.py`, `image-compressor.sh`, canonical photos, supplied PNGs,
-  sibling projects, and the separate `jdatta.github.io` repository unchanged.
+- Left `server.py`, `image-compressor.sh`, canonical photos, and supplied PNGs
+  unchanged.
 
 ## Verification completed
 
@@ -76,7 +75,5 @@ python3 server.py
 ```
 
 Then open `http://127.0.0.1:8080/` for subjective family/human acceptance. Public
-consent for identifiable people and any move to
-`/home/jd/workspace/jdatta.github.io/dugga-elo` remain later, explicitly
-human-controlled release tasks.
-
+consent for identifiable people remains an explicitly human-controlled release
+task.

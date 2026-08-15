@@ -43,13 +43,13 @@
   textual status rail. Destroy the YouTube iframe on entry; show no disc,
   artwork, player controls, or iframe there. Recreate and cue the saved position
   without audible autoplay on exit.
-- `server.py`, `image-compressor.sh`, source photographs, sibling projects, and
-  the separate `jdatta.github.io` repository are outside routine UI edits.
+- `server.py`, `image-compressor.sh`, and source photographs are outside routine
+  UI edits. Files outside this project are out of scope.
 
 ## Testing gotchas
 
 - Test both direct localhost root serving and subpath serving from the parent
-  `tiny-games` directory.
+  `jdatta.github.io` directory.
 - Exercise 390×844, 844×390, 768×1024, 1024×768, and 1440×900.
 - In every normal viewport, confirm the mini-player, iframe, and album do not
   overlap; the document does not overflow; and the primary play/pause control is

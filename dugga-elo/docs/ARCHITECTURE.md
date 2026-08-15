@@ -11,11 +11,16 @@ Normal mode covers portrait phones, tablets in both orientations, and desktop.
 The viewport is a three-row grid: a transparent title header, flexible album,
 and a transparent music region. Narrow portrait uses one 4:5 page with a left
 binding. Wider normal viewports use a centered pair of 4:5 pages with a center
-binding and an approximately 1100 px maximum spread width. Within the music
-region, a rounded mini-player floats near the bottom center and contains the
-rotating BiKL disc, a sans-serif current-title/progress block, and right-aligned
-transport controls with a dominant play/pause action. Its translucent surface
-uses blur and shadow to retain contrast over changing backgrounds. Factual
+binding. Both sit inside a burnished oxblood leather cover with stitched edges
+and a parchment page-stack layer. Antique-brass closure buttons retain the
+existing previous/next interfaces at the outer edges in landscape; every
+portrait layout hides them and relies on tap halves, horizontal swipes, and
+arrow keys. Wider spreads may grow to approximately 1180 px before decoration.
+Within the music region, a rounded mini-player floats near the bottom center. It
+contains the rotating BiKL disc, a sans-serif current-title/progress block, and
+right-aligned transport controls with a dominant play/pause action. Its
+translucent surface uses blur and shadow to retain contrast over changing
+backgrounds. Factual
 playback status is maintained in a screen-reader-only live region instead of a
 visible label. An independent, unobstructed 200×200 YouTube surface is anchored
 at the bottom right. At widths up to 700 px the mini-player stacks above that
@@ -23,13 +28,19 @@ surface and the music row grows to reserve space for both.
 
 Restricted landscape activates only when the media query reports landscape,
 width at most 900 px, and height at most 500 px. The content row becomes two
-compact 5:4 pages plus a narrow text-only status rail. The iframe is destroyed,
-not hidden. The music footer, disc, artwork, and controls are absent from the
-rendered layout.
+compact 5:4 pages plus a narrow text-only status rail. The leather reveal,
+stacked edges, and closure hardware become slimmer, but both album navigation
+targets remain available. The iframe is destroyed, not hidden. The music footer,
+disc, artwork, and controls are absent from the rendered layout.
 
-A `ResizeObserver` fits the book to its flexible workspace. Every nested grid
-allows its children to shrink with `min-width: 0` and `min-height: 0`; the root
-uses safe-area padding, dynamic viewport units, and clipped overflow. Layout
+A `ResizeObserver` fits the decorated shell to its flexible workspace. Sizing
+subtracts workspace padding, leather reveal, stacked-page depth, and any
+rendered closure overhang explicitly, then calculates the paper pages. Hidden
+portrait closures contribute zero overhang, allowing the pages to use the
+recovered width; decoration therefore does not reduce the page dimensions.
+Every nested grid allows its children to shrink with `min-width: 0` and
+`min-height: 0`; the root uses safe-area padding, dynamic viewport units, and
+clipped overflow. Layout
 selection comes only from the restricted media query and the normal workspace
 width, so ordinary landscape tablets and desktops never enter compact mode.
 
@@ -39,8 +50,17 @@ The frozen `ALBUM_IMAGES` array preserves deterministic filename order. Each
 entry records a 1600 px display derivative, canonical retry URL, reserved display
 dimensions, and descriptive alt text. Two reusable image slots render the
 current state. A failed derivative retries the canonical image once and then
-becomes a paper placeholder. Adjacent states are preloaded transiently; there is
-no hidden 45-image gallery.
+becomes a stable paper placeholder. Each light-crema leaf has only a narrow edge
+inset. The rendered photograph is contained without cropping inside a 5–8 px
+ivory mat (3 px in restricted landscape), selected from its manifest aspect
+ratio so the mat follows the photograph rather than filling unused leaf space.
+Temporary turn leaves, blank companions, and error placeholders use the same
+crema base while the mats remain lighter. Adjacent states are preloaded
+transiently; there is no hidden 45-image gallery.
+
+The top-level `--album-leaf-color` and `--portrait-closure-display` custom
+properties are the maintainer-facing controls for leaf color and portrait
+closure visibility.
 
 Album presentation is `single`, `spread`, or `compact-spread`. Single mode steps
 one photograph; both spread modes step two. Spread anchors are even indices, and
@@ -59,8 +79,9 @@ The five-second slideshow runs only while the document is visible, the album is
 not held, and animation is idle. Any completed automatic or manual change starts
 a fresh interval. Pointer capture distinguishes swipes, below-threshold drags,
 short taps, and long holds. Arrow keys navigate globally except from interactive
-elements; Space controls music only in normal mode. Only manual album changes
-write to the polite live region.
+elements; the shell pointer handler also ignores interactive descendants so a
+closure click cannot become a second tap-half action. Space controls music only
+in normal mode. Only manual album changes write to the polite live region.
 
 ## Player lifecycle
 

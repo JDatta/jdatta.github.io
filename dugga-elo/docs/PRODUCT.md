@@ -10,20 +10,26 @@ remembering.
 The exact title appears at an emphatic scale above the album, directly on the
 cloth with layered ivory, gold, and soft brown shadows. The header remains a
 semantic region but has no colored band, border, strip, or subtitle. Paper
-grain, photograph corners, a bronze and charcoal spiral, a restrained lal-paar
-edge, and faint alpana linework provide material character. The palette uses
-warm cloth and paper, vermilion and deep red, subdued gold, and charcoal. Tiro
-Bangla carries the title and small editorial details; Lato and system
+grain, a bronze and charcoal spiral, a restrained lal-paar edge, and faint
+alpana linework provide material character. The book itself has a burnished
+oxblood leather cover with darkened edges, inset highlights, fine stitching,
+and visible parchment page layers beneath its light-crema leaves. Photographs
+sit in thin ivory mats with a fine edge and a small physical shadow. The palette
+uses warm cloth and paper, oxblood and deep red, antique brass, and charcoal.
+Tiro Bangla carries the title and small editorial details; Lato and system
 fallbacks keep controls compact and legible.
 
 ## Audience and use
 
 The alpha is intended for family and community members viewing the photographs
 on phones, tablets, and desktop browsers. Photographs advance every five seconds
-but remain directly controllable with page buttons, click/tap halves, horizontal
-swipes, and arrow keys. Images are always contained without cropping or
-distortion. The last unpaired photograph appears beside an intentional blank
-page.
+but remain directly controllable with click/tap halves, horizontal swipes, and
+arrow keys. In landscape, previous and next are also available as leather tabs
+ending in raised magnetic plates: large antique-brass touch targets that double
+as the album's closures. Portrait layouts hide both closures, leaving the album
+gestures and arrow keys unchanged. Images are always contained without cropping
+or distortion. The last unpaired photograph appears beside an intentional
+light-crema blank page.
 
 Normal layouts keep the title above, the album in all available middle space,
 and a visually transparent music region below. A rounded floating mini-player
@@ -39,9 +45,11 @@ screens stack the mini-player above the bottom-right YouTube surface so neither
 overlaps the album. Music never autoplays audibly.
 
 Very short mobile landscape viewports prioritize photographs. They show two
-compact album pages and a text status rail. Music stops, the external player is
-removed, and all music controls and artwork disappear. Rotating back restores the
-same playlist position in a paused state and asks for a fresh play gesture.
+compact album pages, slim leather and page-edge decoration, both magnetic
+closure controls, and a narrower text status rail. Music stops, the external
+player is removed, and all music controls and artwork disappear. Rotating back
+restores the same playlist position in a paused state and asks for a fresh play
+gesture.
 
 ## Accessibility and resilience
 
@@ -59,6 +67,5 @@ is available in normal mode.
 - No extracted thumbnails, fake record jackets, hidden miniature players, or
   custom controls placed over the YouTube surface.
 - No neon, glass panels, animated smoke, large clip art, or dense mandala fields.
-- No publishing or changes to the separate `jdatta.github.io` repository during
-  localhost alpha. Public-use consent for identifiable people is a release gate,
-  not an alpha implementation detail.
+- No publishing during localhost alpha. Public-use consent for identifiable
+  people is a release gate, not an alpha implementation detail.
