@@ -837,6 +837,27 @@
     .is-playing .play-icon { display: none !important; }
     .is-playing .pause-icon { display: block !important; }
 
+    .buffering-indicator {
+      display: none;
+      box-sizing: border-box;
+      width: 22px;
+      height: 22px;
+      border: 3px dotted #6f6f6f;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .is-buffering .play-icon,
+    .is-buffering .pause-icon { display: none !important; }
+
+    .is-buffering .buffering-indicator {
+      display: block;
+      animation: buffering-spin .9s linear infinite;
+      will-change: transform;
+    }
+
+    @keyframes buffering-spin { to { transform: rotate(360deg); } }
+
     .control-button.primary {
       width: 60px;
       height: 60px;
@@ -1065,8 +1086,11 @@
       }
 
       .compact-play-pause {
+        display: grid;
+        place-items: center;
         width: clamp(64px, 16svh, 78px);
         height: clamp(64px, 16svh, 78px);
+        padding: 0;
         color: #251e1a;
         background: #fffaf1;
         border: 2px solid #251e1a;
@@ -1077,6 +1101,7 @@
 
       .compact-play-pause:hover:not(:disabled) { background: #f3dfba; }
       .compact-play-pause:disabled { cursor: not-allowed; opacity: .42; }
+      .compact-play-pause .buffering-indicator { width: 24px; height: 24px; }
 
       .photo-frame.is-blank::after,
       .photo-frame.is-error::after { font-size: .68rem; }
@@ -1091,6 +1116,7 @@
       }
       .disc { animation: none; }
       .track-title-text.is-overflowing { animation: none; }
+      .is-buffering .buffering-indicator { animation: none; will-change: auto; }
     }
 
     @media (prefers-contrast: more) {
@@ -1254,6 +1280,7 @@
         <button class="compact-play-pause" id="compactPlayPause" type="button" aria-label="Play" disabled>
           <svg class="play-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg>
           <svg class="pause-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5h4v14H7zm6 0h4v14h-4z"></path></svg>
+          <span class="buffering-indicator" aria-hidden="true"></span>
         </button>
       </aside>
     </main>
@@ -1281,6 +1308,7 @@
           <button class="control-button primary" id="playPause" type="button" aria-label="Play" disabled>
             <svg class="play-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg>
             <svg class="pause-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5h4v14H7zm6 0h4v14h-4z"></path></svg>
+            <span class="buffering-indicator" aria-hidden="true"></span>
           </button>
           <button class="control-button" id="nextTrack" type="button" aria-label="Next track" disabled>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 6h2v12h-2zm-2 6L5.5 6v12z"></path></svg>
@@ -2256,10 +2284,13 @@
       }
 
       function updatePlayButton() {
-        const playing = state.player.playback === 'playing' || state.player.playback === 'buffering';
-        const label = playing ? 'Pause' : 'Play';
+        const playing = state.player.playback === 'playing';
+        const buffering = state.player.playback === 'buffering';
+        const label = playing || buffering ? 'Pause' : 'Play';
         elements.playPause.classList.toggle('is-playing', playing);
         elements.compactPlayPause.classList.toggle('is-playing', playing);
+        elements.playPause.classList.toggle('is-buffering', buffering);
+        elements.compactPlayPause.classList.toggle('is-buffering', buffering);
         elements.playPause.setAttribute('aria-label', label);
         elements.compactPlayPause.setAttribute('aria-label', label);
       }
