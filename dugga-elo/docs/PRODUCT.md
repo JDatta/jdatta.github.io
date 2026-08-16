@@ -2,22 +2,26 @@
 
 ## Experience
 
-BiKL Dugga Elo is a warm, family-scale Durga Puja album accompanied by a Puja
+BiKL Sharodotsav is a warm, family-scale Durga Puja album accompanied by a Puja
 playlist. It should feel like opening photographs on sari cloth, not launching a
 streaming product. The album is the visual focus; music supports the act of
 remembering.
 
-The exact title appears at an emphatic scale above the album, directly on the
-cloth with layered ivory, gold, and soft brown shadows. The header remains a
-semantic region but has no colored band, border, strip, or subtitle. Paper
+The title appears as a rounded, extra-bold “BiKL” above the Bengali
+“শারদোৎসব”, directly on the cloth with layered ivory, gold, and soft brown
+shadows. The header remains a semantic region but has no colored band, border,
+strip, or subtitle. Paper
 grain, a bronze and charcoal spiral, a restrained lal-paar edge, and faint
 alpana linework provide material character. The book itself has a burnished
 oxblood leather cover with darkened edges, inset highlights, fine stitching,
 and visible parchment page layers beneath its light-crema leaves. Photographs
 sit in thin ivory mats with a fine edge and a small physical shadow. The palette
 uses warm cloth and paper, oxblood and deep red, antique brass, and charcoal.
-Tiro Bangla carries the title and small editorial details; Lato and system
-fallbacks keep controls compact and legible.
+Nunito carries the rounded BiKL wordmark, Tiro Bangla carries the Bengali title
+and small editorial details, and Lato and system fallbacks keep controls compact
+and legible. Roomy normal layouts expand the title into otherwise unused
+headroom while retaining clear separation from the album; compact layouts keep
+the baseline title scale.
 
 ## Audience and use
 

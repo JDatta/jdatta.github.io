@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#f2e7d4">
-  <meta name="description" content="BiKL Dugga Elo — a family Durga Puja photo album with a companion YouTube playlist.">
-  <title>BiKL Dugga Elo</title>
+  <meta name="description" content="BiKL Sharodotsav — a family Durga Puja photo album with a companion YouTube playlist.">
+  <title>BiKL Sharodotsav</title>
   <link rel="icon" href="resources/cd-art.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;500;600;700&amp;family=Tiro+Bangla:ital@0;1&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;500;600;700&amp;family=Nunito:wght@900&amp;family=Tiro+Bangla:ital@0;1&amp;display=swap" rel="stylesheet">
   <script>document.documentElement.classList.add('js');</script>
   <style>
     :root {
@@ -34,7 +34,7 @@
       --stack-depth: 4px;
       --shell-width: calc(var(--book-width) + ((var(--cover-reveal) + var(--closure-overhang)) * 2));
       --shell-height: calc(var(--page-height) + (var(--cover-reveal) * 2) + var(--stack-depth));
-      --header-height: clamp(82px, 11svh, 112px);
+      --header-height: clamp(112px, 16svh, 158px);
       --player-height: 144px;
       font-family: "Lato", Calibri, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       font-synthesis: none;
@@ -129,17 +129,37 @@
     }
 
     h1 {
+      display: grid;
+      justify-items: center;
+      gap: clamp(1px, .4svh, 4px);
       margin: 0;
-      font-family: "Tiro Bangla", Georgia, serif;
-      font-size: clamp(2.7rem, calc(5.5vw + 1rem), 5.7rem);
-      font-weight: 400;
-      line-height: .9;
-      letter-spacing: .01em;
+      transform: translateY(var(--site-title-offset, 0));
       text-shadow:
         0 1px 0 #fff9ed,
         0 3px 0 rgba(180, 138, 77, .72),
         0 7px 13px rgba(79, 48, 29, .24);
+    }
+
+    .site-title-brand,
+    .site-title-bengali {
+      display: block;
       white-space: nowrap;
+    }
+
+    .site-title-brand {
+      font-family: "Nunito", "Arial Rounded MT Std", "Arial Rounded MT Bold", "Trebuchet MS", sans-serif;
+      font-size: var(--site-title-brand-size, clamp(3.2rem, calc(4.4vw + .95rem), 5rem));
+      font-weight: 900;
+      line-height: .78;
+      letter-spacing: .015em;
+    }
+
+    .site-title-bengali {
+      font-family: "Tiro Bangla", "Noto Serif Bengali", Georgia, serif;
+      font-size: var(--site-title-bengali-size, clamp(2rem, calc(2.6vw + .65rem), 3.1rem));
+      font-weight: 400;
+      line-height: 1.05;
+      letter-spacing: 0;
     }
 
     .content {
@@ -770,7 +790,7 @@
     }
 
     @media (orientation: landscape) and (max-width: 900px) and (max-height: 500px) {
-      :root { --header-height: clamp(46px, 15svh, 58px); }
+      :root { --header-height: clamp(58px, 18svh, 70px); }
 
       .app {
         grid-template-rows: var(--header-height) minmax(0, 1fr);
@@ -778,7 +798,18 @@
 
       .app::after { bottom: 12px; }
 
-      h1 { font-size: clamp(1.35rem, 6.5svh, 1.9rem); }
+      .site-header { padding: 4px 12px 2px; }
+
+      h1 {
+        gap: 0;
+        text-shadow:
+          0 1px 0 #fff9ed,
+          0 2px 0 rgba(180, 138, 77, .72),
+          0 3px 7px rgba(79, 48, 29, .22);
+      }
+
+      .site-title-brand { font-size: clamp(1.2rem, 7svh, 1.55rem); }
+      .site-title-bengali { font-size: clamp(.98rem, 5svh, 1.2rem); }
 
       .content {
         grid-row: 2;
@@ -862,7 +893,10 @@
 <body>
   <div class="app" id="app" data-layout="normal">
     <header class="site-header">
-      <h1>BiKL Dugga Elo</h1>
+      <h1 id="siteTitle">
+        <span class="site-title-brand" id="siteTitleBrand">BiKL</span>
+        <span class="site-title-bengali" id="siteTitleBengali" lang="bn">শারদোৎসব</span>
+      </h1>
     </header>
 
     <main class="content">
@@ -1005,6 +1039,10 @@
 
       const elements = {
         app: document.querySelector('#app'),
+        header: document.querySelector('.site-header'),
+        siteTitle: document.querySelector('#siteTitle'),
+        siteTitleBrand: document.querySelector('#siteTitleBrand'),
+        siteTitleBengali: document.querySelector('#siteTitleBengali'),
         workspace: document.querySelector('#albumWorkspace'),
         shell: document.querySelector('#albumShell'),
         book: document.querySelector('#albumBook'),
@@ -1081,6 +1119,15 @@
 
       const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
       const modulo = (value, divisor) => ((value % divisor) + divisor) % divisor;
+
+      const TITLE_FIT = Object.freeze({
+        albumGap: 24,
+        shadowExtent: 13,
+        topPadding: 12,
+        sidePadding: 24,
+        minimumScale: 1.35,
+        maximumScale: 2.5
+      });
 
       function buildBinding() {
         elements.binding.replaceChildren();
@@ -1350,6 +1397,45 @@
         return bounds.width < 620 ? 'single' : 'spread';
       }
 
+      function resetSiteTitleFit() {
+        elements.siteTitle.style.removeProperty('--site-title-brand-size');
+        elements.siteTitle.style.removeProperty('--site-title-bengali-size');
+        elements.siteTitle.style.removeProperty('--site-title-offset');
+      }
+
+      function fitSiteTitle() {
+        resetSiteTitleFit();
+        if (state.layout.mode !== 'normal') return;
+
+        const appBounds = elements.app.getBoundingClientRect();
+        const headerBounds = elements.header.getBoundingClientRect();
+        const shellBounds = elements.shell.getBoundingClientRect();
+        const baseHeight = elements.siteTitle.offsetHeight;
+        const baseWidth = elements.siteTitle.offsetWidth;
+        if (!baseHeight || !baseWidth || !shellBounds.height) return;
+
+        const availableTop = Math.max(appBounds.top, headerBounds.top) + TITLE_FIT.topPadding;
+        const availableBottom = shellBounds.top - TITLE_FIT.albumGap - TITLE_FIT.shadowExtent;
+        const availableHeight = availableBottom - availableTop;
+        const availableWidth = appBounds.width - (TITLE_FIT.sidePadding * 2);
+        const scale = Math.min(
+          TITLE_FIT.maximumScale,
+          availableHeight / baseHeight,
+          availableWidth / baseWidth
+        );
+        if (scale < TITLE_FIT.minimumScale) return;
+
+        const brandSize = parseFloat(window.getComputedStyle(elements.siteTitleBrand).fontSize);
+        const bengaliSize = parseFloat(window.getComputedStyle(elements.siteTitleBengali).fontSize);
+        elements.siteTitle.style.setProperty('--site-title-brand-size', `${brandSize * scale}px`);
+        elements.siteTitle.style.setProperty('--site-title-bengali-size', `${bengaliSize * scale}px`);
+
+        const grownBounds = elements.siteTitle.getBoundingClientRect();
+        const targetCenter = availableTop + (availableHeight / 2);
+        const currentCenter = grownBounds.top + (grownBounds.height / 2);
+        elements.siteTitle.style.setProperty('--site-title-offset', `${targetCenter - currentCenter}px`);
+      }
+
       function sizeAlbum() {
         const bounds = elements.workspace.getBoundingClientRect();
         if (!bounds.width || !bounds.height) return;
@@ -1396,6 +1482,7 @@
         elements.shell.style.setProperty('--shell-height', `${pageHeight + verticalDecoration}px`);
         if (oldPresentation !== nextPresentation) buildBinding();
         renderAlbum(oldPresentation !== nextPresentation);
+        fitSiteTitle();
         restartSlideshow();
       }
 
@@ -1883,6 +1970,7 @@
       window.addEventListener('orientationchange', () => window.requestAnimationFrame(syncLayoutMode));
 
       initializeAlbum();
+      document.fonts?.ready.then(() => window.requestAnimationFrame(sizeAlbum));
       initializePlayerControls();
       elements.app.dataset.layout = state.layout.mode;
       syncPlayerSurfaces();
