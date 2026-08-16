@@ -81,7 +81,7 @@ body {
   margin: 0;
   background: var(--paper);
   color: var(--ink);
-  font-family: var(--serif);
+  font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
   font-size: 17px;
   line-height: 1.65;
   text-rendering: optimizeLegibility;
@@ -150,6 +150,7 @@ img {
 
 .site-title {
   color: var(--ink);
+  font-family: var(--serif);
   font-size: clamp(2.6rem, 6vw, 4.8rem);
   font-weight: 700;
   letter-spacing: -0.03em;
@@ -197,8 +198,8 @@ img {
   gap: clamp(2rem, 7vw, 5rem);
   border-bottom: 1px solid var(--line);
   font-size: 0.79rem;
-  font-weight: 700;
-  letter-spacing: 0.11em;
+  font-weight: 650;
+  letter-spacing: 0.13em;
   text-transform: uppercase;
 }
 
@@ -260,6 +261,7 @@ img {
 .section-heading h2 {
   margin: 0;
   color: var(--ink);
+  font-family: var(--serif);
   font-size: clamp(2.25rem, 5vw, 3.65rem);
   font-weight: 700;
   letter-spacing: -0.025em;
@@ -277,6 +279,7 @@ img {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: clamp(1rem, 2vw, 1.4rem);
+  font-family: Roboto, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 .project-card {
@@ -324,8 +327,8 @@ img {
 .project-content h3 {
   margin: 0;
   font-size: 1.1rem;
-  font-weight: 700;
-  letter-spacing: -0.005em;
+  font-weight: 600;
+  letter-spacing: -0.015em;
   line-height: 1.3;
 }
 
@@ -390,13 +393,14 @@ img {
 .article-header time {
   color: var(--muted);
   font-size: 0.8rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 
 .post-summary h2 {
   margin: -0.25rem 0 0.6rem;
+  font-family: var(--serif);
   font-size: clamp(1.4rem, 3vw, 1.9rem);
   font-weight: 700;
   letter-spacing: -0.015em;
@@ -437,11 +441,10 @@ img {
   margin-bottom: 1.25rem;
 }
 
-.entry h2,
-.entry h3,
-.entry h4 {
+.entry h2 {
   margin: 2.5rem 0 0.75rem;
   color: var(--ink);
+  font-family: var(--serif);
   font-weight: 700;
   letter-spacing: -0.01em;
   line-height: 1.25;
@@ -451,6 +454,15 @@ img {
   padding-bottom: 0.55rem;
   border-bottom: 1px solid var(--soft-line);
   font-size: 1.55rem;
+}
+
+.entry h3,
+.entry h4 {
+  margin: 2.5rem 0 0.75rem;
+  color: var(--ink);
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
 }
 
 .entry h3 {
@@ -504,6 +516,7 @@ img {
 .article-header h1 {
   margin: 1.35rem 0 0.8rem;
   color: var(--ink);
+  font-family: var(--serif);
   font-size: clamp(2.2rem, 5vw, 3.7rem);
   font-weight: 700;
   letter-spacing: -0.025em;
