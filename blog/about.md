@@ -20,4 +20,4 @@ This site brings together my projects, technical notes, and occasional personal 
 
 ## Contact
 
-- [mail.joydip@gmail.com](mailto:mail.joydip@gmail.com)
+- GMail: `mail.joydip` 
