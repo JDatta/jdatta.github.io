@@ -12,11 +12,13 @@ The title appears as a rounded, extra-bold “BiKL” above the Bengali
 shadows. The header remains a semantic region but has no colored band, border,
 strip, or subtitle. Paper
 grain, a bronze and charcoal spiral, a restrained lal-paar edge, and faint
-alpana linework provide material character. The book itself has a burnished
-oxblood leather cover with darkened edges, inset highlights, fine stitching,
+alpana linework provide material character. The book itself has paired burnished
+oxblood leather covers with darkened edges, inset highlights, fine stitching,
 and visible parchment page layers beneath its light-crema leaves. Photographs
 sit in thin ivory mats with a fine edge and a small physical shadow. The palette
 uses warm cloth and paper, oxblood and deep red, antique brass, and charcoal.
+Two-page views leave a narrow recessed ridge between the paper leaves, revealing
+the oxblood leather beneath while the centered spiral covers most of the gap.
 Nunito carries the rounded BiKL wordmark, Tiro Bangla carries the Bengali title
 and small editorial details, and Lato and system fallbacks keep controls compact
 and legible. Roomy normal layouts expand the title into otherwise unused

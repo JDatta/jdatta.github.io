@@ -11,11 +11,15 @@ Normal mode covers portrait phones, tablets in both orientations, and desktop.
 The viewport is a three-row grid: a transparent title header, flexible album,
 and a transparent music region. Narrow portrait uses one 4:5 page with a left
 binding. Wider normal viewports use a centered pair of 4:5 pages with a center
-binding. Both sit inside a burnished oxblood leather cover with stitched edges
-and a parchment page-stack layer. Antique-brass closure buttons retain the
-existing previous/next interfaces at the outer edges in landscape; every
-portrait layout hides them and relies on tap halves, horizontal swipes, and
-arrow keys. Wider spreads may grow to approximately 1180 px before decoration.
+binding. Two-page presentations separate the leaves with a slim recessed gutter
+that exposes the oxblood leather beneath the spiral while the coil hardware
+covers most of its width. Both sit on distinct left and right panels of a
+burnished oxblood leather cover with stitched edges and a parchment page-stack
+layer. Antique-brass closure buttons
+retain the existing previous/next interfaces at the outer edges in landscape;
+every portrait layout hides them and relies on tap halves, horizontal swipes,
+and arrow keys. Wider spreads may grow to approximately 1180 px before
+decoration.
 Within the music region, a rounded mini-player floats near the bottom center. It
 contains the rotating BiKL disc, a sans-serif current-title/progress block, and
 right-aligned transport controls with a dominant play/pause action. Its
@@ -41,7 +45,9 @@ previous/next controls, and the native iframe surface are absent visually.
 
 A `ResizeObserver` fits the decorated shell to its flexible workspace. Sizing
 subtracts workspace padding, leather reveal, stacked-page depth, and any
-rendered closure overhang explicitly, then calculates the paper pages. Hidden
+rendered closure overhang explicitly, then calculates the paper pages. The
+two-page ridge is added to the book and shell only after that calculation, so it
+widens the album without reducing either page or photograph. Hidden
 portrait closures contribute zero overhang, allowing the pages to use the
 recovered width; decoration therefore does not reduce the page dimensions.
 Every nested grid allows its children to shrink with `min-width: 0` and

@@ -29,6 +29,8 @@
       --page-height: 400px;
       --page-count: 1;
       --book-width: var(--page-width);
+      --ridge-width: 0px;
+      --ridge-half-width: 0px;
       --cover-reveal: 10px;
       --closure-overhang: 8px;
       --stack-depth: 4px;
@@ -119,6 +121,7 @@
     }
 
     .site-header {
+      position: relative;
       display: grid;
       place-content: center;
       min-width: 0;
@@ -126,6 +129,50 @@
       color: var(--deep-red);
       text-align: center;
       background: transparent;
+    }
+
+    .affiliate-links {
+      position: absolute;
+      z-index: 10;
+      top: 8px;
+      right: clamp(8px, 1.5vw, 18px);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .affiliate-link {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      padding: 0;
+      background: rgba(255, 249, 237, .78);
+      border: 1px solid rgba(110, 33, 28, .24);
+      border-radius: 50%;
+      box-shadow: 0 3px 8px rgba(79, 48, 29, .16), inset 0 1px rgba(255, 255, 255, .7);
+    }
+
+    .affiliate-link:hover {
+      background: rgba(255, 249, 237, .96);
+      border-color: rgba(110, 33, 28, .48);
+    }
+
+    .affiliate-link img {
+      display: block;
+      width: 22px;
+      height: 22px;
+      object-fit: contain;
+    }
+
+    .affiliate-link-bikl img {
+      width: 26px;
+      height: 26px;
+    }
+
+    .affiliate-link-x img {
+      width: 19px;
+      height: 19px;
     }
 
     h1 {
@@ -200,6 +247,14 @@
       left: var(--closure-overhang, 10px);
       width: calc(var(--book-width) + (var(--cover-reveal, 12px) * 2));
       height: calc(var(--page-height) + (var(--cover-reveal, 12px) * 2) + var(--stack-depth, 5px));
+      pointer-events: none;
+    }
+
+    .cover-panel {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: calc(50% - var(--ridge-half-width, 0px));
       overflow: hidden;
       background:
         radial-gradient(ellipse at 50% -8%, rgba(255, 216, 166, .18), transparent 48%),
@@ -215,10 +270,15 @@
         inset 0 1px 1px rgba(255, 224, 186, .34),
         inset 0 0 0 3px rgba(39, 7, 7, .2),
         inset 0 -12px 22px rgba(38, 6, 7, .23);
-      pointer-events: none;
     }
 
-    .album-cover::before {
+    .cover-panel-left { left: 0; }
+    .cover-panel-right { right: 0; }
+
+    .presentation-single .cover-panel-left { width: 100%; }
+    .presentation-single .cover-panel-right { display: none; }
+
+    .cover-panel::before {
       position: absolute;
       inset: 7px;
       border: 1px dashed rgba(224, 174, 103, .56);
@@ -227,7 +287,7 @@
       content: "";
     }
 
-    .album-cover::after {
+    .cover-panel::after {
       position: absolute;
       inset: 0;
       background:
@@ -252,6 +312,27 @@
       pointer-events: none;
     }
 
+    .presentation-spread .page-stack {
+      -webkit-mask-image: linear-gradient(
+        to right,
+        #000 0,
+        #000 calc(50% - 3px - var(--ridge-half-width)),
+        transparent calc(50% - 3px - var(--ridge-half-width)),
+        transparent calc(50% - 3px + var(--ridge-half-width)),
+        #000 calc(50% - 3px + var(--ridge-half-width)),
+        #000 100%
+      );
+      mask-image: linear-gradient(
+        to right,
+        #000 0,
+        #000 calc(50% - 3px - var(--ridge-half-width)),
+        transparent calc(50% - 3px - var(--ridge-half-width)),
+        transparent calc(50% - 3px + var(--ridge-half-width)),
+        #000 calc(50% - 3px + var(--ridge-half-width)),
+        #000 100%
+      );
+    }
+
     .album-book {
       position: absolute;
       z-index: 2;
@@ -259,10 +340,32 @@
       left: calc(var(--closure-overhang, 10px) + var(--cover-reveal, 12px));
       display: grid;
       grid-template-columns: repeat(var(--page-count, 1), var(--page-width));
+      column-gap: var(--ridge-width, 0px);
       width: var(--book-width);
       height: var(--page-height);
       filter: drop-shadow(0 8px 8px rgba(55, 31, 21, .2));
       transform-style: preserve-3d;
+    }
+
+    .album-book::before {
+      position: absolute;
+      z-index: 0;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: var(--ridge-width, 0px);
+      background:
+        linear-gradient(90deg, rgba(28, 5, 5, .48), transparent 18% 82%, rgba(28, 5, 5, .5)),
+        linear-gradient(90deg, #4a0e0d, #7a201b 22%, #8c2922 50%, #681613 80%, #3e0b0b);
+      box-shadow:
+        inset 1px 0 rgba(255, 218, 169, .2),
+        inset -1px 0 rgba(31, 6, 6, .5),
+        inset 0 0 7px rgba(30, 5, 5, .3);
+      border-top: 1px solid #39100e;
+      border-bottom: 1px solid #39100e;
+      content: "";
+      pointer-events: none;
+      transform: translateX(-50%);
     }
 
     .page {
@@ -282,8 +385,16 @@
       transform-style: preserve-3d;
     }
 
-    .page-left { border-radius: 5px 1px 1px 5px; }
-    .page-right { border-radius: 1px 5px 5px 1px; }
+    .page-left { border-radius: 5px 2px 2px 5px; }
+    .page-right { border-radius: 2px 5px 5px 2px; }
+
+    .presentation-spread .page-left {
+      box-shadow: inset -7px 0 13px rgba(78, 48, 31, .08), inset 0 0 24px rgba(180, 138, 77, .09);
+    }
+
+    .presentation-spread .page-right {
+      box-shadow: inset 7px 0 13px rgba(78, 48, 31, .08), inset 0 0 24px rgba(180, 138, 77, .09);
+    }
 
     .presentation-single .page-left { display: none; }
 
@@ -413,8 +524,8 @@
       pointer-events: none;
     }
 
-    .turn-leaf.forward { right: 0; transform-origin: left center; }
-    .turn-leaf.backward { left: 0; transform-origin: right center; }
+    .turn-leaf.forward { right: 0; transform-origin: calc(0px - var(--ridge-half-width, 0px)) center; }
+    .turn-leaf.backward { left: 0; transform-origin: calc(100% + var(--ridge-half-width, 0px)) center; }
     .presentation-single .turn-leaf { right: 0; left: 0; }
 
     .album-nav {
@@ -789,6 +900,17 @@
       .time-readout { font-size: .62rem; }
     }
 
+    @media (max-width: 500px) {
+      .site-header { padding: 38px 12px 4px; }
+      .site-title-brand { font-size: var(--site-title-brand-size, 2.75rem); }
+      .site-title-bengali { font-size: var(--site-title-bengali-size, 1.7rem); }
+      .affiliate-links { top: 6px; right: 8px; gap: 4px; }
+      .affiliate-link { width: 30px; height: 30px; }
+      .affiliate-link img { width: 20px; height: 20px; }
+      .affiliate-link-bikl img { width: 24px; height: 24px; }
+      .affiliate-link-x img { width: 18px; height: 18px; }
+    }
+
     @media (orientation: landscape) and (max-width: 900px) and (max-height: 500px) {
       :root { --header-height: clamp(58px, 18svh, 70px); }
 
@@ -844,7 +966,7 @@
         pointer-events: none;
       }
 
-      .album-cover::before { inset: 4px; }
+      .cover-panel::before { inset: 4px; }
       .album-nav { width: 44px; height: 48px; }
       .album-nav::before { width: 30px; height: 30px; }
       .album-nav::after { width: 30px; height: 30px; font-size: .78rem; }
@@ -885,7 +1007,7 @@
     }
 
     @media (prefers-contrast: more) {
-      .page, .photo-frame, .control-button, .youtube-surface { border-width: 2px; }
+      .page, .photo-frame, .control-button, .affiliate-link, .youtube-surface { border-width: 2px; }
       .time-readout { color: #fff9ed; }
     }
   </style>
@@ -897,12 +1019,29 @@
         <span class="site-title-brand" id="siteTitleBrand">BiKL</span>
         <span class="site-title-bengali" id="siteTitleBengali" lang="bn">শারদোৎসব</span>
       </h1>
+      <nav class="affiliate-links" aria-label="BiKL and author links">
+        <a class="affiliate-link affiliate-link-bikl" href="https://bikl.in/" target="_blank" rel="noopener noreferrer" aria-label="Visit the BiKL website">
+          <img src="resources/cd-art.png" alt="" width="26" height="26">
+        </a>
+        <a class="affiliate-link" href="https://www.instagram.com/bikl.bengaluru/" target="_blank" rel="noopener noreferrer" aria-label="Visit BiKL on Instagram">
+          <img src="resources/instagram.svg" alt="" width="22" height="22">
+        </a>
+        <a class="affiliate-link affiliate-link-x" href="https://x.com/djoydip" target="_blank" rel="noopener noreferrer" aria-label="Visit the author on X">
+          <img src="resources/x-logo.svg" alt="" width="22" height="22">
+        </a>
+        <a class="affiliate-link" href="https://www.youtube.com/playlist?list=PLwE4iPKbDie6w4G4GjQ0Mccj49tgjiU4M" target="_blank" rel="noopener noreferrer" aria-label="Open the Puja playlist on YouTube Music">
+          <img src="resources/yt-music.svg" alt="" width="22" height="22">
+        </a>
+      </nav>
     </header>
 
     <main class="content">
       <section class="album-workspace" id="albumWorkspace" aria-label="Durga Puja photo album">
         <div class="album-shell presentation-single" id="albumShell" role="group" tabindex="0" aria-label="Photo 1 of 45. Use the arrow keys or tap a side to turn pages.">
-          <div class="album-cover" aria-hidden="true"></div>
+          <div class="album-cover" aria-hidden="true">
+            <span class="cover-panel cover-panel-left"></span>
+            <span class="cover-panel cover-panel-right"></span>
+          </div>
           <div class="page-stack" aria-hidden="true"></div>
           <button class="album-nav previous" id="previousPhoto" type="button" aria-label="Previous album page">&#x276E;</button>
           <div class="album-book" id="albumBook">
@@ -1408,6 +1547,7 @@
         if (state.layout.mode !== 'normal') return;
 
         const appBounds = elements.app.getBoundingClientRect();
+        if (appBounds.width <= 500) return;
         const headerBounds = elements.header.getBoundingClientRect();
         const shellBounds = elements.shell.getBoundingClientRect();
         const baseHeight = elements.siteTitle.offsetHeight;
@@ -1450,6 +1590,7 @@
 
         const compact = nextPresentation === 'compact-spread';
         const pageCount = nextPresentation === 'single' ? 1 : 2;
+        const ridgeWidth = pageCount === 1 ? 0 : compact ? 8 : 12;
         const ratio = compact ? 1.25 : .8;
         const coverReveal = compact ? 6 : bounds.width < 620 ? 10 : 12;
         const closuresRendered = [elements.previousPhoto, elements.nextPhoto]
@@ -1470,11 +1611,13 @@
 
         pageWidth = Math.floor(pageWidth);
         pageHeight = Math.floor(pageHeight);
-        const bookWidth = pageWidth * pageCount;
+        const bookWidth = (pageWidth * pageCount) + ridgeWidth;
         elements.shell.style.setProperty('--page-width', `${pageWidth}px`);
         elements.shell.style.setProperty('--page-height', `${pageHeight}px`);
         elements.shell.style.setProperty('--page-count', pageCount);
         elements.shell.style.setProperty('--book-width', `${bookWidth}px`);
+        elements.shell.style.setProperty('--ridge-width', `${ridgeWidth}px`);
+        elements.shell.style.setProperty('--ridge-half-width', `${ridgeWidth / 2}px`);
         elements.shell.style.setProperty('--cover-reveal', `${coverReveal}px`);
         elements.shell.style.setProperty('--closure-overhang', `${closureOverhang}px`);
         elements.shell.style.setProperty('--stack-depth', `${stackDepth}px`);
