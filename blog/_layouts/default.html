@@ -1,49 +1,44 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
   <head>
-    <title>{% if page.title %}{{ page.title }} – {% endif %}{{ site.name }} – {{ site.description }}</title>
-
+    <title>{% if page.title and page.title != "Home" %}{{ page.title }} · {% endif %}{{ site.name }}</title>
     {% include meta.html %}
-
-    <!--[if lt IE 9]>
-      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-    <link rel="stylesheet" type="text/css" href="{{ site.baseurl }}/blog/style.css" />
-    <link rel="alternate" type="application/rss+xml" title="{{ site.name }} - {{ site.description }}" href="{{ site.baseurl }}/blog/feed.xml" />
-
-    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+    <link rel="stylesheet" href="{{ site.baseurl }}/blog/style.css">
+    <link rel="alternate" type="application/atom+xml" title="{{ site.name }} — {{ site.description }}" href="{{ site.baseurl }}/blogs/feed.xml">
   </head>
-
   <body>
-    <div class="wrapper-masthead">
-      <div class="container">
-        <header class="masthead clearfix">
-          <a href="{{ site.baseurl }}/blog/" class="site-avatar"><img src="{{ site.avatar }}" /></a>
+    <a class="skip-link" href="#main">Skip to content</a>
 
-          <div class="site-info">
-            <h1 class="site-name"><a href="{{ site.baseurl }}/blog/">{{ site.name }}</a></h1>
-            <p class="site-description">{{ site.description }}</p>
-          </div>
+    <div class="site-shell">
+      <header class="site-header">
+        <a class="site-title" href="{{ site.baseurl }}/">{{ site.name }}</a>
 
-          <nav>
-            <a href="{{ site.baseurl }}/blog/">Blog</a>
-            <a href="{{ site.baseurl }}/blog/about/">About</a>
-          </nav>
-        </header>
-      </div>
-    </div>
+        <div class="social-links" aria-label="Social profiles">
+          <a href="https://www.linkedin.com/in/joydipdatta/" aria-label="LinkedIn">
+            <img src="{{ site.baseurl }}/resources/linked-in.svg" alt="" width="24" height="24">
+          </a>
+          <a href="https://www.instagram.com/joydipdatta/" aria-label="Instagram">
+            <img src="{{ site.baseurl }}/resources/instagram.svg" alt="" width="24" height="24">
+          </a>
+          <a href="https://x.com/djoydip" aria-label="X">
+            <img src="{{ site.baseurl }}/resources/x-logo.svg" alt="" width="24" height="24">
+          </a>
+        </div>
+      </header>
 
-    <div id="main" role="main" class="container">
-      {{ content }}
-    </div>
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a{% if page.nav == "home" %} class="active" aria-current="page"{% endif %} href="{{ site.baseurl }}/">Home</a>
+        <a{% if page.nav == "blogs" or page.layout == "post" %} class="active" aria-current="page"{% endif %} href="{{ site.baseurl }}/blogs/">Blogs</a>
+        <a{% if page.nav == "about" %} class="active" aria-current="page"{% endif %} href="{{ site.baseurl }}/about/">About</a>
+      </nav>
 
-    <div class="wrapper-footer">
-      <div class="container">
-        <footer class="footer">
-          {% include svg-icons.html %}
-        </footer>
-      </div>
+      <main id="main" class="site-main">
+        {{ content }}
+      </main>
+
+      <footer class="site-footer">
+        <!-- Footer content intentionally left blank. -->
+      </footer>
     </div>
 
     {% include analytics.html %}

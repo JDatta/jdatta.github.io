@@ -1,18 +1,27 @@
 ---
 layout: default
+title: Blogs
+nav: blogs
+permalink: /blogs/
 ---
 
-<div class="posts">
-  {% for post in site.posts %}
-    <article class="post">
+<section class="blog-index" aria-labelledby="blogs-title">
+  <div class="section-heading">
+    <p class="eyebrow">Notes and essays</p>
+    <h1 id="blogs-title">Blogs</h1>
+    <p class="section-intro">Writing on software, systems, and things learned along the way.</p>
+  </div>
 
-      <h1><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h1>
-
-      <div class="entry">
-        {{ post.excerpt }}
-      </div>
-
-      <a href="{{ site.baseurl }}{{ post.url }}" class="read-more">Read More</a>
-    </article>
-  {% endfor %}
-</div>
+  <div class="post-list">
+    {% for post in site.posts %}
+      <article class="post-summary">
+        <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%d %B %Y" }}</time>
+        <div>
+          <h2><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h2>
+          <div class="post-excerpt">{{ post.excerpt }}</div>
+          <a class="text-link" href="{{ site.baseurl }}{{ post.url }}">Read article <span aria-hidden="true">&#8594;</span></a>
+        </div>
+      </article>
+    {% endfor %}
+  </div>
+</section>

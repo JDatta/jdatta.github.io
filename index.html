@@ -1,14 +1,48 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Joydip Datta</title>
-  </head>
-  <body>
-    <main>
-      <h1>Joydip Datta</h1>
-      <p>This page is under construction.</p>
-    </main>
-  </body>
-</html>
+---
+layout: default
+title: Home
+nav: home
+---
+
+<section class="projects" aria-labelledby="projects-title">
+  <div class="section-heading">
+    <p class="eyebrow">Selected work</p>
+    <h2 id="projects-title">Projects</h2>
+    <p class="section-intro">A growing collection of experiments, tools, and personal archives.</p>
+  </div>
+
+  <div class="project-grid">
+    <article class="project-card">
+      <a class="project-image" href="https://jdatta.github.io/number-garden/" aria-label="Open Number Garden">
+        <img src="{{ site.baseurl }}/resources/number-garden.png" alt="Number Garden number puzzle interface" width="856" height="1390">
+      </a>
+      <div class="project-content">
+        <h3><a href="https://jdatta.github.io/number-garden/">Number Garden</a></h3>
+        <p>A playful number puzzle built around pattern recognition, experimentation, and strategic thinking.</p>
+        <a class="project-link" href="https://jdatta.github.io/number-garden/" aria-label="Visit Number Garden project">Visit project <span aria-hidden="true">&#8599;</span></a>
+      </div>
+    </article>
+
+    <article class="project-card">
+      <a class="project-image" href="https://jdatta.github.io/dugga-elo" aria-label="Open Dugga Elo">
+        <img src="{{ site.baseurl }}/resources/dugga-elo.png" alt="Dugga Elo music and photography archive" width="1798" height="1356">
+      </a>
+      <div class="project-content">
+        <h3><a href="https://jdatta.github.io/dugga-elo">Dugga Elo</a></h3>
+        <p>An interactive Bengali music and photography archive celebrating nostalgia, memory, and the Durga Puja season.</p>
+        <a class="project-link" href="https://jdatta.github.io/dugga-elo" aria-label="Visit Dugga Elo project">Visit project <span aria-hidden="true">&#8599;</span></a>
+      </div>
+    </article>
+
+    <article class="project-card">
+      <a class="project-image" href="https://github.com/JDatta/orbit" aria-label="Open Orbit on GitHub">
+        <img src="{{ site.baseurl }}/resources/orbit.png" alt="Orbit desktop task dashboard showing the tag cloud" width="2112" height="1788">
+      </a>
+      <div class="project-content">
+        <h3><a href="https://github.com/JDatta/orbit">Orbit</a></h3>
+        <p>A calm, space-themed desktop dashboard for planning and managing TickTick tasks, projects, priorities, and notes.</p>
+        <a class="project-link" href="https://github.com/JDatta/orbit" aria-label="Visit Orbit project on GitHub">Visit project <span aria-hidden="true">&#8599;</span></a>
+      </div>
+    </article>
+  </div>
+</section>

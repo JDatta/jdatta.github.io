@@ -1,20 +1,23 @@
 ---
 layout: page
 title: About
-permalink: /blog/about/
+nav: about
+permalink: /about/
 ---
 
-Distributed Storage Engineer. Interested about technology, travel and food.
+I am a distributed storage engineer interested in building dependable systems and understanding how complex software behaves at scale. I also enjoy exploring technology, travel, and food.
 
-### Other places
- 
- - Website: <https://www.cse.iitb.ac.in/~joydip09/>
- - Personal Blog (old): <http://joydipdatta.blogspot.com/>
- - Tech Blog (lazy mirror): <http://techgargle.blogspot.com>
+This site brings together my projects, technical notes, and occasional personal writing.
 
-### Contact me
+## Elsewhere
 
- - Email: [mail.joydip@gmail.com](mailto:mail.joydip@gmail.com)
- - LinkedIn: <https://www.linkedin.com/in/joydipdatta/>
- - Twitter: [djoydip](https://twitter.com/djoydip)
- 
+- [Academic website](https://www.cse.iitb.ac.in/~joydip09/)
+- [LinkedIn](https://www.linkedin.com/in/joydipdatta/)
+- [X](https://x.com/djoydip)
+- [Instagram](https://www.instagram.com/joydipdatta/)
+- [Personal blog archive](http://joydipdatta.blogspot.com/)
+- [Technical blog archive](http://techgargle.blogspot.com/)
+
+## Contact
+
+- [mail.joydip@gmail.com](mailto:mail.joydip@gmail.com)
