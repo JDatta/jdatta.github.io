@@ -1,7 +1,7 @@
 ---
 layout: page
 title: About
-permalink: /about/
+permalink: /blog/about/
 ---
 
 Distributed Storage Engineer. Interested about technology, travel and food.
