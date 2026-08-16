@@ -63,6 +63,13 @@ fullscreen action; custom controls remain a supplement. When exposed, narrow
 portrait screens stack the mini-player above it so neither overlaps the album.
 Music never autoplays audibly.
 
+Google Analytics records ordinary visits and a small set of engagement events:
+confirmed song starts, music-control requests, album navigation by direction and
+input method, automatic photo advances, and clicks on the four header links.
+Song starts are counted once per playback occurrence rather than again after a
+pause or buffering transition. The application does not collect pointer
+coordinates or define its own user identity.
+
 Very short mobile landscape viewports prioritize photographs. They show two
 compact album pages, slim leather and page-edge decoration, both magnetic
 closure controls, and one prominent play/pause button. The existing player and
@@ -83,7 +90,8 @@ embedded player fails, the same direct link is available in normal mode.
 
 ## Non-goals
 
-- No backend, accounts, chat, live-listener fiction, analytics, or shared state.
+- No backend, accounts, chat, live-listener fiction, or shared state beyond the
+  configured Google Analytics collection.
 - No local music files, proxying, API keys, or invented track metadata.
 - No extracted thumbnails, fake record jackets, or custom controls placed over
   the YouTube surface.

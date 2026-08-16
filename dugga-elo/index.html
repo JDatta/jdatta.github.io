@@ -6,6 +6,15 @@
   <meta name="theme-color" content="#72c1ec">
   <meta name="description" content="BiKL Sharodotsav — a family Durga Puja photo album with a companion YouTube playlist.">
   <title>BiKL Sharodotsav</title>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-89NC1N0W2H"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-89NC1N0W2H');
+  </script>
   <link rel="icon" href="resources/cd-art.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1201,16 +1210,16 @@
         <span class="site-title-bengali" id="siteTitleBengali" lang="bn">শারদোৎসব</span>
       </h1>
       <nav class="affiliate-links" aria-label="BiKL and author links">
-        <a class="affiliate-link affiliate-link-bikl" href="https://bikl.in/" target="_blank" rel="noopener noreferrer" aria-label="Visit the BiKL website">
+        <a class="affiliate-link affiliate-link-bikl" href="https://bikl.in/" target="_blank" rel="noopener noreferrer" aria-label="Visit the BiKL website" data-analytics-link="bikl_website">
           <img src="resources/cd-art.png" alt="" width="26" height="26">
         </a>
-        <a class="affiliate-link" href="https://www.instagram.com/bikl.bengaluru/" target="_blank" rel="noopener noreferrer" aria-label="Visit BiKL on Instagram">
+        <a class="affiliate-link" href="https://www.instagram.com/bikl.bengaluru/" target="_blank" rel="noopener noreferrer" aria-label="Visit BiKL on Instagram" data-analytics-link="bikl_instagram">
           <img src="resources/instagram.svg" alt="" width="22" height="22">
         </a>
-        <a class="affiliate-link affiliate-link-x" href="https://x.com/djoydip" target="_blank" rel="noopener noreferrer" aria-label="Visit the author on X">
+        <a class="affiliate-link affiliate-link-x" href="https://x.com/djoydip" target="_blank" rel="noopener noreferrer" aria-label="Visit the author on X" data-analytics-link="author_x">
           <img src="resources/x-logo.svg" alt="" width="22" height="22">
         </a>
-        <a class="affiliate-link" href="https://www.youtube.com/playlist?list=PLwE4iPKbDie6w4G4GjQ0Mccj49tgjiU4M" target="_blank" rel="noopener noreferrer" aria-label="Open the Puja playlist on YouTube Music">
+        <a class="affiliate-link" href="https://www.youtube.com/playlist?list=PLwE4iPKbDie6w4G4GjQ0Mccj49tgjiU4M" target="_blank" rel="noopener noreferrer" aria-label="Open the Puja playlist on YouTube Music" data-analytics-link="youtube_playlist">
           <img src="resources/yt-music.svg" alt="" width="22" height="22">
         </a>
       </nav>
@@ -1392,7 +1401,8 @@
         youtubeSurface: document.querySelector('#youtubeSurface'),
         youtubeHost: document.querySelector('#youtubeHost'),
         playerMessage: document.querySelector('#playerMessage'),
-        playerMessageText: document.querySelector('#playerMessageText')
+        playerMessageText: document.querySelector('#playerMessageText'),
+        analyticsLinks: document.querySelectorAll('[data-analytics-link]')
       };
 
       const compactQuery = window.matchMedia('(orientation: landscape) and (max-width: 900px) and (max-height: 500px)');
@@ -1435,11 +1445,21 @@
           progressTimer: null,
           lastError: null,
           loopFallbackUsed: false
+        },
+        analytics: {
+          lastTrackKey: null,
+          currentOccurrenceCounted: false,
+          pendingTrackChange: false
         }
       };
 
       const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
       const modulo = (value, divisor) => ((value % divisor) + divisor) % divisor;
+
+      function trackEvent(name, parameters = {}) {
+        if (typeof window.gtag !== 'function') return;
+        try { window.gtag('event', name, parameters); } catch (error) { /* analytics must not affect the experience */ }
+      }
 
       const TITLE_FIT = Object.freeze({
         albumGap: 24,
@@ -1609,7 +1629,7 @@
           state.album.isHeld ||
           state.album.phase !== 'idle'
         ) return;
-        state.album.slideshowTimer = window.setTimeout(() => changeAlbum(1, false), 5000);
+        state.album.slideshowTimer = window.setTimeout(() => requestAlbumChange(1, 'automatic', 'slideshow', false), 5000);
       }
 
       function makeTurnLeaf(direction) {
@@ -1702,6 +1722,18 @@
         state.album.animationHandle = animation;
         try { await animation.finished; } catch (error) { return; }
         commitTurn(target, manual);
+      }
+
+      function requestAlbumChange(direction, method, controlSurface, manual = true) {
+        const target = targetForDirection(direction);
+        trackEvent(`${direction > 0 ? 'next' : 'previous'}_image_${method}`, {
+          from_image_number: state.album.activeIndex + 1,
+          to_image_number: target + 1,
+          images_per_page: stepSize(),
+          presentation: state.album.presentation,
+          control_surface: controlSurface
+        });
+        return changeAlbum(direction, manual);
       }
 
       function cancelTurnAndSettle() {
@@ -1846,12 +1878,12 @@
         const elapsed = performance.now() - pointer.time;
         const threshold = Math.max(40, elements.shell.clientWidth * .08);
         if (Math.abs(dx) >= threshold && Math.abs(dx) >= Math.abs(dy) * 1.2) {
-          changeAlbum(dx < 0 ? 1 : -1, true);
+          requestAlbumChange(dx < 0 ? 1 : -1, 'swipe', 'album');
           return;
         }
         if (distance <= 8 && elapsed < 500) {
           const bounds = elements.shell.getBoundingClientRect();
-          changeAlbum(event.clientX < bounds.left + bounds.width / 2 ? -1 : 1, true);
+          requestAlbumChange(event.clientX < bounds.left + bounds.width / 2 ? -1 : 1, 'click', 'album');
           return;
         }
         restartSlideshow();
@@ -2041,11 +2073,41 @@
         return 'unstarted';
       }
 
+      function trackParameters() {
+        const videoData = safePlayerValue('getVideoData', null);
+        const videoId = typeof videoData?.video_id === 'string' ? videoData.video_id : '';
+        return {
+          track_number: state.player.currentPlaylistIndex + 1,
+          playlist_length: state.player.playlistLength,
+          track_title: state.player.currentTrackTitle,
+          video_id: videoId,
+          layout_mode: state.layout.mode
+        };
+      }
+
+      function trackSongPlay(previousPlayback) {
+        const parameters = trackParameters();
+        const trackKey = parameters.video_id || `playlist_index:${state.player.currentPlaylistIndex}`;
+        const isNewOccurrence =
+          !state.analytics.currentOccurrenceCounted ||
+          trackKey !== state.analytics.lastTrackKey ||
+          previousPlayback === 'ended' ||
+          state.analytics.pendingTrackChange;
+        if (isNewOccurrence) {
+          trackEvent('song_play', parameters);
+          state.analytics.lastTrackKey = trackKey;
+          state.analytics.currentOccurrenceCounted = true;
+        }
+        state.analytics.pendingTrackChange = false;
+      }
+
       function handlePlayerState(event) {
         if (event.target !== state.player.instance) return;
+        const previousPlayback = state.player.playback;
         state.player.playback = playbackName(event.data);
         syncPlayerSnapshot();
         if (state.player.playback === 'playing') {
+          trackSongPlay(previousPlayback);
           state.player.loopFallbackUsed = false;
           elements.playerStatus.textContent = factualTrackStatus('Playing');
           startProgressPolling();
@@ -2057,6 +2119,8 @@
           stopProgressPolling();
           syncPlayerSnapshot();
         } else if (state.player.playback === 'ended') {
+          state.analytics.currentOccurrenceCounted = false;
+          state.analytics.pendingTrackChange = false;
           elements.playerStatus.textContent = 'Track ended';
           stopProgressPolling();
           if (state.player.userHasRequestedPlayback && !state.player.loopFallbackUsed) {
@@ -2205,9 +2269,15 @@
         elements.disc.classList.toggle('is-spinning', spinning);
       }
 
-      function togglePlayback() {
+      function togglePlayback(inputMethod = 'click', controlSurface = 'mini_player') {
         if (!state.player.instance || state.player.lifecycle !== 'ready') return;
         const active = state.player.playback === 'playing' || state.player.playback === 'buffering';
+        state.analytics.pendingTrackChange = false;
+        trackEvent(active ? 'pause_request' : 'play_request', {
+          ...trackParameters(),
+          input_method: inputMethod,
+          control_surface: controlSurface
+        });
         try {
           if (active) state.player.instance.pauseVideo();
           else {
@@ -2224,8 +2294,8 @@
         state.layout.resizeObserver.observe(elements.workspace);
         sizeAlbum();
 
-        elements.previousPhoto.addEventListener('click', () => changeAlbum(-1, true));
-        elements.nextPhoto.addEventListener('click', () => changeAlbum(1, true));
+        elements.previousPhoto.addEventListener('click', () => requestAlbumChange(-1, 'click', 'closure'));
+        elements.nextPhoto.addEventListener('click', () => requestAlbumChange(1, 'click', 'closure'));
         elements.shell.addEventListener('pointerdown', handlePointerDown);
         elements.shell.addEventListener('pointerup', event => finishPointer(event));
         elements.shell.addEventListener('pointercancel', event => finishPointer(event, true));
@@ -2239,15 +2309,28 @@
         state.layout.playerResizeObserver.observe(elements.playerTitleViewport);
         syncTitleMarquee();
 
-        elements.playPause.addEventListener('click', togglePlayback);
-        elements.compactPlayPause.addEventListener('click', togglePlayback);
+        elements.playPause.addEventListener('click', () => togglePlayback('click', 'mini_player'));
+        elements.compactPlayPause.addEventListener('click', () => togglePlayback('click', 'compact_player'));
         elements.previousTrack.addEventListener('click', () => {
           state.player.userHasRequestedPlayback = true;
+          state.analytics.pendingTrackChange = true;
+          trackEvent('previous_song_click', trackParameters());
           try { state.player.instance?.previousVideo(); } catch (error) { /* player event reports errors */ }
         });
         elements.nextTrack.addEventListener('click', () => {
           state.player.userHasRequestedPlayback = true;
+          state.analytics.pendingTrackChange = true;
+          trackEvent('next_song_click', trackParameters());
           try { state.player.instance?.nextVideo(); } catch (error) { /* player event reports errors */ }
+        });
+
+        elements.analyticsLinks.forEach(link => {
+          link.addEventListener('click', () => {
+            trackEvent('outbound_link_click', {
+              link_name: link.dataset.analyticsLink,
+              link_url: link.href
+            });
+          });
         });
 
         elements.discImage.addEventListener('error', () => {
@@ -2265,13 +2348,13 @@
         if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey || isInteractiveTarget(event.target)) return;
         if (event.key === 'ArrowLeft') {
           event.preventDefault();
-          changeAlbum(-1, true);
+          requestAlbumChange(-1, 'keyboard', 'document');
         } else if (event.key === 'ArrowRight') {
           event.preventDefault();
-          changeAlbum(1, true);
+          requestAlbumChange(1, 'keyboard', 'document');
         } else if ((event.key === ' ' || event.code === 'Space') && state.layout.mode === 'normal') {
           event.preventDefault();
-          togglePlayback();
+          togglePlayback('keyboard', 'document');
         }
       });
 

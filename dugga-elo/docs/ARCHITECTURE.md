@@ -136,6 +136,24 @@ terminal. The disc uses one lifetime CSS animation and toggles only
 rotation. Disc artwork falls back from the small PNG to the large seal and then
 to a CSS disc.
 
+## Analytics
+
+The Google tag for GA4 property `G-89NC1N0W2H` loads asynchronously in the
+document head. Its normal configuration records page and session activity. A
+guarded `trackEvent` wrapper sends custom engagement events without making the
+album or player depend on the analytics library being available.
+
+Album navigation uses separate event names for direction and input method, with
+context for the source and target image, images per page, presentation, and
+control surface. Tap-half and leather-closure actions share the click counters;
+swipe, keyboard, and automatic turns remain distinct. Music controls record
+previous/next clicks and play/pause requests. `song_play` is emitted only after
+the YouTube player confirms playback of a new track occurrence. Track identity,
+end state, and explicit track navigation prevent buffering or pause/resume from
+inflating that count while allowing playlist transitions and completed replays
+to count. Stable labels identify clicks on the four header links. No pointer
+coordinates or application-defined user identifiers are collected.
+
 ## Portability and performance
 
 All project asset URLs are relative. The directory therefore works at localhost
