@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#f2e7d4">
+  <meta name="theme-color" content="#72c1ec">
   <meta name="description" content="BiKL Sharodotsav — a family Durga Puja photo album with a companion YouTube playlist.">
   <title>BiKL Sharodotsav</title>
   <link rel="icon" href="resources/cd-art.png" type="image/png">
@@ -17,7 +17,7 @@
       /* Album tuning */
       --album-leaf-color: #f3e3c4;
       --portrait-closure-display: none;
-      --cloth: #f2e7d4;
+      --sky: #72c1ec;
       --paper: #fff9ed;
       --paper-deep: #ead9bb;
       --vermilion: #a33428;
@@ -56,10 +56,7 @@
     body {
       margin: 0;
       color: var(--charcoal);
-      background:
-        linear-gradient(90deg, transparent 0 10px, rgba(163, 52, 40, .2) 10px 13px, transparent 13px calc(100% - 13px), rgba(163, 52, 40, .2) calc(100% - 13px) calc(100% - 10px), transparent calc(100% - 10px)),
-        repeating-linear-gradient(32deg, rgba(110, 33, 28, .024) 0 1px, transparent 1px 8px),
-        var(--cloth);
+      background: var(--sky);
     }
 
     button,
@@ -94,30 +91,86 @@
       .app { height: 100dvh; }
     }
 
-    .app::before,
-    .app::after {
+    .scenery {
       position: absolute;
       z-index: -1;
-      width: 74px;
-      height: 74px;
-      border: 2px solid rgba(180, 138, 77, .26);
-      border-radius: 50%;
-      content: "";
+      inset: 0;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 78% 9%, rgba(255, 239, 176, .5) 0, rgba(255, 241, 189, .2) 10%, transparent 25%),
+        linear-gradient(180deg, #62b9ee 0%, #8fcfee 43%, #d8f1fa 72%, #cae8d3 100%);
       pointer-events: none;
+      user-select: none;
     }
 
-    .app::before {
-      top: 30px;
-      left: 34px;
-      clip-path: polygon(0 0, 100% 0, 0 100%);
-      box-shadow: 13px 13px 0 -11px rgba(110, 33, 28, .24), 26px 26px 0 -23px rgba(110, 33, 28, .2);
+    .scenery-definitions {
+      position: absolute;
+      width: 0;
+      height: 0;
+      overflow: hidden;
     }
 
-    .app::after {
-      right: 34px;
-      bottom: calc(var(--player-height) + 18px);
-      clip-path: polygon(100% 0, 100% 100%, 0 100%);
-      box-shadow: -13px 13px 0 -11px rgba(110, 33, 28, .24), -26px 26px 0 -23px rgba(110, 33, 28, .2);
+    .scenery-horizon {
+      position: absolute;
+      right: -1px;
+      bottom: -1px;
+      width: calc(100% + 2px);
+      height: clamp(210px, 36svh, 390px);
+    }
+
+    .scenery-cloud {
+      position: absolute;
+      display: block;
+      height: auto;
+      overflow: visible;
+      opacity: .8;
+      filter: drop-shadow(0 10px 14px rgba(39, 113, 157, .09));
+    }
+
+    .scenery-cloud-1 { top: 7%; left: -3%; width: clamp(180px, 24vw, 370px); --cloud-duration: 75s; --cloud-delay: -31s; }
+    .scenery-cloud-2 { top: 19%; right: -4%; width: clamp(170px, 22vw, 340px); --cloud-duration: 92s; --cloud-delay: -67s; }
+    .scenery-cloud-3 { top: 29%; left: 7%; width: clamp(135px, 17vw, 270px); --cloud-duration: 110s; --cloud-delay: -89s; opacity: .68; }
+    .scenery-cloud-4 { top: 5%; right: 12%; width: clamp(130px, 18vw, 285px); --cloud-duration: 128s; --cloud-delay: -112s; opacity: .72; }
+    .scenery-cloud-5 { top: 31%; left: 58%; width: clamp(120px, 15vw, 245px); --cloud-duration: 150s; --cloud-delay: -143s; opacity: .58; }
+
+    .kash-cluster {
+      position: absolute;
+      bottom: -2.5%;
+      display: block;
+      height: auto;
+      overflow: visible;
+      filter: drop-shadow(0 5px 5px rgba(19, 67, 36, .12));
+      transform-origin: 50% 100%;
+    }
+
+    .kash-cluster-1 { left: -4%; width: clamp(190px, 25vw, 390px); --kash-duration: 7.2s; --kash-delay: -3.8s; --sway-from: -1.4deg; --sway-to: 1.1deg; }
+    .kash-cluster-2 { bottom: -5%; left: 14%; width: clamp(125px, 16vw, 250px); --kash-duration: 8.8s; --kash-delay: -6.2s; --sway-from: -.8deg; --sway-to: 1.3deg; }
+    .kash-cluster-3 { right: 13%; width: clamp(130px, 17vw, 265px); --kash-duration: 6.4s; --kash-delay: -2.1s; --sway-from: -1.1deg; --sway-to: 1.8deg; }
+    .kash-cluster-4 { right: -4%; width: clamp(190px, 25vw, 390px); --kash-duration: 8.1s; --kash-delay: -5.4s; --sway-from: -1.6deg; --sway-to: .9deg; }
+
+    @keyframes scenery-cloud-drift {
+      from { transform: translate3d(-3vw, 0, 0); }
+      to { transform: translate3d(7vw, 0, 0); }
+    }
+
+    @keyframes scenery-kash-sway {
+      from { transform: rotate(var(--sway-from)); }
+      to { transform: rotate(var(--sway-to)); }
+    }
+
+    @supports ((transform: translate3d(0, 0, 0)) and (animation: scenery-cloud-drift 1s linear)) {
+      .scenery-cloud {
+        animation: scenery-cloud-drift var(--cloud-duration) linear var(--cloud-delay) infinite;
+        will-change: transform;
+      }
+
+      .kash-cluster {
+        animation: scenery-kash-sway var(--kash-duration) ease-in-out var(--kash-delay) infinite alternate;
+        will-change: transform;
+      }
+
+      .scenery.is-paused .scenery-cloud,
+      .scenery.is-paused .kash-cluster { animation-play-state: paused; }
     }
 
     .site-header {
@@ -918,8 +971,6 @@
         grid-template-rows: var(--header-height) minmax(0, 1fr);
       }
 
-      .app::after { bottom: 12px; }
-
       .site-header { padding: 4px 12px 2px; }
 
       h1 {
@@ -1002,6 +1053,11 @@
 
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { scroll-behavior: auto !important; }
+      .scenery-cloud,
+      .kash-cluster {
+        animation: none !important;
+        will-change: auto !important;
+      }
       .disc { animation: none; }
       .track-title-text.is-overflowing { animation: none; }
     }
@@ -1014,6 +1070,86 @@
 </head>
 <body>
   <div class="app" id="app" data-layout="normal">
+    <div class="scenery" id="scenery" aria-hidden="true">
+      <svg class="scenery-definitions" width="0" height="0" focusable="false" aria-hidden="true">
+        <defs>
+          <filter id="cloud-softness" x="-15%" y="-25%" width="130%" height="160%" color-interpolation-filters="sRGB">
+            <feGaussianBlur stdDeviation="1.25"></feGaussianBlur>
+          </filter>
+          <linearGradient id="cloud-light" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#fffef7" stop-opacity=".98"></stop>
+            <stop offset=".62" stop-color="#f7fcff" stop-opacity=".9"></stop>
+            <stop offset="1" stop-color="#d9edf6" stop-opacity=".62"></stop>
+          </linearGradient>
+          <linearGradient id="plume-light" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#fffdf0"></stop>
+            <stop offset=".55" stop-color="#f7f3dc"></stop>
+            <stop offset="1" stop-color="#d9dac3"></stop>
+          </linearGradient>
+          <symbol id="cloud-form" viewBox="0 0 320 125">
+            <g filter="url(#cloud-softness)" fill="url(#cloud-light)">
+              <ellipse cx="63" cy="84" rx="55" ry="25"></ellipse>
+              <ellipse cx="112" cy="62" rx="60" ry="42"></ellipse>
+              <ellipse cx="169" cy="67" rx="71" ry="50"></ellipse>
+              <ellipse cx="230" cy="75" rx="63" ry="37"></ellipse>
+              <ellipse cx="276" cy="88" rx="42" ry="22"></ellipse>
+              <path d="M27 89 C55 70 83 80 105 84 C143 65 188 69 214 82 C246 74 279 82 301 96 C270 111 72 113 27 89Z"></path>
+            </g>
+          </symbol>
+          <symbol id="kash-form" viewBox="0 0 300 440">
+            <g fill="none" stroke-linecap="round">
+              <path d="M18 455 Q56 298 78 160 M62 455 Q95 280 119 112 M111 455 Q142 265 155 143 M160 455 Q177 273 194 92 M210 455 Q221 287 239 139 M257 455 Q262 320 278 181" stroke="#2d6a39" stroke-width="4"></path>
+              <path d="M18 455 Q58 299 78 160 M111 455 Q143 265 155 143 M210 455 Q222 287 239 139" stroke="#84a455" stroke-width="1.6" opacity=".9"></path>
+              <path d="M42 348 Q65 332 82 340 M76 311 Q94 295 111 302 M126 325 Q146 304 162 313 M169 273 Q190 255 204 267 M213 327 Q238 308 252 318 M245 359 Q264 344 278 350" stroke="#4b7d3e" stroke-width="3"></path>
+            </g>
+            <g fill="url(#plume-light)" stroke="#f9f5df" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M77 165 C55 146 48 114 54 77 C79 91 94 120 80 165Z" stroke-width="1.2"></path>
+              <path d="M118 117 C96 96 91 61 101 22 C126 42 137 78 121 118Z" stroke-width="1.3"></path>
+              <path d="M155 148 C135 126 131 91 143 55 C166 75 174 112 157 149Z" stroke-width="1.2"></path>
+              <path d="M194 97 C175 76 173 42 187 8 C207 31 213 66 196 98Z" stroke-width="1.3"></path>
+              <path d="M239 144 C220 123 219 90 232 56 C253 79 257 113 241 145Z" stroke-width="1.2"></path>
+              <path d="M278 186 C261 168 259 140 271 111 C289 131 294 159 280 187Z" stroke-width="1.1"></path>
+            </g>
+            <g fill="none" stroke="#d6d4bd" stroke-width="1" stroke-linecap="round" opacity=".9">
+              <path d="M78 160 Q64 132 54 80 M78 158 Q82 125 58 91 M78 158 Q92 130 65 103"></path>
+              <path d="M119 112 Q105 78 102 28 M120 111 Q125 75 106 38 M120 111 Q139 79 113 50"></path>
+              <path d="M155 143 Q144 111 145 61 M156 142 Q164 107 149 70 M156 142 Q176 113 158 81"></path>
+              <path d="M194 92 Q185 59 188 14 M195 92 Q203 57 191 24 M195 92 Q215 65 200 36"></path>
+              <path d="M239 139 Q231 109 233 62 M240 139 Q249 105 237 73 M240 139 Q258 113 246 84"></path>
+              <path d="M278 181 Q271 155 272 117 M279 181 Q288 152 276 127"></path>
+            </g>
+          </symbol>
+        </defs>
+      </svg>
+
+      <svg class="scenery-cloud scenery-cloud-1" viewBox="0 0 320 125" focusable="false"><use href="#cloud-form"></use></svg>
+      <svg class="scenery-cloud scenery-cloud-2" viewBox="0 0 320 125" focusable="false"><use href="#cloud-form"></use></svg>
+      <svg class="scenery-cloud scenery-cloud-3" viewBox="0 0 320 125" focusable="false"><use href="#cloud-form"></use></svg>
+      <svg class="scenery-cloud scenery-cloud-4" viewBox="0 0 320 125" focusable="false"><use href="#cloud-form"></use></svg>
+      <svg class="scenery-cloud scenery-cloud-5" viewBox="0 0 320 125" focusable="false"><use href="#cloud-form"></use></svg>
+
+      <svg class="scenery-horizon" viewBox="0 0 1600 360" preserveAspectRatio="none" focusable="false">
+        <defs>
+          <linearGradient id="far-grass" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#6f9f45"></stop>
+            <stop offset="1" stop-color="#3f793b"></stop>
+          </linearGradient>
+          <linearGradient id="near-grass" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#477f3d"></stop>
+            <stop offset="1" stop-color="#245a34"></stop>
+          </linearGradient>
+        </defs>
+        <path d="M0 115 C184 78 326 127 486 94 C668 56 811 119 990 88 C1190 54 1363 100 1600 67 L1600 360 L0 360Z" fill="url(#far-grass)"></path>
+        <path d="M0 190 C202 137 372 207 585 154 C793 104 943 199 1139 143 C1325 91 1450 141 1600 125 L1600 360 L0 360Z" fill="url(#near-grass)"></path>
+        <path d="M0 225 C222 187 393 238 590 202 C806 163 1014 230 1214 187 C1365 155 1495 181 1600 168 L1600 360 L0 360Z" fill="#245a34" opacity=".72"></path>
+      </svg>
+
+      <svg class="kash-cluster kash-cluster-1" viewBox="0 0 300 440" focusable="false"><use href="#kash-form"></use></svg>
+      <svg class="kash-cluster kash-cluster-2" viewBox="0 0 300 440" focusable="false"><use href="#kash-form"></use></svg>
+      <svg class="kash-cluster kash-cluster-3" viewBox="0 0 300 440" focusable="false"><use href="#kash-form"></use></svg>
+      <svg class="kash-cluster kash-cluster-4" viewBox="0 0 300 440" focusable="false"><use href="#kash-form"></use></svg>
+    </div>
+
     <header class="site-header">
       <h1 id="siteTitle">
         <span class="site-title-brand" id="siteTitleBrand">BiKL</span>
@@ -1178,6 +1314,7 @@
 
       const elements = {
         app: document.querySelector('#app'),
+        scenery: document.querySelector('#scenery'),
         header: document.querySelector('.site-header'),
         siteTitle: document.querySelector('#siteTitle'),
         siteTitleBrand: document.querySelector('#siteTitleBrand'),
@@ -2095,6 +2232,7 @@
 
       document.addEventListener('visibilitychange', () => {
         state.album.documentVisible = !document.hidden;
+        elements.scenery.classList.toggle('is-paused', document.hidden);
         if (document.hidden) {
           stopSlideshow();
           stopProgressPolling();
@@ -2113,6 +2251,7 @@
       window.addEventListener('orientationchange', () => window.requestAnimationFrame(syncLayoutMode));
 
       initializeAlbum();
+      elements.scenery.classList.toggle('is-paused', document.hidden);
       document.fonts?.ready.then(() => window.requestAnimationFrame(sizeAlbum));
       initializePlayerControls();
       elements.app.dataset.layout = state.layout.mode;

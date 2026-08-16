@@ -3,20 +3,24 @@
 ## Experience
 
 BiKL Sharodotsav is a warm, family-scale Durga Puja album accompanied by a Puja
-playlist. It should feel like opening photographs on sari cloth, not launching a
-streaming product. The album is the visual focus; music supports the act of
-remembering.
+playlist. It should feel like opening photographs outdoors in a calm Bengali
+autumn, not launching a streaming product. The album is the visual focus; music
+supports the act of remembering.
 
 The title appears as a rounded, extra-bold “BiKL” above the Bengali
-“শারদোৎসব”, directly on the cloth with layered ivory, gold, and soft brown
+“শারদোৎসব”, directly on a sunlit blue sky with layered ivory, gold, and soft brown
 shadows. The header remains a semantic region but has no colored band, border,
-strip, or subtitle. Paper
-grain, a bronze and charcoal spiral, a restrained lal-paar edge, and faint
-alpana linework provide material character. The book itself has paired burnished
-oxblood leather covers with darkened edges, inset highlights, fine stitching,
-and visible parchment page layers beneath its light-crema leaves. Photographs
-sit in thin ivory mats with a fine edge and a small physical shadow. The palette
-uses warm cloth and paper, oxblood and deep red, antique brass, and charcoal.
+strip, or subtitle. Soft cumulus clouds occupy the upper edges without crowding
+the title. Layered green grasses and ivory-white kash flowers create a painterly
+lower horizon, with the taller flower clusters concentrated at the sides to keep
+the center quiet behind the album. Slow cloud drift and slight, independent kash
+sway give the scene life without competing with photographs; reduced-motion
+users retain the same complete scene without movement. The book itself has
+paired burnished oxblood leather covers with darkened edges, inset highlights,
+fine stitching, and visible parchment page layers beneath its light-crema
+leaves. Photographs sit in thin ivory mats with a fine edge and a small physical
+shadow. The palette uses clear sky blue, natural greens, ivory paper, oxblood
+and deep red, antique brass, and charcoal.
 Two-page views leave a narrow recessed ridge between the paper leaves, revealing
 the oxblood leather beneath while the centered spiral covers most of the gap.
 Nunito carries the rounded BiKL wordmark, Tiro Bangla carries the Bengali title
@@ -68,10 +72,11 @@ track state in the full mini-player.
 
 Controls have visible focus, accessible names, and factual status. Manual photo
 turns are announced politely; automatic changes are quiet. Reduced-motion users
-receive a brief fade instead of a physical page rotation, and the disc does not
-spin. If JavaScript is unavailable, the first photo, a short explanation, and a
-direct playlist link remain. If the embedded player fails, the same direct link
-is available in normal mode.
+receive a brief fade instead of a physical page rotation, the disc does not spin,
+and clouds and kash remain still. The decorative scenery is hidden from assistive
+technology and cannot receive input or focus. If JavaScript is unavailable, the
+first photo, a short explanation, and a direct playlist link remain. If the
+embedded player fails, the same direct link is available in normal mode.
 
 ## Non-goals
 
