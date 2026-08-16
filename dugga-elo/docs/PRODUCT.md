@@ -36,11 +36,15 @@ and a visually transparent music region below. A rounded floating mini-player
 contains the BiKL disc, current track title, previous/play/next controls,
 progress, and elapsed/total time in a three-part disc–information–controls
 layout. Its translucent, shadowed pill keeps the controls legible over future
-background treatments, and its play/pause control is intentionally dominant.
-Playback state remains available to assistive technology without adding a
-visible status label. A separate official YouTube iframe stays alive for music
-but is visually clipped and unfocusable by default, keeping the album and compact
-mini-player primary. A source feature flag can expose its 200×200 native surface
+background treatments, its fine highlighted edge suggests physical thickness,
+and its play/pause control is intentionally dominant. Previous and next retain
+44 px touch targets even in the narrow layout. Long titles scroll within their
+available space while titles that fit remain still; reduced-motion users receive
+no marquee. Playback state remains available to assistive technology
+without adding a visible status label. A separate official YouTube iframe stays
+alive for music but is visually clipped and unfocusable by default, keeping the
+album and compact mini-player primary. A source feature flag can expose its
+200×200 native surface
 at the bottom right with identity, volume, controls, keyboard behavior, and
 fullscreen action; custom controls remain a supplement. When exposed, narrow
 portrait screens stack the mini-player above it so neither overlaps the album.

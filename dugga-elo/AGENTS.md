@@ -36,9 +36,10 @@
   mini-player above it, otherwise keep them side by side without overlap.
 - Preserve the mini-player's disc–track information–controls order. Track text
   is sans-serif and title-only; do not add an artist/uploader line or a visible
-  playback-status label. Keep factual player messages in the screen-reader live
-  region. The custom controls are previous, dominant play/pause, and next;
-  volume and mute remain on the native YouTube surface.
+  playback-status label. Marquee the title only when it exceeds its available
+  width, and keep it still for reduced-motion users. Keep factual player messages
+  in the screen-reader live region. The custom controls are previous, dominant
+  play/pause, and next; volume and mute remain on the native YouTube surface.
 - Restricted landscape is exactly `(orientation: landscape) and
   (max-width: 900px) and (max-height: 500px)`. It shows a two-page album plus one
   compact play/pause button. Keep the YouTube iframe and playback alive across

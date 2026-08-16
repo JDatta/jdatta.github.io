@@ -19,10 +19,12 @@ arrow keys. Wider spreads may grow to approximately 1180 px before decoration.
 Within the music region, a rounded mini-player floats near the bottom center. It
 contains the rotating BiKL disc, a sans-serif current-title/progress block, and
 right-aligned transport controls with a dominant play/pause action. Its
-translucent surface uses blur and shadow to retain contrast over changing
-backgrounds. Factual
-playback status is maintained in a screen-reader-only live region instead of a
-visible label. The independent 200×200 YouTube iframe remains mounted for API
+slim translucent surface uses blur, a highlighted border, inset depth, and shadow
+to retain contrast over changing backgrounds. A `ResizeObserver` activates a
+measured title marquee only when metadata exceeds the available width; reduced
+motion leaves the title stationary. Factual playback status is maintained in a
+screen-reader-only live region instead of a visible label. The independent
+200×200 YouTube iframe remains mounted for API
 playback but its surface is clipped, inert, and unfocusable by default. The
 startup `show-yt-iframe` feature flag makes the native surface unobstructed at
 the bottom right. At widths up to 700 px the mini-player then stacks above that
