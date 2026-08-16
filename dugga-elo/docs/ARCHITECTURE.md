@@ -8,14 +8,16 @@ worker, application backend, API key, or locally hosted music.
 ## Layouts
 
 The first child of the application root is one non-interactive, `aria-hidden`
-scenery layer. Its inline SVG definitions are reused by five cloud instances and
-four kash-flower clusters, while a CSS sky gradient and an inline SVG grass
-horizon cover the viewport beneath every layout. The artwork has a complete
-static composition: blue sky, a restrained warm glow, scattered cumulus clouds,
-layered green grass, and ivory kash plumes. The horizon and flowers stay weighted
-toward the lower and outer edges so the centered title, album, and music controls
-remain visually primary. The body uses a matching sky color before the layer is
-painted or if it cannot be rendered.
+scenery layer. Its inline SVG definitions are reused by seven logical clouds
+across near, middle, and far depth bands and by four kash-flower clusters. Each
+moving cloud has a paired SVG copy one viewport behind it, while a CSS sky
+gradient and an inline SVG grass horizon cover the viewport beneath every
+layout. The artwork has a complete static composition: blue sky, a
+restrained warm glow, scattered cumulus clouds, layered green grass, and ivory
+kash plumes. The horizon and flowers stay weighted toward the lower and outer
+edges so the centered title, album, and music controls remain visually primary.
+The body uses a matching sky color before the layer is painted or if it cannot
+be rendered.
 
 Normal mode covers portrait phones, tablets in both orientations, and desktop.
 The viewport is a three-row grid: a transparent title header, flexible album,
@@ -146,12 +148,18 @@ responsive layout changes so playback continuity does not depend on
 reconstruction.
 
 The scenic illustration adds no runtime or raster request. Transform and CSS
-animation support progressively enables slow, staggered cloud drift and four
-independent kash sways; all static placement and drawing remain outside the
-animation. Only the animated wrappers receive narrowly scoped `will-change`, and
-their animations change only `transform`. Negative delays populate the first
-frame without script-driven setup. Reduced-motion preference disables all scenic
-motion while preserving the full illustration. The document visibility handler
-pauses the decorative CSS animations in background tabs and resumes their same
-timelines on return, alongside the existing slideshow and progress-polling
-management.
+animation support progressively enables staggered cloud drift in three parallax
+depth bands and four independent kash sways; all static placement and drawing
+remain outside the animation. Every cloud lane contains identical primary and
+trailing copies separated by exactly one viewport. Translating the lane one
+viewport makes one copy enter from the left as its twin exits right; the end and
+start frames are visually identical, keeping seven logical clouds continuously
+on screen without a loop jump. Near lanes complete that path more quickly, while
+smaller, fainter middle and far lanes move progressively more slowly. Only the
+lane wrappers receive narrowly scoped `will-change`, and their animations change
+only `transform`. Negative delays distribute clouds across the initial frame
+without script-driven setup. Reduced-motion preference disables all scenic
+motion, hides the trailing copies, and retains the primary static positions.
+The document visibility handler pauses the decorative CSS animations in
+background tabs and resumes their same timelines on return, alongside the
+existing slideshow and progress-polling management.

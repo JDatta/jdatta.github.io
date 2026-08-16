@@ -13,9 +13,12 @@ shadows. The header remains a semantic region but has no colored band, border,
 strip, or subtitle. Soft cumulus clouds occupy the upper edges without crowding
 the title. Layered green grasses and ivory-white kash flowers create a painterly
 lower horizon, with the taller flower clusters concentrated at the sides to keep
-the center quiet behind the album. Slow cloud drift and slight, independent kash
-sway give the scene life without competing with photographs; reduced-motion
-users retain the same complete scene without movement. The book itself has
+the center quiet behind the album. Clouds circulate continuously from left to
+right, with a new form entering as its matching cloud exits so the sky retains
+its density without a visible reset. Nearer forms move more quickly than the
+smaller, fainter clouds behind them. The slight, independent kash sway keeps the
+lower scene alive without competing with photographs. Reduced-motion users
+retain the same complete scene without movement. The book itself has
 paired burnished oxblood leather covers with darkened edges, inset highlights,
 fine stitching, and visible parchment page layers beneath its light-crema
 leaves. Photographs sit in thin ivory mats with a fine edge and a small physical

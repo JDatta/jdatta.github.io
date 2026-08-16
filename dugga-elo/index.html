@@ -118,20 +118,38 @@
       height: clamp(210px, 36svh, 390px);
     }
 
-    .scenery-cloud {
+    .scenery-cloud-lane {
       position: absolute;
-      display: block;
-      height: auto;
+      left: 0;
+      width: 100vw;
+      height: 0;
       overflow: visible;
       opacity: .8;
+    }
+
+    .scenery-cloud {
+      position: absolute;
+      top: 0;
+      left: var(--cloud-x);
+      display: block;
+      width: var(--cloud-width);
+      height: auto;
+      overflow: visible;
       filter: drop-shadow(0 10px 14px rgba(39, 113, 157, .09));
     }
 
-    .scenery-cloud-1 { top: 7%; left: -3%; width: clamp(180px, 24vw, 370px); --cloud-duration: 75s; --cloud-delay: -31s; }
-    .scenery-cloud-2 { top: 19%; right: -4%; width: clamp(170px, 22vw, 340px); --cloud-duration: 92s; --cloud-delay: -67s; }
-    .scenery-cloud-3 { top: 29%; left: 7%; width: clamp(135px, 17vw, 270px); --cloud-duration: 110s; --cloud-delay: -89s; opacity: .68; }
-    .scenery-cloud-4 { top: 5%; right: 12%; width: clamp(130px, 18vw, 285px); --cloud-duration: 128s; --cloud-delay: -112s; opacity: .72; }
-    .scenery-cloud-5 { top: 31%; left: 58%; width: clamp(120px, 15vw, 245px); --cloud-duration: 150s; --cloud-delay: -143s; opacity: .58; }
+    .scenery-cloud-repeat {
+      display: none;
+      transform: translateX(-100vw);
+    }
+
+    .scenery-cloud-1 { top: 7%; --cloud-x: max(24px, 3vw); --cloud-width: clamp(180px, 24vw, 370px); --cloud-duration: 53s; --cloud-delay: -9.4s; }
+    .scenery-cloud-2 { top: 19%; --cloud-x: calc(100vw - max(24px, 3vw) - var(--cloud-width)); --cloud-width: clamp(170px, 22vw, 340px); --cloud-duration: 66s; --cloud-delay: -41.3s; }
+    .scenery-cloud-3 { top: 29%; --cloud-x: max(24px, 7vw); --cloud-width: clamp(135px, 17vw, 270px); --cloud-duration: 104s; --cloud-delay: -36.6s; opacity: .68; }
+    .scenery-cloud-4 { top: 5%; --cloud-x: calc(100vw - 12vw - var(--cloud-width)); --cloud-width: clamp(130px, 18vw, 285px); --cloud-duration: 120s; --cloud-delay: -96.5s; opacity: .72; }
+    .scenery-cloud-5 { top: 31%; --cloud-x: 58vw; --cloud-width: clamp(120px, 15vw, 245px); --cloud-duration: 141s; --cloud-delay: -77.6s; opacity: .58; }
+    .scenery-cloud-6 { top: 14%; --cloud-x: 30vw; --cloud-width: clamp(105px, 12vw, 190px); --cloud-duration: 132s; --cloud-delay: -10.6s; opacity: .5; }
+    .scenery-cloud-7 { top: 38%; --cloud-x: calc(100vw - max(24px, 3vw) - var(--cloud-width)); --cloud-width: clamp(95px, 11vw, 175px); --cloud-duration: 151s; --cloud-delay: -140.4s; opacity: .45; }
 
     .kash-cluster {
       position: absolute;
@@ -143,14 +161,14 @@
       transform-origin: 50% 100%;
     }
 
-    .kash-cluster-1 { left: -4%; width: clamp(190px, 25vw, 390px); --kash-duration: 7.2s; --kash-delay: -3.8s; --sway-from: -1.4deg; --sway-to: 1.1deg; }
-    .kash-cluster-2 { bottom: -5%; left: 14%; width: clamp(125px, 16vw, 250px); --kash-duration: 8.8s; --kash-delay: -6.2s; --sway-from: -.8deg; --sway-to: 1.3deg; }
-    .kash-cluster-3 { right: 13%; width: clamp(130px, 17vw, 265px); --kash-duration: 6.4s; --kash-delay: -2.1s; --sway-from: -1.1deg; --sway-to: 1.8deg; }
-    .kash-cluster-4 { right: -4%; width: clamp(190px, 25vw, 390px); --kash-duration: 8.1s; --kash-delay: -5.4s; --sway-from: -1.6deg; --sway-to: .9deg; }
+    .kash-cluster-1 { left: -4%; width: clamp(190px, 25vw, 390px); --kash-duration: 5.8s; --kash-delay: -3s; --sway-from: -1.4deg; --sway-to: 1.1deg; }
+    .kash-cluster-2 { bottom: -5%; left: 14%; width: clamp(125px, 16vw, 250px); --kash-duration: 7s; --kash-delay: -5s; --sway-from: -.8deg; --sway-to: 1.3deg; }
+    .kash-cluster-3 { right: 13%; width: clamp(130px, 17vw, 265px); --kash-duration: 5.1s; --kash-delay: -1.7s; --sway-from: -1.1deg; --sway-to: 1.8deg; }
+    .kash-cluster-4 { right: -4%; width: clamp(190px, 25vw, 390px); --kash-duration: 6.5s; --kash-delay: -4.3s; --sway-from: -1.6deg; --sway-to: .9deg; }
 
     @keyframes scenery-cloud-drift {
-      from { transform: translate3d(-3vw, 0, 0); }
-      to { transform: translate3d(7vw, 0, 0); }
+      from { transform: translate3d(0, 0, 0); }
+      to { transform: translate3d(100vw, 0, 0); }
     }
 
     @keyframes scenery-kash-sway {
@@ -159,18 +177,22 @@
     }
 
     @supports ((transform: translate3d(0, 0, 0)) and (animation: scenery-cloud-drift 1s linear)) {
-      .scenery-cloud {
-        animation: scenery-cloud-drift var(--cloud-duration) linear var(--cloud-delay) infinite;
-        will-change: transform;
-      }
+      @media (prefers-reduced-motion: no-preference) {
+        .scenery-cloud-lane {
+          animation: scenery-cloud-drift var(--cloud-duration) linear var(--cloud-delay) infinite;
+          will-change: transform;
+        }
 
-      .kash-cluster {
-        animation: scenery-kash-sway var(--kash-duration) ease-in-out var(--kash-delay) infinite alternate;
-        will-change: transform;
-      }
+        .scenery-cloud-repeat { display: block; }
 
-      .scenery.is-paused .scenery-cloud,
-      .scenery.is-paused .kash-cluster { animation-play-state: paused; }
+        .kash-cluster {
+          animation: scenery-kash-sway var(--kash-duration) ease-in-out var(--kash-delay) infinite alternate;
+          will-change: transform;
+        }
+
+        .scenery.is-paused .scenery-cloud-lane,
+        .scenery.is-paused .kash-cluster { animation-play-state: paused; }
+      }
     }
 
     .site-header {
@@ -1053,7 +1075,7 @@
 
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { scroll-behavior: auto !important; }
-      .scenery-cloud,
+      .scenery-cloud-lane,
       .kash-cluster {
         animation: none !important;
         will-change: auto !important;
@@ -1122,11 +1144,34 @@
         </defs>
       </svg>
 
-      <svg class="scenery-cloud scenery-cloud-1" viewBox="0 0 320 125" focusable="false"><use href="#cloud-form"></use></svg>
-      <svg class="scenery-cloud scenery-cloud-2" viewBox="0 0 320 125" focusable="false"><use href="#cloud-form"></use></svg>
-      <svg class="scenery-cloud scenery-cloud-3" viewBox="0 0 320 125" focusable="false"><use href="#cloud-form"></use></svg>
-      <svg class="scenery-cloud scenery-cloud-4" viewBox="0 0 320 125" focusable="false"><use href="#cloud-form"></use></svg>
-      <svg class="scenery-cloud scenery-cloud-5" viewBox="0 0 320 125" focusable="false"><use href="#cloud-form"></use></svg>
+      <div class="scenery-cloud-lane scenery-cloud-near scenery-cloud-1">
+        <svg class="scenery-cloud" viewBox="0 0 320 125" focusable="false"><use href="#cloud-form"></use></svg>
+        <svg class="scenery-cloud scenery-cloud-repeat" viewBox="0 0 320 125" focusable="false"><use href="#cloud-form"></use></svg>
+      </div>
+      <div class="scenery-cloud-lane scenery-cloud-near scenery-cloud-2">
+        <svg class="scenery-cloud" viewBox="0 0 320 125" focusable="false"><use href="#cloud-form"></use></svg>
+        <svg class="scenery-cloud scenery-cloud-repeat" viewBox="0 0 320 125" focusable="false"><use href="#cloud-form"></use></svg>
+      </div>
+      <div class="scenery-cloud-lane scenery-cloud-middle scenery-cloud-3">
+        <svg class="scenery-cloud" viewBox="0 0 320 125" focusable="false"><use href="#cloud-form"></use></svg>
+        <svg class="scenery-cloud scenery-cloud-repeat" viewBox="0 0 320 125" focusable="false"><use href="#cloud-form"></use></svg>
+      </div>
+      <div class="scenery-cloud-lane scenery-cloud-middle scenery-cloud-4">
+        <svg class="scenery-cloud" viewBox="0 0 320 125" focusable="false"><use href="#cloud-form"></use></svg>
+        <svg class="scenery-cloud scenery-cloud-repeat" viewBox="0 0 320 125" focusable="false"><use href="#cloud-form"></use></svg>
+      </div>
+      <div class="scenery-cloud-lane scenery-cloud-far scenery-cloud-5">
+        <svg class="scenery-cloud" viewBox="0 0 320 125" focusable="false"><use href="#cloud-form"></use></svg>
+        <svg class="scenery-cloud scenery-cloud-repeat" viewBox="0 0 320 125" focusable="false"><use href="#cloud-form"></use></svg>
+      </div>
+      <div class="scenery-cloud-lane scenery-cloud-far scenery-cloud-6">
+        <svg class="scenery-cloud" viewBox="0 0 320 125" focusable="false"><use href="#cloud-form"></use></svg>
+        <svg class="scenery-cloud scenery-cloud-repeat" viewBox="0 0 320 125" focusable="false"><use href="#cloud-form"></use></svg>
+      </div>
+      <div class="scenery-cloud-lane scenery-cloud-far scenery-cloud-7">
+        <svg class="scenery-cloud" viewBox="0 0 320 125" focusable="false"><use href="#cloud-form"></use></svg>
+        <svg class="scenery-cloud scenery-cloud-repeat" viewBox="0 0 320 125" focusable="false"><use href="#cloud-form"></use></svg>
+      </div>
 
       <svg class="scenery-horizon" viewBox="0 0 1600 360" preserveAspectRatio="none" focusable="false">
         <defs>
