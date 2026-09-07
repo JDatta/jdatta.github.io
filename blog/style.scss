@@ -5,65 +5,77 @@
 @import "variables";
 
 @font-face {
-  font-family: "CMU Serif";
-  src: url("../resources/fonts/CMUSerif-Roman.woff2") format("woff2");
+  font-family: "Inter Variable";
+  src: url("../resources/fonts/InterVariable.woff2") format("woff2");
   font-display: swap;
   font-style: normal;
-  font-weight: 400;
+  font-weight: 100 900;
 }
 
 @font-face {
-  font-family: "CMU Serif";
-  src: url("../resources/fonts/CMUSerif-Bold.woff2") format("woff2");
-  font-display: swap;
-  font-style: normal;
-  font-weight: 700;
-}
-
-@font-face {
-  font-family: "CMU Serif";
-  src: url("../resources/fonts/CMUSerif-Italic.woff2") format("woff2");
+  font-family: "Inter Variable";
+  src: url("../resources/fonts/InterVariable-Italic.woff2") format("woff2");
   font-display: swap;
   font-style: italic;
-  font-weight: 400;
-}
-
-@font-face {
-  font-family: "CMU Serif";
-  src: url("../resources/fonts/CMUSerif-BoldItalic.woff2") format("woff2");
-  font-display: swap;
-  font-style: italic;
-  font-weight: 700;
-}
-
-@font-face {
-  font-family: "Tiro Bangla";
-  src: url("../resources/fonts/TiroBangla-Regular.woff2") format("woff2");
-  font-display: swap;
-  font-style: normal;
-  font-weight: 400;
-  unicode-range: U+0980-09FF, U+200C-200D;
-}
-
-@font-face {
-  font-family: "Tiro Bangla";
-  src: url("../resources/fonts/TiroBangla-Italic.woff2") format("woff2");
-  font-display: swap;
-  font-style: italic;
-  font-weight: 400;
-  unicode-range: U+0980-09FF, U+200C-200D;
+  font-weight: 100 900;
 }
 
 :root {
+  color-scheme: light;
   --ink: #17191c;
+  --body-ink: #30343a;
   --muted: #656b73;
   --line: #d9dde2;
   --soft-line: #e9ebee;
   --paper: #ffffff;
   --wash: #f5f6f7;
   --accent: #264c73;
+  --card: #f8f9fc;
+  --card-media: #eef1f6;
+  --link-decoration: #a9afb7;
+  --shadow: rgba(23, 25, 28, 0.14);
+  --shadow-raised: rgba(23, 25, 28, 0.09);
+  --icon-filter: none;
   --content-width: 1120px;
-  --serif: "CMU Serif", "Tiro Bangla", Georgia, "Times New Roman", serif;
+  --sans: "Inter Variable", Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --ink: #f2f4f7;
+  --body-ink: #e1e5ea;
+  --muted: #aeb6c2;
+  --line: #353c47;
+  --soft-line: #2c333d;
+  --paper: #171a1f;
+  --wash: #20252d;
+  --accent: #9ecbff;
+  --card: #20252d;
+  --card-media: #2a303a;
+  --link-decoration: #737f8e;
+  --shadow: rgba(0, 0, 0, 0.28);
+  --shadow-raised: rgba(0, 0, 0, 0.38);
+  --icon-filter: invert(1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+    --ink: #f2f4f7;
+    --body-ink: #e1e5ea;
+    --muted: #aeb6c2;
+    --line: #353c47;
+    --soft-line: #2c333d;
+    --paper: #171a1f;
+    --wash: #20252d;
+    --accent: #9ecbff;
+    --card: #20252d;
+    --card-media: #2a303a;
+    --link-decoration: #737f8e;
+    --shadow: rgba(0, 0, 0, 0.28);
+    --shadow-raised: rgba(0, 0, 0, 0.38);
+    --icon-filter: invert(1);
+  }
 }
 
 * {
@@ -81,7 +93,7 @@ body {
   margin: 0;
   background: var(--paper);
   color: var(--ink);
-  font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-family: var(--sans);
   font-size: 17px;
   line-height: 1.65;
   text-rendering: optimizeLegibility;
@@ -89,7 +101,7 @@ body {
 
 a {
   color: inherit;
-  text-decoration-color: #a9afb7;
+  text-decoration-color: var(--link-decoration);
   text-decoration-thickness: 1px;
   text-underline-offset: 0.2em;
 }
@@ -150,11 +162,11 @@ img {
 
 .site-title {
   color: var(--ink);
-  font-family: var(--serif);
-  font-size: clamp(2.6rem, 6vw, 4.8rem);
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  line-height: 0.95;
+  font-family: var(--sans);
+  font-size: clamp(2.35rem, 5vw, 4.15rem);
+  font-weight: 750;
+  letter-spacing: -0.055em;
+  line-height: 1;
   text-decoration: none;
 }
 
@@ -169,8 +181,8 @@ img {
 }
 
 .social-links a {
-  width: 38px;
-  height: 38px;
+  width: 44px;
+  height: 44px;
   display: grid;
   place-items: center;
   border: 1px solid transparent;
@@ -188,6 +200,58 @@ img {
   width: 20px;
   height: 20px;
   object-fit: contain;
+  filter: var(--icon-filter);
+}
+
+.theme-toggle {
+  width: 44px;
+  height: 44px;
+  display: none;
+  place-items: center;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  transition: border-color 140ms ease, background 140ms ease;
+}
+
+.js .theme-toggle {
+  display: grid;
+}
+
+.theme-toggle:hover,
+.theme-toggle:focus-visible {
+  border-color: var(--line);
+  background: var(--wash);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.theme-icon {
+  width: 19px;
+  height: 19px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
+.theme-icon-moon {
+  display: none;
+}
+
+:root[data-theme="dark"] .theme-icon-sun {
+  display: none;
+}
+
+:root[data-theme="dark"] .theme-icon-moon {
+  display: block;
 }
 
 .site-nav {
@@ -261,11 +325,11 @@ img {
 .section-heading h2 {
   margin: 0;
   color: var(--ink);
-  font-family: var(--serif);
-  font-size: clamp(2.25rem, 5vw, 3.65rem);
-  font-weight: 700;
-  letter-spacing: -0.025em;
-  line-height: 1.05;
+  font-family: var(--sans);
+  font-size: clamp(2.05rem, 4.5vw, 3.35rem);
+  font-weight: 720;
+  letter-spacing: -0.045em;
+  line-height: 1.1;
 }
 
 .section-intro {
@@ -279,7 +343,7 @@ img {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: clamp(1rem, 2vw, 1.4rem);
-  font-family: Roboto, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: var(--sans);
 }
 
 .project-card {
@@ -288,21 +352,21 @@ img {
   overflow: hidden;
   flex-direction: column;
   border-radius: 12px;
-  background: #f8f9fc;
-  box-shadow: 0 1px 2px rgba(23, 25, 28, 0.14), 0 1px 3px 1px rgba(23, 25, 28, 0.08);
+  background: var(--card);
+  box-shadow: 0 1px 2px var(--shadow), 0 1px 3px 1px var(--shadow-raised);
   transition: box-shadow 180ms ease, transform 180ms ease;
 }
 
 .project-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 2px 5px rgba(23, 25, 28, 0.15), 0 4px 10px 1px rgba(23, 25, 28, 0.09);
+  box-shadow: 0 2px 5px var(--shadow), 0 4px 10px 1px var(--shadow-raised);
 }
 
 .project-image {
   aspect-ratio: 16 / 10;
   display: block;
   overflow: hidden;
-  background: #eef1f6;
+  background: var(--card-media);
 }
 
 .project-image img {
@@ -346,7 +410,7 @@ img {
 }
 
 .project-content .project-link {
-  color: #3f51b5;
+  color: var(--accent);
   font-size: 0.72rem;
   letter-spacing: 0.06em;
 }
@@ -438,10 +502,10 @@ img {
 
 .post-summary h2 {
   margin: -0.25rem 0 0.6rem;
-  font-family: var(--serif);
+  font-family: var(--sans);
   font-size: clamp(1.4rem, 3vw, 1.9rem);
   font-weight: 700;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.03em;
   line-height: 1.25;
 }
 
@@ -467,7 +531,7 @@ img {
 }
 
 .entry {
-  color: #30343a;
+  color: var(--body-ink);
 }
 
 .entry p,
@@ -482,7 +546,7 @@ img {
 .entry h2 {
   margin: 2.5rem 0 0.75rem;
   color: var(--ink);
-  font-family: var(--serif);
+  font-family: var(--sans);
   font-weight: 700;
   letter-spacing: -0.01em;
   line-height: 1.25;
@@ -554,11 +618,11 @@ img {
 .article-header h1 {
   margin: 1.35rem 0 0.8rem;
   color: var(--ink);
-  font-family: var(--serif);
-  font-size: clamp(2.2rem, 5vw, 3.7rem);
-  font-weight: 700;
-  letter-spacing: -0.025em;
-  line-height: 1.08;
+  font-family: var(--sans);
+  font-size: clamp(2.05rem, 4.5vw, 3.35rem);
+  font-weight: 720;
+  letter-spacing: -0.045em;
+  line-height: 1.12;
 }
 
 @media (max-width: 720px) {
@@ -579,14 +643,19 @@ img {
   }
 
   .social-links a {
-    width: 30px;
-    height: 30px;
+    width: 36px;
+    height: 36px;
     place-items: start;
   }
 
   .social-links img {
     width: 18px;
     height: 18px;
+  }
+
+  .theme-toggle {
+    width: 36px;
+    height: 36px;
   }
 
   .site-nav {
@@ -630,3 +699,70 @@ img {
 }
 
 @import "highlights";
+
+:root[data-theme="dark"] .highlight {
+  border-color: var(--line);
+  background: var(--wash);
+  box-shadow: none;
+}
+
+:root[data-theme="dark"] .highlight .c,
+:root[data-theme="dark"] .highlight .cm,
+:root[data-theme="dark"] .highlight .c1,
+:root[data-theme="dark"] .highlight .cs,
+:root[data-theme="dark"] .highlight .g,
+:root[data-theme="dark"] .highlight .l,
+:root[data-theme="dark"] .highlight .n,
+:root[data-theme="dark"] .highlight .p,
+:root[data-theme="dark"] .highlight .w {
+  color: #c4ccd7;
+}
+
+:root[data-theme="dark"] .highlight .k,
+:root[data-theme="dark"] .highlight .o,
+:root[data-theme="dark"] .highlight .gi,
+:root[data-theme="dark"] .highlight .ow {
+  color: #b8dc73;
+}
+
+:root[data-theme="dark"] .highlight .x,
+:root[data-theme="dark"] .highlight .gh,
+:root[data-theme="dark"] .highlight .gu,
+:root[data-theme="dark"] .highlight .kc,
+:root[data-theme="dark"] .highlight .no,
+:root[data-theme="dark"] .highlight .ni,
+:root[data-theme="dark"] .highlight .se {
+  color: #ffb36d;
+}
+
+:root[data-theme="dark"] .highlight .gd,
+:root[data-theme="dark"] .highlight .m,
+:root[data-theme="dark"] .highlight .s,
+:root[data-theme="dark"] .highlight .mf,
+:root[data-theme="dark"] .highlight .mh,
+:root[data-theme="dark"] .highlight .mi,
+:root[data-theme="dark"] .highlight .mo,
+:root[data-theme="dark"] .highlight .s2,
+:root[data-theme="dark"] .highlight .s1 {
+  color: #73daca;
+}
+
+:root[data-theme="dark"] .highlight .gr,
+:root[data-theme="dark"] .highlight .kt,
+:root[data-theme="dark"] .highlight .sr {
+  color: #ff8c9c;
+}
+
+:root[data-theme="dark"] .highlight .kd,
+:root[data-theme="dark"] .highlight .kr,
+:root[data-theme="dark"] .highlight .nc,
+:root[data-theme="dark"] .highlight .nd,
+:root[data-theme="dark"] .highlight .ne,
+:root[data-theme="dark"] .highlight .nf,
+:root[data-theme="dark"] .highlight .nt,
+:root[data-theme="dark"] .highlight .nv,
+:root[data-theme="dark"] .highlight .vc,
+:root[data-theme="dark"] .highlight .vg,
+:root[data-theme="dark"] .highlight .vi {
+  color: #7dcfff;
+}
