@@ -138,19 +138,10 @@ list should say.
 Each task had explicit dependencies. For the packing-list example, part of the
 task graph could look like this:
 
-```mermaid
-flowchart TD
-    A[REL-01: Stabilize browser tests] --> C[REL-03: Fix saved-list restoration]
-    C --> D[REL-04: Verify phone lifecycle behavior]
-    A --> E[REL-05: Review test evidence]
-    B[REL-02: Fix Android test dependencies] --> E
-    D --> E
-    O[Owner confirms signing-key custody] --> F[REL-06: Configure release signing]
-    E --> G[REL-07: Freeze and validate a candidate]
-    F --> G
-    G --> H[REL-08: Upload for internal testing]
-    P[Owner approves the exact build] --> H
-```
+<div class="task-dependency-diagram">
+  <img class="task-dependency-diagram__light" src="{{ site.baseurl }}/resources/orchestrator-task-dependencies-light.png" alt="Release task dependency graph: REL-01, REL-02, and REL-04 lead to review of test evidence; signing-key custody leads to release signing; the review and signing paths lead to candidate validation and then internal testing.">
+  <img class="task-dependency-diagram__dark" src="{{ site.baseurl }}/resources/orchestrator-task-dependencies-dark.png" alt="" aria-hidden="true">
+</div>
 
  - **Selecting work:** The orchestrator identifies tasks whose dependencies are satisfied and assigns up to three workers at a time. It prevents conflicts over shared files or resources and integrates results in rank order.
  - **Assigning a task:** Each worker receives one task, its completion criteria, and a model suited to the work. Workers make changes in separate checkouts and can resume interrupted sessions. Difficult tasks can escalate to a more capable model.

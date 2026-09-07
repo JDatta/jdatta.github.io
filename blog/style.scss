@@ -609,6 +609,32 @@ img {
   font-size: 0.88em;
 }
 
+.task-dependency-diagram {
+  margin: 1.5rem 0;
+}
+
+.task-dependency-diagram__dark {
+  display: none;
+}
+
+:root[data-theme="dark"] .task-dependency-diagram__light {
+  display: none;
+}
+
+:root[data-theme="dark"] .task-dependency-diagram__dark {
+  display: block;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .task-dependency-diagram__light {
+    display: none;
+  }
+
+  :root:not([data-theme]) .task-dependency-diagram__dark {
+    display: block;
+  }
+}
+
 .article-header {
   margin-bottom: 3rem;
   padding-bottom: 2rem;
