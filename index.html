@@ -4,10 +4,24 @@ title: Home
 nav: home
 ---
 
+<section class="recent-writing" aria-labelledby="writing-title">
+  <div class="writing-heading">
+    <h2 id="writing-title">Recent writing</h2>
+    <a class="archive-link" href="{{ '/blogs/' | relative_url }}">All posts</a>
+  </div>
+  <ul class="writing-list">
+    {% for post in site.posts limit:2 %}
+      <li>
+        <a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
+        <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%d %b %Y" }}</time>
+      </li>
+    {% endfor %}
+  </ul>
+</section>
+
 <section class="projects" aria-labelledby="projects-title">
   <div class="section-heading">
-    <p class="eyebrow" id="projects-title">Selected work</p>
-    <!-- <h2 id="projects-title">Projects</h2> -->
+    <h2 id="projects-title">Selected work</h2>
     <p class="section-intro">An assorted collection of weekend experiments, tiny tools, and personal archives.</p>
   </div>
 
@@ -49,8 +63,7 @@ nav: home
 
 <section class="instagram-feed" aria-labelledby="instagram-title">
   <div class="section-heading">
-    <p class="eyebrow">My Arts</p>
-    <!-- <h2 id="instagram-title">Latest images</h2>-->
+    <h2 id="instagram-title">My Arts</h2>
     <p class="section-intro">Recent photographs, sketches, and watercolours from @joydipdatta.</p>
   </div>
 

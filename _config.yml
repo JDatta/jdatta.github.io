@@ -89,6 +89,7 @@ gems:
 
 # Exclude these files from your production _site
 exclude:
+  - serve.sh
   - Gemfile
   - Gemfile.lock
   - LICENSE

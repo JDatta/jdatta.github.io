@@ -50,7 +50,7 @@ In this article, I am using Llama2 13B chat, but feel free to use other models, 
 
 ## Our first prompt
 
-```text
+```console
 [jd@15:16:26 llama.cpp]$ ./main --model ./models/13B/ggml-model-q4_0.bin --prompt "How to make mayo?" -i
 
 main: build = 929 (a113689)
@@ -96,7 +96,7 @@ Together, these options allow you to create a more chat-like experience. Even mo
 
 See the example below:
 
-```text
+```console
 $ ./main --model ./models/13B/ggml-model-q4_0.bin --in-prefix " " --in-suffix "Assistant:" -r "User:" -i -p "User: Hi\"
 
 Assistant: Hi! I am an AI assistant. Ask me anything you want and I will try to answer to the best of my ability
@@ -130,7 +130,7 @@ As you can see, it is not very good at logical deduction or basic maths (not sur
 
 Here we found out how we can give the AI a few examples to tune the answers, similar to the methodology of few-shot inference.
 
-```text
+```console
 $ ./main --model ./models/13B/ggml-model-q4_0.bin --in-prefix " " --in-suffix "Assistant:" -r "User:" -i -p "User: Cow\
 
 Assistant: A cow is a farm animal.
@@ -165,7 +165,7 @@ Please note that this is just an example and it is not recommended to use these 
 
 While the performance of Llama2 may not be satisfactory for logical inference or math, it is pretty good at text processing jobs; for example, summarization. Before we go, let's see how we can use Llama2 for text summarization. Here let's try to summarize the first section of the Wikipedia article on Earth. Let's assume we have copied and kept it in a file `earth.txt`. Before summarization, it has 584 words.
 
-```text
+```console
 $ wc -w earth.txt
      584 earth.txt
 ```
@@ -181,7 +181,7 @@ Write a concise summary of the text, and return your responses with 5 lines that
 
 But wait. Before we proceed, we need to increase the Llama2 default context window size. Otherwise it would fail with this error:
 
-```text
+```console
 ./main --model ./models/13B/ggml-model-q4_0.bin --prompt "\
 Write a concise summary of the text, and return your responses with 5 lines that cover the key points of the text.
 
@@ -195,7 +195,7 @@ main: error: prompt is too long (914 tokens, max 508)
 
 We can increase the context window using the `--ctx_size` option. Here is an example. Note that it is a one-shot summarization task, so we do not need the `-i` option.
 
-```text
+```console
 $ wc -w earth.txt
      584 earth.txt
 

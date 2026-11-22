@@ -1,4 +1,7 @@
-# I asked an agent to build the orchestrator
+---
+layout: post
+title: I asked an agent to build the orchestrator
+---
 
 Man! the world moves fast!
 

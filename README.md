@@ -13,7 +13,7 @@
 
 | Location | Contents |
 | --- | --- |
-| [index.html](index.html) | Homepage with selected projects and art |
+| [index.html](index.html) | Homepage with recent writing, selected projects, and art |
 | [blog/](blog/) | Posts, about page, layouts, includes, and styles |
 | [number-garden/](number-garden/) | Number Garden project pages |
 | [dugga-elo/](dugga-elo/) | Dugga Elo app, assets, and documentation |
@@ -24,3 +24,29 @@
 ## Site technology
 
 The site uses Jekyll and is hosted on GitHub Pages at the custom domain `jdatta.me`. Its blog originated from the Jekyll Now theme. The [original Jekyll Now README](docs/README-jekyll-now.md) is preserved verbatim for historical setup instructions and credits.
+
+## Local preview
+
+With Ruby installed, run this setup once from the repository root. Skip the first command if Bundler 2.4.22 is already installed.
+
+```sh
+gem install --user-install bundler -v 2.4.22 --no-document
+export PATH="$(ruby -rrubygems -e 'puts Gem.user_dir')/bin:$PATH"
+bundle _2.4.22_ config set --local path .bundle/gems
+bundle _2.4.22_ install
+```
+
+Keep the Ruby user gem bin directory on your `PATH` in new shells if you installed Bundler with `--user-install`.
+
+Run `./serve.sh` and open [http://127.0.0.1:4173/](http://127.0.0.1:4173/). Jekyll rebuilds when you edit site files. Refresh the browser to see the changes. Press Ctrl+C to stop the server. To use another port, run `PORT=4000 ./serve.sh`.
+
+## Code blocks in posts
+
+Write the language immediately after the opening backticks. Use `bash` for shell commands, `console` for terminal sessions with output, `markdown` for Markdown source examples, and `text` for plain text. For example, this fence highlights Python at build time.
+
+````markdown
+```python
+for title in titles:
+    print(title)
+```
+````

@@ -32,12 +32,12 @@ This is confusing because the space occupied by the culprit java object in heap 
 
 ### Generate and analyze permgen dump
 Before analyzing heap dump, for permgen issues you should try to get the permgen dump. If the process for which you are getting permgen error is still live, run this command to extract the permgen dump and save it to a file
-``` bash
+```bash
 jmap -permstat <pid> > /tmp/permgen_dump
 ```
 
 This is a simple file with the following format:
-``` bash
+```console
 $ head /tmp/permgen_dump
 class_loader    classes bytes   parent_loader   alive?  type
 
@@ -50,7 +50,7 @@ class_loader    classes bytes   parent_loader   alive?  type
 ```
 
 First we would sum the bytes occupied by all alive loaders.
-``` bash
+```console
 $ grep live /tmp/permgen_dump|tail -n +3 |awk '{s+=$3} END{print s}'
 283469897
 ```
@@ -58,7 +58,7 @@ This must be more than the permgen size limit.
 
 From this file we would prepare a __histogram__ to find out loaders occupying most of the spaces. Following steps show how I created the histogram from above file. Skip ahead if you want as the scripts are pretty basic.
 
-``` bash
+```console
 ## Print the type information (last column i.e. col 6)
 ## and bytes column and save to a file
 $ cat /tmp/permgen_dump|tail -n +3 |awk '{print $6" "$3}' > /tmp/hist1.txt
@@ -85,11 +85,11 @@ At this step, you can check your code to see how this custom class loader is bei
 
 ### How to generate heap dump
 You can generate heap dump using following command
-``` bash
+```bash
 jmap -dump:file=/tmp/dump.hprof <pid>
 ```
 Alternatively you can add the following java options in your startup command to automatically create heap dump whenever there is an `OutOfMemoryError`
-```
+```text
 -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/path/to/dump/dir
 ```
 
@@ -106,7 +106,7 @@ In the dominator tree page look for the loader class name which we noted to take
 `jhat` is another heap dump analyzing tool
 
 Run the command to start `jhat` server
-``` bash
+```console
 $ jhat -port 9091 /tmp/dump.hprof
 ```
 
@@ -116,7 +116,7 @@ Remember, the loader would not be garbage collected until all the classes/object
 
 ## Appendix:
 ### Python code to generate histogram
-``` python
+```python
 #!/usr/bin/python
 import sys
 import operator
