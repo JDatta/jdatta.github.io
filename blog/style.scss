@@ -726,12 +726,6 @@ img {
 
 @import "highlights";
 
-:root[data-theme="dark"] .highlight {
-  border-color: var(--line);
-  background: var(--wash);
-  box-shadow: none;
-}
-
 :root[data-theme="dark"] .highlight .c,
 :root[data-theme="dark"] .highlight .cm,
 :root[data-theme="dark"] .highlight .c1,
