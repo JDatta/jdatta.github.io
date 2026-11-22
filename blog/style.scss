@@ -275,7 +275,7 @@ img {
   height: 54px;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   gap: 2.25rem;
   border-bottom: 1px solid var(--line);
   font-size: 0.79rem;
@@ -321,7 +321,10 @@ img {
 }
 
 .site-footer {
-  min-height: 82px;
+  padding: 1.75rem 0;
+  color: var(--muted);
+  font-size: 0.875rem;
+  text-align: center;
 }
 
 .section-heading {
@@ -338,8 +341,7 @@ img {
   text-transform: uppercase;
 }
 
-.section-heading h1,
-.section-heading h2 {
+.section-heading h1 {
   margin: 0;
   color: var(--ink);
   font-family: var(--serif);
@@ -354,18 +356,26 @@ img {
   font-size: 1.05rem;
 }
 
-.recent-writing {
-  display: grid;
-  grid-template-columns: minmax(13rem, 1fr) minmax(0, 2fr);
-  gap: 2rem;
+.recent-writing,
+.projects {
   margin-bottom: clamp(2rem, 4vw, 3.25rem);
   padding-bottom: clamp(1.75rem, 3.5vw, 2.75rem);
   border-bottom: 1px solid var(--line);
 }
 
-.writing-heading h2 {
-  margin: 0 0 0.45rem;
+.recent-writing {
+  display: grid;
+  grid-template-columns: minmax(13rem, 1fr) minmax(0, 2fr);
+  gap: 2rem;
+}
+
+.writing-heading h2,
+.section-heading h2 {
   font: 400 clamp(1.75rem, 3vw, 2.35rem)/1.2 var(--serif);
+}
+
+.writing-heading h2 {
+  margin-bottom: 0.45rem;
 }
 
 .archive-link {
@@ -497,10 +507,6 @@ img {
 
 .text-link:hover span {
   transform: translateX(3px);
-}
-
-.instagram-feed {
-  margin-top: clamp(4rem, 8vw, 6.5rem);
 }
 
 .instagram-feed .section-heading {
@@ -744,11 +750,6 @@ img {
   .theme-toggle {
     width: 36px;
     height: 36px;
-  }
-
-  .site-nav {
-    justify-content: space-around;
-    gap: 0;
   }
 
   .recent-writing {
